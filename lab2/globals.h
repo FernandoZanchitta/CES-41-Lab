@@ -32,7 +32,7 @@
 /* ENDFILE is implicitly defined by Yacc/Bison,
  * and not included in the tab.h file
  */
-#define ENDFILE 0
+// #define ENDFILE 0
 
 #endif
 
@@ -50,8 +50,21 @@
 /* Yacc/Bison generates its own integer values
  * for tokens
  */
+// typedef enum 
+//     /* book-keeping tokens */
+//    { ENDFILE,ERROR,
+//     /* reserved words */
+//     IF,ELSE,INT,RETURN,VOID,WHILE,WRITE,
+//     /* multicharacter tokens */
+//     ID,NUM,
+//     /* special symbols */
+//     PLUS,MINUS,TIMES,OVER,LESS,LEQ,GREATER,GEQ,COMPARE,
+//     DIFF,ASSIGN,SEMI,COMMA,LPAREN,RPAREN,LCOLCH,RCOLCH,LBRAC,RBRAC,
+//     /* Comments */
+//     BEGCOM,ENDCOM,
+//    } TokenType;
 typedef int TokenType; 
-
+extern int FlagComment;
 extern FILE* source; /* source code text file */
 extern FILE* listing; /* listing output text file */
 extern FILE* code; /* code text file for TM simulator */

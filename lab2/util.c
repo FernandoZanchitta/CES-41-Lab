@@ -13,46 +13,74 @@
  * and its lexeme to the listing file
  */
 void printToken( TokenType token, const char* tokenString )
-{ switch (token)
-  { case IF:
-    case THEN:
+{ 
+  switch (token)
+  { 
+    case BEGCOM:
+      FlagComment = 1;
+      break;
+    case ENDCOM: 
+      FlagComment = 0;
+      break;
+    case IF:
+    case INT:
     case ELSE:
-    case END:
-    case REPEAT:
-    case UNTIL:
-    case READ:
+    case RETURN:
+    case VOID:
+    case WHILE:
     case WRITE:
+      if(FlagComment == 0){
+      fprintf(listing,"\t%d: ",lineno);
       fprintf(listing,
          "reserved word: %s\n",tokenString);
+      }
       break;
-    case ASSIGN: fprintf(listing,":=\n"); break;
-    case LT: fprintf(listing,"<\n"); break;
-    case EQ: fprintf(listing,"=\n"); break;
-    case LPAREN: fprintf(listing,"(\n"); break;
-    case RPAREN: fprintf(listing,")\n"); break;
-    case SEMI: fprintf(listing,";\n"); break;
-    case PLUS: fprintf(listing,"+\n"); break;
-    case MINUS: fprintf(listing,"-\n"); break;
-    case TIMES: fprintf(listing,"*\n"); break;
-    case OVER: fprintf(listing,"/\n"); break;
-    case ENDFILE: fprintf(listing,"EOF\n"); break;
-    case NUM:
+    case PLUS: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"+\n");} break;
+    case MINUS: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"-\n");} break;
+    case TIMES: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"*\n");} break;
+    case OVER: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"/\n");} break;
+    case LESS: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"<\n");} break;
+    case LEQ: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"<=\n");} break;
+    case GREATER: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,">\n");} break;
+    case GEQ: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,">=\n");} break;
+    case ASSIGN: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"=\n");} break;
+    case COMPARE: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"==\n");} break;
+    case DIFF: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"!=\n");} break;
+    case SEMI: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,";\n");} break;
+    case COMMA: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,",\n");} break;
+    case LPAREN: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"(\n");} break;
+    case RPAREN: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,")\n");} break;
+    case LCOLCH: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"[\n");} break;
+    case RCOLCH: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"]\n");} break;
+    case LBRAC: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"{\n");} break;
+    case RBRAC: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"}\n");} break;
+    case ENDFILE: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"EOF\n");} break;
+    case NUM: 
+      if(FlagComment == 0){
+        fprintf(listing,"\t%d: ",lineno);
       fprintf(listing,
           "NUM, val= %s\n",tokenString);
+      }
       break;
     case ID:
+      if(FlagComment == 0){
+        fprintf(listing,"\t%d: ",lineno);
       fprintf(listing,
           "ID, name= %s\n",tokenString);
+      }
       break;
     case ERROR:
+      if(FlagComment == 0){
+        fprintf(listing,"\t%d: ",lineno);
       fprintf(listing,
           "ERROR: %s\n",tokenString);
+      }
       break;
     default: /* should never happen */
+      fprintf(listing,"\t%d: ",lineno);
       fprintf(listing,"Unknown token: %d\n",token);
-  }
 }
-
+}
 /* Function newStmtNode creates a new statement
  * node for syntax tree construction
  */

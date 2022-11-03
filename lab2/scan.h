@@ -1,8 +1,6 @@
 /****************************************************/
 /* File: scan.h                                     */
-/* The scanner interface for the TINY compiler      */
-/* Compiler Construction: Principles and Practice   */
-/* Kenneth C. Louden                                */
+/* The scanner interface for the C- compiler      */
 /****************************************************/
 
 #ifndef _SCAN_H_
