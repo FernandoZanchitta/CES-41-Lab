@@ -72,11 +72,11 @@ comp_decl
     ;
 local_decl
     : local_decl var_decl {printf(" Entrou em local_decl var_decl\n");}
-    | VOID {printf(" Entrou em VOID\n");}
+    | %empty {printf(" Entrou em empty\n");}
     ;
 stmt_lista
     : stmt_lista stmt {printf(" Entrou em stmt_lista stmt\n");}
-    | VOID {printf(" Entrou em VOID\n");}
+    | %empty {printf(" Entrou em empty\n");}
     ;
 stmt
     : exp_decl {printf(" Entrou em exp_decl\n");}
@@ -147,7 +147,7 @@ ativation
     ;
 args
     : arg_lista {printf(" Entrou em arg_lista\n");}
-    | VOID {printf(" Entrou em VOID\n");}
+    | %empty {printf(" Entrou em empty\n");}
     ;
 arg_lista
     : arg_lista COMMA exp {printf(" Entrou em arg_lista COMMA exp\n");}

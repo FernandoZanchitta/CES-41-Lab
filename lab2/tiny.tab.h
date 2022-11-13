@@ -1,14 +1,14 @@
-/* A Bison parser, made by GNU Bison 2.3.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
+/* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
+   Inc.
 
-   This program is free software; you can redistribute it and/or modify
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,9 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -33,89 +31,77 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Tokens.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
+
+#ifndef YY_YY_TINY_TAB_H_INCLUDED
+# define YY_YY_TINY_TAB_H_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
+
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     ID = 258,
-     NUM = 259,
-     IF = 260,
-     ELSE = 261,
-     INT = 262,
-     RETURN = 263,
-     VOID = 264,
-     WHILE = 265,
-     WRITE = 266,
-     PLUS = 267,
-     MINUS = 268,
-     TIMES = 269,
-     OVER = 270,
-     LESS = 271,
-     LEQ = 272,
-     GREATER = 273,
-     GEQ = 274,
-     COMPARE = 275,
-     LPAREN = 276,
-     RPAREN = 277,
-     DIFF = 278,
-     ASSIGN = 279,
-     SEMI = 280,
-     COMMA = 281,
-     LCOLCH = 282,
-     RCOLCH = 283,
-     LBRAC = 284,
-     RBRAC = 285,
-     BEGCOM = 286,
-     ENDCOM = 287,
-     ERROR = 288,
-     ENDFILE = 289
-   };
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    ID = 258,                      /* ID  */
+    NUM = 259,                     /* NUM  */
+    IF = 260,                      /* IF  */
+    ELSE = 261,                    /* ELSE  */
+    INT = 262,                     /* INT  */
+    RETURN = 263,                  /* RETURN  */
+    VOID = 264,                    /* VOID  */
+    WHILE = 265,                   /* WHILE  */
+    WRITE = 266,                   /* WRITE  */
+    PLUS = 267,                    /* PLUS  */
+    MINUS = 268,                   /* MINUS  */
+    TIMES = 269,                   /* TIMES  */
+    OVER = 270,                    /* OVER  */
+    LESS = 271,                    /* LESS  */
+    LEQ = 272,                     /* LEQ  */
+    GREATER = 273,                 /* GREATER  */
+    GEQ = 274,                     /* GEQ  */
+    COMPARE = 275,                 /* COMPARE  */
+    LPAREN = 276,                  /* LPAREN  */
+    RPAREN = 277,                  /* RPAREN  */
+    DIFF = 278,                    /* DIFF  */
+    ASSIGN = 279,                  /* ASSIGN  */
+    SEMI = 280,                    /* SEMI  */
+    COMMA = 281,                   /* COMMA  */
+    LCOLCH = 282,                  /* LCOLCH  */
+    RCOLCH = 283,                  /* RCOLCH  */
+    LBRAC = 284,                   /* LBRAC  */
+    RBRAC = 285,                   /* RBRAC  */
+    BEGCOM = 286,                  /* BEGCOM  */
+    ENDCOM = 287,                  /* ENDCOM  */
+    ERROR = 288,                   /* ERROR  */
+    ENDFILE = 289                  /* ENDFILE  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Tokens.  */
-#define ID 258
-#define NUM 259
-#define IF 260
-#define ELSE 261
-#define INT 262
-#define RETURN 263
-#define VOID 264
-#define WHILE 265
-#define WRITE 266
-#define PLUS 267
-#define MINUS 268
-#define TIMES 269
-#define OVER 270
-#define LESS 271
-#define LEQ 272
-#define GREATER 273
-#define GEQ 274
-#define COMPARE 275
-#define LPAREN 276
-#define RPAREN 277
-#define DIFF 278
-#define ASSIGN 279
-#define SEMI 280
-#define COMMA 281
-#define LCOLCH 282
-#define RCOLCH 283
-#define LBRAC 284
-#define RBRAC 285
-#define BEGCOM 286
-#define ENDCOM 287
-#define ERROR 288
-#define ENDFILE 289
 
-
-
-
+/* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef int YYSTYPE;
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
 #endif
+
 
 extern YYSTYPE yylval;
 
+
+int yyparse (void);
+
+
+#endif /* !YY_YY_TINY_TAB_H_INCLUDED  */

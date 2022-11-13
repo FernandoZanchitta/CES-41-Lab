@@ -477,12 +477,12 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "tiny.l"
+#line 1 "lexical.l"
 /****************************************************/
 /* File: lexical.l                                 */
 /* Lex specification for C-                         */
 /****************************************************/
-#line 7 "tiny.l"
+#line 7 "lexical.l"
 #include "globals.h"
 #include "util.h"
 #include "scan.h"
@@ -708,7 +708,7 @@ YY_DECL
 		}
 
 	{
-#line 21 "tiny.l"
+#line 21 "lexical.l"
 
 #line 713 "lex.yy.c"
 
@@ -769,168 +769,168 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 22 "tiny.l"
+#line 22 "lexical.l"
 {return IF;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 23 "tiny.l"
+#line 23 "lexical.l"
 {return ELSE;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 24 "tiny.l"
+#line 24 "lexical.l"
 {return INT;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 25 "tiny.l"
+#line 25 "lexical.l"
 {return RETURN;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 26 "tiny.l"
+#line 26 "lexical.l"
 {return VOID;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 27 "tiny.l"
+#line 27 "lexical.l"
 {return WHILE;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 28 "tiny.l"
+#line 28 "lexical.l"
 {return PLUS;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 29 "tiny.l"
+#line 29 "lexical.l"
 {return MINUS;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 30 "tiny.l"
+#line 30 "lexical.l"
 {return TIMES;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 31 "tiny.l"
+#line 31 "lexical.l"
 {return OVER;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 32 "tiny.l"
+#line 32 "lexical.l"
 {return LESS;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 33 "tiny.l"
+#line 33 "lexical.l"
 {return LEQ;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 34 "tiny.l"
+#line 34 "lexical.l"
 {return GREATER;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 35 "tiny.l"
+#line 35 "lexical.l"
 {return GEQ;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 36 "tiny.l"
+#line 36 "lexical.l"
 {return ASSIGN;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 37 "tiny.l"
+#line 37 "lexical.l"
 {return COMPARE;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 38 "tiny.l"
+#line 38 "lexical.l"
 {return DIFF;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 39 "tiny.l"
+#line 39 "lexical.l"
 {return SEMI;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 40 "tiny.l"
+#line 40 "lexical.l"
 {return COMMA;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 41 "tiny.l"
+#line 41 "lexical.l"
 {return LPAREN;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 42 "tiny.l"
+#line 42 "lexical.l"
 {return RPAREN;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 43 "tiny.l"
+#line 43 "lexical.l"
 {return LCOLCH;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 44 "tiny.l"
+#line 44 "lexical.l"
 {return RCOLCH;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 45 "tiny.l"
+#line 45 "lexical.l"
 {return LBRAC;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 46 "tiny.l"
+#line 46 "lexical.l"
 {return RBRAC;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 47 "tiny.l"
+#line 47 "lexical.l"
 {return NUM;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 48 "tiny.l"
+#line 48 "lexical.l"
 {return ID;}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 49 "tiny.l"
+#line 49 "lexical.l"
 {lineno++;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 50 "tiny.l"
+#line 50 "lexical.l"
 {/* skip whitespace */}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 51 "tiny.l"
+#line 51 "lexical.l"
 {return BEGCOM;}  
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 52 "tiny.l"
+#line 52 "lexical.l"
 {return ENDCOM;}  
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 53 "tiny.l"
+#line 53 "lexical.l"
 {return ERROR;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 54 "tiny.l"
+#line 54 "lexical.l"
 ECHO;
 	YY_BREAK
 #line 936 "lex.yy.c"
@@ -1938,7 +1938,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 54 "tiny.l"
+#line 54 "lexical.l"
 
 TokenType getToken(void)
 { static int firstTime = TRUE;
