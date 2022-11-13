@@ -10,7 +10,7 @@
 #include <string.h>
 /* lexeme of identifier or reserved word */
 char tokenString[MAXTOKENLEN+1];
-FlagComment = 0;
+int FlagComment = 0;
 %}
 digit       [0-9]
 number      {digit}+

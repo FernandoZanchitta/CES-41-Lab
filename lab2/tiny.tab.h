@@ -57,12 +57,12 @@
      GREATER = 273,
      GEQ = 274,
      COMPARE = 275,
-     DIFF = 276,
-     ASSIGN = 277,
-     SEMI = 278,
-     COMMA = 279,
-     LPAREN = 280,
-     RPAREN = 281,
+     LPAREN = 276,
+     RPAREN = 277,
+     DIFF = 278,
+     ASSIGN = 279,
+     SEMI = 280,
+     COMMA = 281,
      LCOLCH = 282,
      RCOLCH = 283,
      LBRAC = 284,
@@ -92,12 +92,12 @@
 #define GREATER 273
 #define GEQ 274
 #define COMPARE 275
-#define DIFF 276
-#define ASSIGN 277
-#define SEMI 278
-#define COMMA 279
-#define LPAREN 280
-#define RPAREN 281
+#define LPAREN 276
+#define RPAREN 277
+#define DIFF 278
+#define ASSIGN 279
+#define SEMI 280
+#define COMMA 281
 #define LCOLCH 282
 #define RCOLCH 283
 #define LBRAC 284
