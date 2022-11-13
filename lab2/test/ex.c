@@ -1,1 +1,1 @@
-int funcao ( void ) { void void }
+int a;

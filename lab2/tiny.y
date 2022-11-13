@@ -34,23 +34,40 @@ int yyerror(char *s);
 %% /* Grammar for C- */
 
 program     
-      : decl_lista {printf(" Entrou em decl_lista\n");} 
+      : decl_lista {savedTree = $1;} 
       ;
 decl_lista    
-      : decl_lista decl {printf(" Entrou em decl_lista decl\n");}
-      | decl  {printf(" Entrou em decl\n");}
+      : decl_lista decl {YYSTYPE t = $1;
+                         if (t != NULL)
+                         { while (t->sibling != NULL)
+                             t = t->sibling;
+                           t->sibling = $2;
+                           $$ = $1;
+                         }
+                         else $$ = $2;
+                        }
+      | decl {
+            $$ = $1;
+        }
       ;
 decl        
-      : var_decl {printf(" Entrou em var_decl\n");}
+      : var_decl {$$ = $1;}
       | func_decl {printf(" Entrou em func_decl\n");}
       ;
 var_decl    
-      : type_esp ID SEMI {printf(" Entrou em type ID SEMI\n");}
+      : type_esp ID{savedName = copyString(tokenString);
+      savedLineNo = lineno; } SEMI {
+        $$ = newDeclNode();
+        // printf("Entrou em var_decl\n");
+        $$->type = $1->type;
+        // printf("Passou o type\n");
+        $$->attr.name = savedName;
+        $$->lineno = savedLineNo;}
       | type_esp ID LCOLCH NUM RCOLCH SEMI {printf(" Entrou em type_esp ID LCOLCH NUM RCOLCH\n");}
       ;
 type_esp    
-      : INT {printf(" Entrou em INT\n");}
-      | VOID {printf(" Entrou em VOID\n");}
+      : INT {$$ = newTypeNode(Integer);}
+      | VOID {$$ = newTypeNode(Void);}
       ;
 func_decl   
       : type_esp ID LPAREN params RPAREN comp_decl {printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");}

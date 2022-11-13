@@ -196,10 +196,54 @@ void printTree( TreeNode * tree )
           break;
       }
     }
+    else if(tree->nodekind==DeclK)
+    { 
+          fprintf(listing,"Var: %s\n",tree->attr.name);
+          if(tree->type == Integer)
+            fprintf(listing,"Type: Integer\n");
+          else if(tree->type == Void)
+            fprintf(listing,"Type: Void\n");
+          else
+            fprintf(listing,"Type: Unknown\n");
+    }
     else fprintf(listing,"Unknown node kind\n");
     for (i=0;i<MAXCHILDREN;i++)
          printTree(tree->child[i]);
     tree = tree->sibling;
   }
   UNINDENT;
+}
+
+
+TreeNode * newDeclNode()
+{
+  TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
+  int i;
+  if (t==NULL)
+    fprintf(listing,"Out of memory error at line %d\n",lineno);
+  else {
+    printf("entrei no newDeclNode\n");
+    for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
+    t->sibling = NULL;
+    t->nodekind = DeclK;
+    t->lineno = lineno;
+    printf("sai do newDeclNode\n");
+  }
+  return t;
+}
+TreeNode * newTypeNode(ExpType type){
+  TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
+  int i;
+  if (t==NULL)
+    fprintf(listing,"Out of memory error at line %d\n",lineno);
+  else {
+    printf("entrei no newTypeNode\n");
+    for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
+    t->sibling = NULL;
+    t->nodekind = TypeK;
+    t->type = type;
+    t->lineno = lineno;
+    printf("sai do newTypeNode\n");
+  }
+  return t;
 }

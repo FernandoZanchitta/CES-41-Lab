@@ -1,5 +1,7 @@
 all:
-    bison -d tiny.y
-    flex tiny.l
-    gcc -c *.c
-    gcc -o tiny *.o -ly -ll
+	bison -d tiny.y
+	flex tiny.l
+	gcc -c *.c  
+	gcc -o tiny *.o -ly -ll 
+clear:
+	rm *.o *.tab.* *.yy.*

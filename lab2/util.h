@@ -33,4 +33,13 @@ char * copyString( char * );
  */
 void printTree( TreeNode * );
 
+/* Function newDeclNode creates a new declaration
+ * node for syntax tree construction
+ */
+TreeNode * newDeclNode();
+
+/* 
+* Function newTypeNode creates a new type node for syntax tree construction
+*/
+TreeNode * newTypeNode();
 #endif
