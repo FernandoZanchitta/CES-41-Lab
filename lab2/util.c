@@ -205,6 +205,17 @@ void printTree( TreeNode * tree )
             fprintf(listing,"Type: Void\n");
           else
             fprintf(listing,"Type: Unknown\n");
+          switch (tree->kind.decl) 
+          {
+          case VarK:
+              fprintf(listing, "ID variable \n");
+              break;
+          case ArrayK:
+              fprintf(listing, "ID array \n");
+              break;
+          default:
+              break;
+          }
     }
     else fprintf(listing,"Unknown node kind\n");
     for (i=0;i<MAXCHILDREN;i++)
@@ -215,7 +226,7 @@ void printTree( TreeNode * tree )
 }
 
 
-TreeNode * newDeclNode()
+TreeNode * newDeclNode(DeclKind kind)
 {
   TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
   int i;
@@ -226,6 +237,7 @@ TreeNode * newDeclNode()
     for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
     t->sibling = NULL;
     t->nodekind = DeclK;
+    t->kind.decl = kind;
     t->lineno = lineno;
     printf("sai do newDeclNode\n");
   }

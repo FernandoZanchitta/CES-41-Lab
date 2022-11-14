@@ -55,15 +55,26 @@ decl
       | func_decl {printf(" Entrou em func_decl\n");}
       ;
 var_decl    
-      : type_esp ID{savedName = copyString(tokenString);
-      savedLineNo = lineno; } SEMI {
-        $$ = newDeclNode();
-        // printf("Entrou em var_decl\n");
+      : type_esp ID{
+        savedName = copyString(tokenString);
+        savedLineNo = lineno; 
+        }
+        SEMI{
+        $$ = newDeclNode(VarK);
         $$->type = $1->type;
-        // printf("Passou o type\n");
         $$->attr.name = savedName;
-        $$->lineno = savedLineNo;}
-      | type_esp ID LCOLCH NUM RCOLCH SEMI {printf(" Entrou em type_esp ID LCOLCH NUM RCOLCH\n");}
+        $$->lineno = savedLineNo;
+        }
+      | type_esp ID{
+        savedName = copyString(tokenString);
+        savedLineNo = lineno; 
+        } LCOLCH NUM RCOLCH SEMI {
+        printf(" Entrou em type_esp ID LCOLCH NUM RCOLCH\n");
+        $$ = newDeclNode(ArrayK);
+        $$->type = $1->type;
+        $$->attr.name = savedName;
+        $$->lineno = savedLineNo;
+        }
       ;
 type_esp    
       : INT {$$ = newTypeNode(Integer);}
