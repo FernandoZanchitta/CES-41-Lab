@@ -57,7 +57,7 @@ decl
 var_decl    
       : type_esp ID{
         printf("tokenString: %s\n", tokenString);
-        savedName = copyString(tokenString);
+        savedName = copyString(ID_name);
         savedLineNo = lineno; 
         
         }
@@ -66,7 +66,7 @@ var_decl
         $$->child[0] = newDeclNode(VarK);
 
         $$->child[0]->type = $1->type;
-        $$->child[0]->attr.name = ID_name;
+        $$->child[0]->attr.name = savedName;
         $$->child[0]->lineno = savedLineNo;
         printf("lineno: %d\n", $$->child[0]->lineno);
         }
@@ -77,7 +77,7 @@ var_decl
             $$ = $1;
             $$->child[0] = newDeclNode(ArrayK);
             $$->child[0]->type = $1->type;
-            $$->child[0]->attr.name = ID_name;
+            $$->child[0]->attr.name = savedName;
             $$->child[0]->lineno = savedLineNo;
         }
       ;
@@ -87,14 +87,14 @@ type_esp
       ;
 func_decl   
       : type_esp ID {
-        savedName = copyString(tokenString);
+        savedName = copyString(ID_name);
         savedLineNo = lineno; 
       }LPAREN params RPAREN comp_decl {
         printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
         $$ = $1;
         $$->child[0] = newFuncNode();
         $$->child[0]->type = $1->type;
-        $$->child[0]->attr.name = ID_name;
+        $$->child[0]->attr.name = savedName;
         $$->child[0]->lineno = savedLineNo;
         $$->child[0]->child[0] = $5;
         $$->child[0]->child[1] = $7;
@@ -128,12 +128,12 @@ param_list
 param
     :type_esp ID {
         printf(" Entrou em type_esp ID\n");
-        savedName = copyString(tokenString);
+        savedName = copyString(ID_name);
         savedLineNo = lineno; 
         $$ = $1;
         $$->child[0] = newParamNode(VarK);
         $$->child[0]->type = $1->type;
-        $$->child[0]->attr.name = ID_name;
+        $$->child[0]->attr.name = savedName;
         $$->child[0]->lineno = lineno;
         }
     |type_esp ID{
@@ -144,7 +144,7 @@ param
         $$ = $1;
         $$->child[0] = newParamNode(ArrayK);
         $$->child[0]->type = $1->type;
-        $$->child[0]->attr.name = ID_name;
+        $$->child[0]->attr.name = savedName;
         $$->child[0]->lineno = lineno;
     }
     ;
@@ -178,22 +178,23 @@ local_decl
         else $$ = $2;
         }
     | %empty {
-        $$ = NULL;
         printf(" Entrou em empty\n");
+        $$ = NULL;
         }
     ;
 stmt_lista
     : stmt_lista stmt {
+        // $$ = NULL;
         printf(" Entrou em stmt_lista stmt\n");
-        // YYSTYPE t = $1;
-        // if (t != NULL)
-        // { while (t->sibling != NULL)
-        //     t = t->sibling;
-        // t->sibling = $2;
-        // $$ = $1;
-        // }
-        // else $$ = $2;
+        YYSTYPE t = $1;
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = $2;
+        $$ = $1;
         }
+        else $$ = $2;
+         }
     | %empty {
         printf(" Entrou em empty\n");
         $$ = NULL;

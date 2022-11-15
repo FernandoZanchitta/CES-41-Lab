@@ -1,2 +1,3 @@
-int funcao (int a){
+int teste ( int a, int c) {
+    int b;
 }

@@ -72,7 +72,7 @@ TokenType getToken(void)
     //char * topo = top_id(stack);
     //fprintf(listing," topo da pilha: %s\n", topo);
     strcpy(ID_name, tokenString);
-    fprintf(listing, "ID_name = %s\n", ID_name);
+    //fprintf(listing, "ID_name = %s\n", ID_name);
   }
   if (TraceScan) {
     printToken(currentToken,tokenString);
