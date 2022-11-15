@@ -68,9 +68,7 @@ extern int FlagComment;
 extern FILE* source; /* source code text file */
 extern FILE* listing; /* listing output text file */
 extern FILE* code; /* code text file for TM simulator */
-
 extern int lineno; /* source line number for listing */
-
 /**************************************************/
 /***********   Syntax tree for parsing ************/
 /**************************************************/
@@ -96,6 +94,11 @@ typedef struct treeNode
              int val;
              char * name; } attr;
    } TreeNode;
+typedef struct stack_id{
+      char * id ;
+      struct stack_id * next;
+} Stack_id;
+extern Stack_id * stack_id; /* stack of identifiers */
 
 /**************************************************/
 /***********   Flags for tracing       ************/
@@ -105,6 +108,7 @@ typedef struct treeNode
  * be echoed to the listing file with line numbers
  * during parsing
  */
+extern Stack_id *stack_id;
 extern int EchoSource;
 
 /* TraceScan = TRUE causes token information to be

@@ -13,6 +13,14 @@
  */
 void printToken( TokenType, const char* );
 
+/*
+* Stack_id functions
+*/
+void create_stack_id(Stack_id * );
+void push_back_id(char * ,Stack_id * );
+void pop_id(Stack_id *);
+char* top_id(Stack_id *);
+
 /* Function newStmtNode creates a new statement
  * node for syntax tree construction
  */

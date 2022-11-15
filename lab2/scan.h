@@ -11,7 +11,7 @@
 
 /* tokenString array stores the lexeme of each token */
 extern char tokenString[MAXTOKENLEN+1];
-
+extern char ID_name[MAXTOKENLEN+1];
 /* function getToken returns the 
  * next token in source file
  */

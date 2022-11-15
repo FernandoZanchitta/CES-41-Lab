@@ -81,6 +81,59 @@ void printToken( TokenType token, const char* tokenString )
       fprintf(listing,"Unknown token: %d\n",token);
 }
 }
+/*
+Stack_id functions
+*/
+void create_stack_id(Stack_id * stack){
+  stack = (Stack_id *) malloc(sizeof(Stack_id));
+  stack->next = NULL;
+}
+void push_back_id(char *id,Stack_id * stack){
+  Stack_id * new = (Stack_id *)malloc(sizeof(Stack_id));
+  new->id = id;
+  new->next = NULL;
+  if(stack == NULL){
+    // allocate memory for stack
+    stack = new;
+  }
+  else if(stack->next == NULL){
+    stack->next = new;
+  }else{
+    fprintf(listing,"Pushing %s\n",id);
+    Stack_id * aux = stack->next;
+    while(aux->next != NULL){
+      aux = aux->next;
+    }
+    aux->next = new;
+  }
+}
+void pop_id(Stack_id * stack){
+  if(stack->next != NULL){
+    Stack_id * aux = stack->next;
+    while(aux->next->next != NULL){
+      aux = aux->next;
+    }
+    free(aux->next);
+    aux->next = NULL;
+  }
+}
+char * top_id(Stack_id * stack){
+  if(stack->next != NULL){
+    Stack_id * aux = stack->next;
+    while(aux->next != NULL){
+      aux = aux->next;
+    }
+    fprintf(listing,"Top id\n"); 
+    return aux->id;
+  }
+  else{
+     
+    return stack->id;
+  }
+  return NULL;
+}
+    
+
 /* Function newStmtNode creates a new statement
  * node for syntax tree construction
  */
