@@ -152,6 +152,14 @@ comp_decl
     : LBRAC local_decl stmt_lista RBRAC {
         printf(" Entrou em LBRAC local_decl stmt_lista RBRAC\n");
         // considerando o local_decl e stmt_lista irmãos
+        YYSTYPE t = $1;
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = $2;
+        $$ = $1;
+        }
+        else $$ = $2;
     }
     ;
 local_decl
@@ -187,30 +195,64 @@ stmt_lista
         }
     ;
 stmt
-    : exp_decl {printf(" Entrou em exp_decl\n");}
-    | comp_decl {printf(" Entrou em comp_decl\n");}
-    | sel_decl {printf(" Entrou em sel_decl\n");}
-    | repeat_decl {printf(" Entrou em repeat_decl\n");}
-    | return_decl {printf(" Entrou em return_decl\n");}
+    : exp_decl {
+        printf(" Entrou em exp_decl\n");
+        $$ = $1;
+        }
+    | comp_decl {
+        printf(" Entrou em comp_decl\n");
+        $$ = $1;
+        }
+    | sel_decl {
+        printf(" Entrou em sel_decl\n");
+        $$ = $1;
+        }
+    | repeat_decl {
+        printf(" Entrou em repeat_decl\n");
+        $$ = $1;
+        }
+    | return_decl {
+        printf(" Entrou em return_decl\n");
+        $$ = $1;
+        }
     ;
 exp_decl
-    : exp SEMI {printf(" Entrou em exp SEMI\n");}
-    | SEMI {printf(" Entrou em SEMI\n");}
+    : exp SEMI {
+        printf(" Entrou em exp SEMI\n");
+        $$ = $1;
+        }
+    | SEMI {
+        printf(" Entrou em SEMI\n");
+        }
     ;
 sel_decl
-    : IF LPAREN exp RPAREN stmt {printf(" Entrou em IF LPAREN exp RPAREN stmt\n");}
-    | IF LPAREN exp RPAREN stmt ELSE stmt {printf(" Entrou em IF LPAREN exp RPAREN stmt ELSE stmt\n");}
+    : IF LPAREN exp RPAREN stmt {
+        printf(" Entrou em IF LPAREN exp RPAREN stmt\n");
+        }
+    | IF LPAREN exp RPAREN stmt ELSE stmt {
+        printf(" Entrou em IF LPAREN exp RPAREN stmt ELSE stmt\n");
+        }
     ;
 repeat_decl
-    : WHILE LPAREN exp RPAREN stmt {printf(" Entrou em WHILE LPAREN exp RPAREN stmt\n");}
+    : WHILE LPAREN exp RPAREN stmt {
+        printf(" Entrou em WHILE LPAREN exp RPAREN stmt\n");
+        }
     ;
 return_decl
-    : RETURN SEMI {printf(" Entrou em RETURN SEMI\n");}
-    | RETURN exp SEMI {printf(" Entrou em RETURN exp SEMI\n");}
+    : RETURN SEMI {
+        printf(" Entrou em RETURN SEMI\n");
+        }
+    | RETURN exp SEMI {
+        printf(" Entrou em RETURN exp SEMI\n");
+        }
     ;
 exp
-    : var ASSIGN exp {printf(" Entrou em var ASSIGN exp\n");}
-    | simple_exp {printf(" Entrou em simple_exp\n");}
+    : var ASSIGN exp {
+        printf(" Entrou em var ASSIGN exp\n");
+        }
+    | simple_exp {
+        printf(" Entrou em simple_exp\n");
+        }
     ;
 var
     : ID {printf(" Entrou em ID\n");}

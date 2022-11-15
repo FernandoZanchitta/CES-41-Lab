@@ -1,1 +1,3 @@
-int a (int b, int c) { }
+int teste (int b) { 
+    int a;
+}
