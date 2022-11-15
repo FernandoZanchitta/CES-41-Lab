@@ -156,29 +156,31 @@ enum yysymbol_kind_t
   YYSYMBOL_41_2 = 41,                      /* $@2  */
   YYSYMBOL_type_esp = 42,                  /* type_esp  */
   YYSYMBOL_func_decl = 43,                 /* func_decl  */
-  YYSYMBOL_params = 44,                    /* params  */
-  YYSYMBOL_param_list = 45,                /* param_list  */
-  YYSYMBOL_param = 46,                     /* param  */
-  YYSYMBOL_comp_decl = 47,                 /* comp_decl  */
-  YYSYMBOL_local_decl = 48,                /* local_decl  */
-  YYSYMBOL_stmt_lista = 49,                /* stmt_lista  */
-  YYSYMBOL_stmt = 50,                      /* stmt  */
-  YYSYMBOL_exp_decl = 51,                  /* exp_decl  */
-  YYSYMBOL_sel_decl = 52,                  /* sel_decl  */
-  YYSYMBOL_repeat_decl = 53,               /* repeat_decl  */
-  YYSYMBOL_return_decl = 54,               /* return_decl  */
-  YYSYMBOL_exp = 55,                       /* exp  */
-  YYSYMBOL_var = 56,                       /* var  */
-  YYSYMBOL_simple_exp = 57,                /* simple_exp  */
-  YYSYMBOL_relacional = 58,                /* relacional  */
-  YYSYMBOL_soma_exp = 59,                  /* soma_exp  */
-  YYSYMBOL_soma = 60,                      /* soma  */
-  YYSYMBOL_term = 61,                      /* term  */
-  YYSYMBOL_mult = 62,                      /* mult  */
-  YYSYMBOL_factor = 63,                    /* factor  */
-  YYSYMBOL_ativation = 64,                 /* ativation  */
-  YYSYMBOL_args = 65,                      /* args  */
-  YYSYMBOL_arg_lista = 66                  /* arg_lista  */
+  YYSYMBOL_44_3 = 44,                      /* $@3  */
+  YYSYMBOL_params = 45,                    /* params  */
+  YYSYMBOL_param_list = 46,                /* param_list  */
+  YYSYMBOL_param = 47,                     /* param  */
+  YYSYMBOL_48_4 = 48,                      /* $@4  */
+  YYSYMBOL_comp_decl = 49,                 /* comp_decl  */
+  YYSYMBOL_local_decl = 50,                /* local_decl  */
+  YYSYMBOL_stmt_lista = 51,                /* stmt_lista  */
+  YYSYMBOL_stmt = 52,                      /* stmt  */
+  YYSYMBOL_exp_decl = 53,                  /* exp_decl  */
+  YYSYMBOL_sel_decl = 54,                  /* sel_decl  */
+  YYSYMBOL_repeat_decl = 55,               /* repeat_decl  */
+  YYSYMBOL_return_decl = 56,               /* return_decl  */
+  YYSYMBOL_exp = 57,                       /* exp  */
+  YYSYMBOL_var = 58,                       /* var  */
+  YYSYMBOL_simple_exp = 59,                /* simple_exp  */
+  YYSYMBOL_relacional = 60,                /* relacional  */
+  YYSYMBOL_soma_exp = 61,                  /* soma_exp  */
+  YYSYMBOL_soma = 62,                      /* soma  */
+  YYSYMBOL_term = 63,                      /* term  */
+  YYSYMBOL_mult = 64,                      /* mult  */
+  YYSYMBOL_factor = 65,                    /* factor  */
+  YYSYMBOL_ativation = 66,                 /* ativation  */
+  YYSYMBOL_args = 67,                      /* args  */
+  YYSYMBOL_arg_lista = 68                  /* arg_lista  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -506,16 +508,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  9
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   98
+#define YYLAST   97
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  35
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  32
+#define YYNNTS  34
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  65
+#define YYNRULES  67
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  104
+#define YYNSTATES  106
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   289
@@ -565,15 +567,15 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int16 yyrline[] =
 {
-       0,    37,    37,    40,    49,    54,    55,    58,    58,    68,
-      68,    80,    81,    84,    87,    88,    91,    92,    95,    96,
-      99,   102,   103,   106,   107,   110,   111,   112,   113,   114,
-     117,   118,   121,   122,   125,   128,   129,   132,   133,   136,
-     137,   140,   141,   144,   145,   146,   147,   148,   149,   152,
-     153,   156,   157,   160,   161,   164,   165,   168,   169,   170,
-     171,   174,   177,   178,   181,   182
+       0,    37,    37,    40,    49,    54,    55,    58,    58,    73,
+      73,    85,    86,    89,    89,   104,   108,   111,   123,   129,
+     139,   139,   152,   158,   169,   174,   185,   190,   191,   192,
+     193,   194,   197,   198,   201,   202,   205,   208,   209,   212,
+     213,   216,   217,   220,   221,   224,   225,   226,   227,   228,
+     229,   232,   233,   236,   237,   240,   241,   244,   245,   248,
+     249,   250,   251,   254,   257,   258,   261,   262
 };
 #endif
 
@@ -595,10 +597,10 @@ static const char *const yytname[] =
   "RPAREN", "DIFF", "ASSIGN", "SEMI", "COMMA", "LCOLCH", "RCOLCH", "LBRAC",
   "RBRAC", "BEGCOM", "ENDCOM", "ERROR", "ENDFILE", "$accept", "program",
   "decl_lista", "decl", "var_decl", "$@1", "$@2", "type_esp", "func_decl",
-  "params", "param_list", "param", "comp_decl", "local_decl", "stmt_lista",
-  "stmt", "exp_decl", "sel_decl", "repeat_decl", "return_decl", "exp",
-  "var", "simple_exp", "relacional", "soma_exp", "soma", "term", "mult",
-  "factor", "ativation", "args", "arg_lista", YY_NULLPTR
+  "$@3", "params", "param_list", "param", "$@4", "comp_decl", "local_decl",
+  "stmt_lista", "stmt", "exp_decl", "sel_decl", "repeat_decl",
+  "return_decl", "exp", "var", "simple_exp", "relacional", "soma_exp",
+  "soma", "term", "mult", "factor", "ativation", "args", "arg_lista", YY_NULLPTR
 };
 
 static const char *
@@ -608,12 +610,12 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-65)
+#define YYPACT_NINF (-58)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-16)
+#define YYTABLE_NINF (-21)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -622,17 +624,17 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      30,   -65,   -65,     1,    30,   -65,   -65,    11,   -65,   -65,
-     -65,   -12,    38,     2,     8,    24,    49,    45,    42,   -65,
-     -65,    65,    44,    41,    30,    46,    47,   -65,   -65,   -65,
-      48,   -65,    30,   -65,   -65,    69,     0,    50,   -10,   -65,
-      55,     3,    57,    37,   -65,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,    54,    56,   -65,    43,    36,   -65,   -65,    37,
-      37,    37,   -65,    58,    37,    59,   -65,    37,   -65,   -65,
-     -65,   -65,   -65,   -65,   -65,   -65,    37,    37,   -65,   -65,
-      37,   -65,    60,    61,    62,    63,   -65,    64,   -65,   -65,
-     -65,    52,    36,   -65,   -65,    37,   -65,    28,    28,   -65,
-      78,   -65,    28,   -65
+       4,   -58,   -58,     1,     4,   -58,   -58,    19,   -58,   -58,
+     -58,   -12,    23,    24,    29,   -58,    48,     5,    30,    45,
+      66,    49,    44,   -58,    47,    46,    50,     4,   -58,    51,
+     -58,   -58,   -58,    52,     4,   -58,   -58,    71,     0,    54,
+      14,   -58,    55,     3,    56,    13,   -58,   -58,   -58,   -58,
+     -58,   -58,   -58,   -58,    57,    59,   -58,    43,    25,   -58,
+     -58,    13,    13,    13,   -58,    60,    13,    53,   -58,    13,
+     -58,   -58,   -58,   -58,   -58,   -58,   -58,   -58,    13,    13,
+     -58,   -58,    13,   -58,    62,    61,    58,    67,   -58,    68,
+     -58,   -58,   -58,    33,    25,   -58,   -58,    13,   -58,    28,
+      28,   -58,    82,   -58,    28,   -58
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -641,34 +643,34 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        0,    11,    12,     0,     2,     4,     5,     0,     6,     1,
-       3,     7,     0,     0,     0,    12,     0,     0,    14,    17,
-       8,     0,    18,     0,     0,     0,     0,    22,    13,    16,
-       0,    19,    24,    10,    21,     0,     0,     7,    39,    60,
-       0,     0,     0,     0,    31,    20,    26,    23,    25,    27,
-      28,    29,     0,    58,    38,    42,    50,    54,    59,    63,
-       0,     0,    35,     0,     0,     0,    30,     0,    51,    52,
-      44,    43,    45,    46,    47,    48,     0,     0,    55,    56,
-       0,    65,     0,    62,     0,     0,    36,     0,    57,    37,
-      58,    41,    49,    53,    61,     0,    40,     0,     0,    64,
-      32,    34,     0,    33
+       3,     7,     0,     0,     0,     8,     0,     0,     0,    12,
+       0,     0,    15,    18,     0,    19,     0,     0,    10,     0,
+      24,    14,    17,     0,    26,    21,    23,     0,     0,     7,
+      41,    62,     0,     0,     0,     0,    33,    22,    28,    25,
+      27,    29,    30,    31,     0,    60,    40,    44,    52,    56,
+      61,    65,     0,     0,    37,     0,     0,     0,    32,     0,
+      53,    54,    46,    45,    47,    48,    49,    50,     0,     0,
+      57,    58,     0,    67,     0,    64,     0,     0,    38,     0,
+      59,    39,    60,    43,    51,    55,    63,     0,    42,     0,
+       0,    66,    34,    36,     0,    35
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -65,   -65,   -65,    84,    66,   -65,   -65,    10,   -65,   -65,
-     -65,    67,    70,   -65,   -65,   -54,   -65,   -65,   -65,   -65,
-     -41,   -64,   -65,   -65,    13,   -65,    15,   -65,    14,   -65,
-     -65,   -65
+     -58,   -58,   -58,    87,    63,   -58,   -58,    10,   -58,   -58,
+     -58,   -58,    65,   -58,    69,   -58,   -58,   -57,   -58,   -58,
+     -58,   -58,   -43,   -14,   -58,   -58,    15,   -58,    17,   -58,
+      12,   -58,   -58,   -58
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     3,     4,     5,     6,    13,    14,     7,     8,    17,
-      18,    19,    46,    32,    36,    47,    48,    49,    50,    51,
-      52,    53,    54,    76,    55,    77,    56,    80,    57,    58,
-      82,    83
+       0,     3,     4,     5,     6,    12,    13,     7,     8,    14,
+      21,    22,    23,    29,    48,    34,    38,    49,    50,    51,
+      52,    53,    54,    55,    56,    78,    57,    79,    58,    82,
+      59,    60,    84,    85
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -676,30 +678,30 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      63,     9,    65,    38,    39,    40,    38,    39,    41,    12,
-      42,    59,    90,    90,    11,    -9,    90,    60,    81,    84,
-      85,    43,    16,    87,    43,    44,    89,    20,    62,    27,
-      45,    38,    39,    40,    16,    21,    41,     1,    42,     2,
-      38,    39,    35,   100,   101,     1,   -15,    15,   103,    43,
-      78,    79,    22,    44,    99,    68,    69,    27,    43,    70,
-      71,    72,    73,    74,    68,    69,    75,    23,    24,    25,
-      27,    26,    37,    33,    30,    31,    61,    -9,    64,    66,
-      67,    88,    94,    86,   102,    97,    98,    95,    10,    91,
-      96,    29,    92,    28,    93,     0,     0,     0,    34
+      65,     9,    67,    40,    41,    42,    40,    41,    43,   -13,
+      44,     1,     1,     2,    19,    -9,    40,    41,    83,    86,
+      87,    45,    11,    89,    45,    46,    91,    20,    64,    30,
+      47,    40,    41,    42,    45,    61,    43,    20,    44,    80,
+      81,    62,   102,   103,    37,    70,    71,   105,    15,    45,
+      17,    16,    18,    46,   101,    70,    71,    30,    24,    72,
+      73,    74,    75,    76,    92,    92,    77,   -16,    92,    25,
+      27,    26,    28,   -20,    39,    90,    63,    66,    33,    30,
+      35,    -9,    68,    69,    96,    88,    98,    97,   104,    99,
+     100,    10,    32,    93,    95,    31,    94,    36
 };
 
 static const yytype_int8 yycheck[] =
 {
-      41,     0,    43,     3,     4,     5,     3,     4,     8,    21,
-      10,    21,    76,    77,     3,    27,    80,    27,    59,    60,
-      61,    21,    12,    64,    21,    25,    67,    25,    25,    29,
-      30,     3,     4,     5,    24,    27,     8,     7,    10,     9,
-       3,     4,    32,    97,    98,     7,    22,     9,   102,    21,
-      14,    15,     3,    25,    95,    12,    13,    29,    21,    16,
-      17,    18,    19,    20,    12,    13,    23,    22,    26,     4,
-      29,    27,     3,    25,    28,    28,    21,    27,    21,    25,
-      24,    22,    22,    25,     6,    22,    22,    26,     4,    76,
-      28,    24,    77,    23,    80,    -1,    -1,    -1,    32
+      43,     0,    45,     3,     4,     5,     3,     4,     8,    21,
+      10,     7,     7,     9,     9,    27,     3,     4,    61,    62,
+      63,    21,     3,    66,    21,    25,    69,    17,    25,    29,
+      30,     3,     4,     5,    21,    21,     8,    27,    10,    14,
+      15,    27,    99,   100,    34,    12,    13,   104,    25,    21,
+      21,    27,     4,    25,    97,    12,    13,    29,    28,    16,
+      17,    18,    19,    20,    78,    79,    23,    22,    82,     3,
+      26,    22,    25,    27,     3,    22,    21,    21,    27,    29,
+      28,    27,    25,    24,    22,    25,    28,    26,     6,    22,
+      22,     4,    27,    78,    82,    26,    79,    34
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -707,40 +709,40 @@ static const yytype_int8 yycheck[] =
 static const yytype_int8 yystos[] =
 {
        0,     7,     9,    36,    37,    38,    39,    42,    43,     0,
-      38,     3,    21,    40,    41,     9,    42,    44,    45,    46,
-      25,    27,     3,    22,    26,     4,    27,    29,    47,    46,
-      28,    28,    48,    25,    39,    42,    49,     3,     3,     4,
-       5,     8,    10,    21,    25,    30,    47,    50,    51,    52,
-      53,    54,    55,    56,    57,    59,    61,    63,    64,    21,
-      27,    21,    25,    55,    21,    55,    25,    24,    12,    13,
-      16,    17,    18,    19,    20,    23,    58,    60,    14,    15,
-      62,    55,    65,    66,    55,    55,    25,    55,    22,    55,
-      56,    59,    61,    63,    22,    26,    28,    22,    22,    55,
-      50,    50,     6,    50
+      38,     3,    40,    41,    44,    25,    27,    21,     4,     9,
+      42,    45,    46,    47,    28,     3,    22,    26,    25,    48,
+      29,    49,    47,    27,    50,    28,    39,    42,    51,     3,
+       3,     4,     5,     8,    10,    21,    25,    30,    49,    52,
+      53,    54,    55,    56,    57,    58,    59,    61,    63,    65,
+      66,    21,    27,    21,    25,    57,    21,    57,    25,    24,
+      12,    13,    16,    17,    18,    19,    20,    23,    60,    62,
+      14,    15,    64,    57,    67,    68,    57,    57,    25,    57,
+      22,    57,    58,    61,    63,    65,    22,    26,    28,    22,
+      22,    57,    52,    52,     6,    52
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
        0,    35,    36,    37,    37,    38,    38,    40,    39,    41,
-      39,    42,    42,    43,    44,    44,    45,    45,    46,    46,
-      47,    48,    48,    49,    49,    50,    50,    50,    50,    50,
-      51,    51,    52,    52,    53,    54,    54,    55,    55,    56,
-      56,    57,    57,    58,    58,    58,    58,    58,    58,    59,
-      59,    60,    60,    61,    61,    62,    62,    63,    63,    63,
-      63,    64,    65,    65,    66,    66
+      39,    42,    42,    44,    43,    45,    45,    46,    46,    47,
+      48,    47,    49,    50,    50,    51,    51,    52,    52,    52,
+      52,    52,    53,    53,    54,    54,    55,    56,    56,    57,
+      57,    58,    58,    59,    59,    60,    60,    60,    60,    60,
+      60,    61,    61,    62,    62,    63,    63,    64,    64,    65,
+      65,    65,    65,    66,    67,    67,    68,    68
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     2,     1,     1,     1,     0,     4,     0,
-       7,     1,     1,     6,     1,     1,     3,     1,     2,     4,
-       4,     2,     0,     2,     0,     1,     1,     1,     1,     1,
-       2,     1,     5,     7,     5,     2,     3,     3,     1,     1,
-       4,     3,     1,     1,     1,     1,     1,     1,     1,     3,
-       1,     1,     1,     3,     1,     1,     1,     3,     1,     1,
-       1,     4,     1,     0,     3,     1
+       7,     1,     1,     0,     7,     1,     1,     3,     1,     2,
+       0,     5,     4,     2,     0,     2,     0,     1,     1,     1,
+       1,     1,     2,     1,     5,     7,     5,     2,     3,     3,
+       1,     1,     4,     3,     1,     1,     1,     1,     1,     1,
+       1,     3,     1,     1,     1,     3,     1,     1,     1,     3,
+       1,     1,     1,     4,     1,     0,     3,     1
 };
 
 
@@ -1206,7 +1208,7 @@ yyreduce:
   case 2: /* program: decl_lista  */
 #line 37 "tiny.y"
                    {savedTree = yyvsp[0];}
-#line 1210 "tiny.tab.c"
+#line 1212 "tiny.tab.c"
     break;
 
   case 3: /* decl_lista: decl_lista decl  */
@@ -1220,7 +1222,7 @@ yyreduce:
                          }
                          else yyval = yyvsp[0];
                         }
-#line 1224 "tiny.tab.c"
+#line 1226 "tiny.tab.c"
     break;
 
   case 4: /* decl_lista: decl  */
@@ -1228,394 +1230,486 @@ yyreduce:
              {
             yyval = yyvsp[0];
         }
-#line 1232 "tiny.tab.c"
+#line 1234 "tiny.tab.c"
     break;
 
   case 5: /* decl: var_decl  */
 #line 54 "tiny.y"
                  {yyval = yyvsp[0];}
-#line 1238 "tiny.tab.c"
+#line 1240 "tiny.tab.c"
     break;
 
   case 6: /* decl: func_decl  */
 #line 55 "tiny.y"
                   {printf(" Entrou em func_decl\n");}
-#line 1244 "tiny.tab.c"
+#line 1246 "tiny.tab.c"
     break;
 
   case 7: /* $@1: %empty  */
 #line 58 "tiny.y"
                    {
+        printf("tokenString: %s\n", tokenString);
         savedName = copyString(tokenString);
         savedLineNo = lineno; 
+        
         }
-#line 1253 "tiny.tab.c"
+#line 1257 "tiny.tab.c"
     break;
 
   case 8: /* var_decl: type_esp ID $@1 SEMI  */
-#line 62 "tiny.y"
+#line 64 "tiny.y"
             {
-        yyval = newDeclNode(VarK);
-        yyval->type = yyvsp[-3]->type;
-        yyval->attr.name = savedName;
-        yyval->lineno = savedLineNo;
+        yyval = yyvsp[-3];
+        yyval->child[0] = newDeclNode(VarK);
+
+        yyval->child[0]->type = yyvsp[-3]->type;
+        yyval->child[0]->attr.name = savedName;
+        yyval->child[0]->lineno = savedLineNo;
+        printf("lineno: %d\n", yyval->child[0]->lineno);
         }
-#line 1264 "tiny.tab.c"
+#line 1271 "tiny.tab.c"
     break;
 
   case 9: /* $@2: %empty  */
-#line 68 "tiny.y"
-                   {
+#line 73 "tiny.y"
+                    {
         savedName = copyString(tokenString);
         savedLineNo = lineno; 
         }
-#line 1273 "tiny.tab.c"
+#line 1280 "tiny.tab.c"
     break;
 
   case 10: /* var_decl: type_esp ID $@2 LCOLCH NUM RCOLCH SEMI  */
-#line 71 "tiny.y"
+#line 76 "tiny.y"
                                  {
-        printf(" Entrou em type_esp ID LCOLCH NUM RCOLCH\n");
-        yyval = newDeclNode(ArrayK);
-        yyval->type = yyvsp[-6]->type;
-        yyval->attr.name = savedName;
-        yyval->lineno = savedLineNo;
+            yyval = yyvsp[-6];
+            yyval->child[0] = newDeclNode(ArrayK);
+            yyval->child[0]->type = yyvsp[-6]->type;
+            yyval->child[0]->attr.name = savedName;
+            yyval->child[0]->lineno = savedLineNo;
         }
-#line 1285 "tiny.tab.c"
+#line 1292 "tiny.tab.c"
     break;
 
   case 11: /* type_esp: INT  */
-#line 80 "tiny.y"
+#line 85 "tiny.y"
             {yyval = newTypeNode(Integer);}
-#line 1291 "tiny.tab.c"
+#line 1298 "tiny.tab.c"
     break;
 
   case 12: /* type_esp: VOID  */
-#line 81 "tiny.y"
+#line 86 "tiny.y"
              {yyval = newTypeNode(Void);}
-#line 1297 "tiny.tab.c"
+#line 1304 "tiny.tab.c"
     break;
 
-  case 13: /* func_decl: type_esp ID LPAREN params RPAREN comp_decl  */
-#line 84 "tiny.y"
-                                                   {printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");}
-#line 1303 "tiny.tab.c"
+  case 13: /* $@3: %empty  */
+#line 89 "tiny.y"
+                    {
+        savedName = copyString(tokenString);
+        savedLineNo = lineno; 
+      }
+#line 1313 "tiny.tab.c"
     break;
 
-  case 14: /* params: param_list  */
-#line 87 "tiny.y"
-                   {printf(" Entrou em param_list\n");}
-#line 1309 "tiny.tab.c"
-    break;
-
-  case 15: /* params: VOID  */
-#line 88 "tiny.y"
-             {printf(" Entrou em VOID\n");}
-#line 1315 "tiny.tab.c"
-    break;
-
-  case 16: /* param_list: param_list COMMA param  */
-#line 91 "tiny.y"
-                               {printf(" Entrou em param_list COMMA param\n");}
-#line 1321 "tiny.tab.c"
-    break;
-
-  case 17: /* param_list: param  */
+  case 14: /* func_decl: type_esp ID $@3 LPAREN params RPAREN comp_decl  */
 #line 92 "tiny.y"
-              {printf(" Entrou em param\n");}
-#line 1327 "tiny.tab.c"
+                                      {
+        printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
+        yyval = yyvsp[-6];
+        yyval->child[0] = newFuncNode();
+        yyval->child[0]->type = yyvsp[-6]->type;
+        yyval->child[0]->attr.name = savedName;
+        yyval->child[0]->lineno = savedLineNo;
+        yyval->child[0]->child[0] = yyvsp[-2];
+        yyval->child[0]->child[1] = yyvsp[0];
+        }
+#line 1328 "tiny.tab.c"
     break;
 
-  case 18: /* param: type_esp ID  */
-#line 95 "tiny.y"
-                 {printf(" Entrou em type_esp ID\n");}
-#line 1333 "tiny.tab.c"
+  case 15: /* params: param_list  */
+#line 104 "tiny.y"
+                   {
+        printf(" Entrou em param_list\n");
+        yyval = yyvsp[0];
+      }
+#line 1337 "tiny.tab.c"
     break;
 
-  case 19: /* param: type_esp ID LCOLCH RCOLCH  */
-#line 96 "tiny.y"
-                               {printf(" Entrou em type_esp ID LCOLCH RCOLCH\n");}
-#line 1339 "tiny.tab.c"
+  case 16: /* params: VOID  */
+#line 108 "tiny.y"
+             {printf(" Entrou em VOID\n");}
+#line 1343 "tiny.tab.c"
     break;
 
-  case 20: /* comp_decl: LBRAC local_decl stmt_lista RBRAC  */
-#line 99 "tiny.y"
-                                        {printf(" Entrou em LBRAC local_decl stmt_lista RBRAC\n");}
-#line 1345 "tiny.tab.c"
+  case 17: /* param_list: param_list COMMA param  */
+#line 111 "tiny.y"
+                               {
+        printf(" Entrou em param_list COMMA param\n");
+        YYSTYPE t = yyvsp[-2];
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = yyvsp[0];
+        yyval = yyvsp[-2];
+        }
+        else yyval = yyvsp[0];
+                        
+        }
+#line 1360 "tiny.tab.c"
     break;
 
-  case 21: /* local_decl: local_decl var_decl  */
-#line 102 "tiny.y"
-                          {printf(" Entrou em local_decl var_decl\n");}
-#line 1351 "tiny.tab.c"
-    break;
-
-  case 22: /* local_decl: %empty  */
-#line 103 "tiny.y"
-             {printf(" Entrou em empty\n");}
-#line 1357 "tiny.tab.c"
-    break;
-
-  case 23: /* stmt_lista: stmt_lista stmt  */
-#line 106 "tiny.y"
-                      {printf(" Entrou em stmt_lista stmt\n");}
-#line 1363 "tiny.tab.c"
-    break;
-
-  case 24: /* stmt_lista: %empty  */
-#line 107 "tiny.y"
-             {printf(" Entrou em empty\n");}
+  case 18: /* param_list: param  */
+#line 123 "tiny.y"
+              {
+        printf(" Entrou em param\n");
+        yyval = yyvsp[0];
+        }
 #line 1369 "tiny.tab.c"
     break;
 
-  case 25: /* stmt: exp_decl  */
-#line 110 "tiny.y"
-               {printf(" Entrou em exp_decl\n");}
-#line 1375 "tiny.tab.c"
+  case 19: /* param: type_esp ID  */
+#line 129 "tiny.y"
+                 {
+        printf(" Entrou em type_esp ID\n");
+        savedName = copyString(tokenString);
+        savedLineNo = lineno; 
+        yyval = yyvsp[-1];
+        yyval->child[0] = newParamNode(VarK);
+        yyval->child[0]->type = yyvsp[-1]->type;
+        yyval->child[0]->attr.name = savedName;
+        yyval->child[0]->lineno = lineno;
+        }
+#line 1384 "tiny.tab.c"
     break;
 
-  case 26: /* stmt: comp_decl  */
-#line 111 "tiny.y"
-                {printf(" Entrou em comp_decl\n");}
-#line 1381 "tiny.tab.c"
-    break;
-
-  case 27: /* stmt: sel_decl  */
-#line 112 "tiny.y"
-               {printf(" Entrou em sel_decl\n");}
-#line 1387 "tiny.tab.c"
-    break;
-
-  case 28: /* stmt: repeat_decl  */
-#line 113 "tiny.y"
-                  {printf(" Entrou em repeat_decl\n");}
+  case 20: /* $@4: %empty  */
+#line 139 "tiny.y"
+                {
+        savedName = copyString(tokenString);
+        savedLineNo = lineno;
+    }
 #line 1393 "tiny.tab.c"
     break;
 
-  case 29: /* stmt: return_decl  */
-#line 114 "tiny.y"
-                  {printf(" Entrou em return_decl\n");}
-#line 1399 "tiny.tab.c"
+  case 21: /* param: type_esp ID $@4 LCOLCH RCOLCH  */
+#line 142 "tiny.y"
+                    {
+        printf(" Entrou em type_esp ID LCOLCH RCOLCH\n");
+        yyval = yyvsp[-4];
+        yyval->child[0] = newParamNode(ArrayK);
+        yyval->child[0]->type = yyvsp[-4]->type;
+        yyval->child[0]->attr.name = savedName;
+        yyval->child[0]->lineno = lineno;
+    }
+#line 1406 "tiny.tab.c"
     break;
 
-  case 30: /* exp_decl: exp SEMI  */
-#line 117 "tiny.y"
-               {printf(" Entrou em exp SEMI\n");}
-#line 1405 "tiny.tab.c"
-    break;
-
-  case 31: /* exp_decl: SEMI  */
-#line 118 "tiny.y"
-           {printf(" Entrou em SEMI\n");}
-#line 1411 "tiny.tab.c"
-    break;
-
-  case 32: /* sel_decl: IF LPAREN exp RPAREN stmt  */
-#line 121 "tiny.y"
-                                {printf(" Entrou em IF LPAREN exp RPAREN stmt\n");}
-#line 1417 "tiny.tab.c"
-    break;
-
-  case 33: /* sel_decl: IF LPAREN exp RPAREN stmt ELSE stmt  */
-#line 122 "tiny.y"
-                                          {printf(" Entrou em IF LPAREN exp RPAREN stmt ELSE stmt\n");}
-#line 1423 "tiny.tab.c"
-    break;
-
-  case 34: /* repeat_decl: WHILE LPAREN exp RPAREN stmt  */
-#line 125 "tiny.y"
-                                   {printf(" Entrou em WHILE LPAREN exp RPAREN stmt\n");}
-#line 1429 "tiny.tab.c"
-    break;
-
-  case 35: /* return_decl: RETURN SEMI  */
-#line 128 "tiny.y"
-                  {printf(" Entrou em RETURN SEMI\n");}
-#line 1435 "tiny.tab.c"
-    break;
-
-  case 36: /* return_decl: RETURN exp SEMI  */
-#line 129 "tiny.y"
-                      {printf(" Entrou em RETURN exp SEMI\n");}
-#line 1441 "tiny.tab.c"
-    break;
-
-  case 37: /* exp: var ASSIGN exp  */
-#line 132 "tiny.y"
-                     {printf(" Entrou em var ASSIGN exp\n");}
-#line 1447 "tiny.tab.c"
-    break;
-
-  case 38: /* exp: simple_exp  */
-#line 133 "tiny.y"
-                 {printf(" Entrou em simple_exp\n");}
-#line 1453 "tiny.tab.c"
-    break;
-
-  case 39: /* var: ID  */
-#line 136 "tiny.y"
-         {printf(" Entrou em ID\n");}
-#line 1459 "tiny.tab.c"
-    break;
-
-  case 40: /* var: ID LCOLCH exp RCOLCH  */
-#line 137 "tiny.y"
-                           {printf(" Entrou em ID LCOLCH exp RCOLCH\n");}
-#line 1465 "tiny.tab.c"
-    break;
-
-  case 41: /* simple_exp: soma_exp relacional soma_exp  */
-#line 140 "tiny.y"
-                                   {printf(" Entrou em soma_exp relacional soma_exp\n");}
-#line 1471 "tiny.tab.c"
-    break;
-
-  case 42: /* simple_exp: soma_exp  */
-#line 141 "tiny.y"
-               {printf(" Entrou em soma_exp\n");}
-#line 1477 "tiny.tab.c"
-    break;
-
-  case 43: /* relacional: LEQ  */
-#line 144 "tiny.y"
-          {printf(" Entrou em LEQ\n");}
-#line 1483 "tiny.tab.c"
-    break;
-
-  case 44: /* relacional: LESS  */
-#line 145 "tiny.y"
-           {printf(" Entrou em LESS\n");}
-#line 1489 "tiny.tab.c"
-    break;
-
-  case 45: /* relacional: GREATER  */
-#line 146 "tiny.y"
-              {printf(" Entrou em GREATER\n");}
-#line 1495 "tiny.tab.c"
-    break;
-
-  case 46: /* relacional: GEQ  */
-#line 147 "tiny.y"
-          {printf(" Entrou em GEQ\n");}
-#line 1501 "tiny.tab.c"
-    break;
-
-  case 47: /* relacional: COMPARE  */
-#line 148 "tiny.y"
-             {printf(" Entrou em COMPARE\n");}
-#line 1507 "tiny.tab.c"
-    break;
-
-  case 48: /* relacional: DIFF  */
-#line 149 "tiny.y"
-           {printf(" Entrou em DIFF\n");}
-#line 1513 "tiny.tab.c"
-    break;
-
-  case 49: /* soma_exp: soma_exp soma term  */
+  case 22: /* comp_decl: LBRAC local_decl stmt_lista RBRAC  */
 #line 152 "tiny.y"
-                         {printf(" Entrou em soma_exp soma term\n");}
-#line 1519 "tiny.tab.c"
+                                        {
+        printf(" Entrou em LBRAC local_decl stmt_lista RBRAC\n");
+        // considerando o local_decl e stmt_lista irmãos
+    }
+#line 1415 "tiny.tab.c"
     break;
 
-  case 50: /* soma_exp: term  */
-#line 153 "tiny.y"
-           {printf(" Entrou em term\n");}
-#line 1525 "tiny.tab.c"
+  case 23: /* local_decl: local_decl var_decl  */
+#line 158 "tiny.y"
+                          {
+        printf(" Entrou em local_decl var_decl\n");
+        YYSTYPE t = yyvsp[-1];
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = yyvsp[0];
+        yyval = yyvsp[-1];
+        }
+        else yyval = yyvsp[0];
+        }
+#line 1431 "tiny.tab.c"
     break;
 
-  case 51: /* soma: PLUS  */
-#line 156 "tiny.y"
-           {printf(" Entrou em PLUS\n");}
-#line 1531 "tiny.tab.c"
-    break;
-
-  case 52: /* soma: MINUS  */
-#line 157 "tiny.y"
-            {printf(" Entrou em MINUS\n");}
-#line 1537 "tiny.tab.c"
-    break;
-
-  case 53: /* term: term mult factor  */
-#line 160 "tiny.y"
-                       {printf(" Entrou em term mult factor\n");}
-#line 1543 "tiny.tab.c"
-    break;
-
-  case 54: /* term: factor  */
-#line 161 "tiny.y"
-             {printf(" Entrou em factor\n");}
-#line 1549 "tiny.tab.c"
-    break;
-
-  case 55: /* mult: TIMES  */
-#line 164 "tiny.y"
-            {printf(" Entrou em TIMES\n");}
-#line 1555 "tiny.tab.c"
-    break;
-
-  case 56: /* mult: OVER  */
-#line 165 "tiny.y"
-           {printf(" Entrou em OVER\n");}
-#line 1561 "tiny.tab.c"
-    break;
-
-  case 57: /* factor: LPAREN exp RPAREN  */
-#line 168 "tiny.y"
-                        {printf(" Entrou em LPAREN\n");}
-#line 1567 "tiny.tab.c"
-    break;
-
-  case 58: /* factor: var  */
+  case 24: /* local_decl: %empty  */
 #line 169 "tiny.y"
-          {printf(" Entrou em var\n");}
-#line 1573 "tiny.tab.c"
+             {
+        printf(" Entrou em empty\n");
+        }
+#line 1439 "tiny.tab.c"
     break;
 
-  case 59: /* factor: ativation  */
-#line 170 "tiny.y"
-                {printf(" Entrou em activation\n");}
-#line 1579 "tiny.tab.c"
-    break;
-
-  case 60: /* factor: NUM  */
-#line 171 "tiny.y"
-          {printf(" Entrou em NUM\n");}
-#line 1585 "tiny.tab.c"
-    break;
-
-  case 61: /* ativation: ID LPAREN args RPAREN  */
+  case 25: /* stmt_lista: stmt_lista stmt  */
 #line 174 "tiny.y"
-                            {printf(" Entrou em ID LPAREN args RPAREN\n");}
-#line 1591 "tiny.tab.c"
+                      {
+        printf(" Entrou em stmt_lista stmt\n");
+        YYSTYPE t = yyvsp[-1];
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = yyvsp[0];
+        yyval = yyvsp[-1];
+        }
+        else yyval = yyvsp[0];
+        }
+#line 1455 "tiny.tab.c"
     break;
 
-  case 62: /* args: arg_lista  */
-#line 177 "tiny.y"
-                {printf(" Entrou em arg_lista\n");}
-#line 1597 "tiny.tab.c"
+  case 26: /* stmt_lista: %empty  */
+#line 185 "tiny.y"
+             {
+        printf(" Entrou em empty\n");
+        }
+#line 1463 "tiny.tab.c"
     break;
 
-  case 63: /* args: %empty  */
-#line 178 "tiny.y"
-             {printf(" Entrou em empty\n");}
-#line 1603 "tiny.tab.c"
+  case 27: /* stmt: exp_decl  */
+#line 190 "tiny.y"
+               {printf(" Entrou em exp_decl\n");}
+#line 1469 "tiny.tab.c"
     break;
 
-  case 64: /* arg_lista: arg_lista COMMA exp  */
-#line 181 "tiny.y"
-                          {printf(" Entrou em arg_lista COMMA exp\n");}
-#line 1609 "tiny.tab.c"
+  case 28: /* stmt: comp_decl  */
+#line 191 "tiny.y"
+                {printf(" Entrou em comp_decl\n");}
+#line 1475 "tiny.tab.c"
     break;
 
-  case 65: /* arg_lista: exp  */
-#line 182 "tiny.y"
-          {printf(" Entrou em exp\n");}
-#line 1615 "tiny.tab.c"
+  case 29: /* stmt: sel_decl  */
+#line 192 "tiny.y"
+               {printf(" Entrou em sel_decl\n");}
+#line 1481 "tiny.tab.c"
     break;
 
+  case 30: /* stmt: repeat_decl  */
+#line 193 "tiny.y"
+                  {printf(" Entrou em repeat_decl\n");}
+#line 1487 "tiny.tab.c"
+    break;
 
+  case 31: /* stmt: return_decl  */
+#line 194 "tiny.y"
+                  {printf(" Entrou em return_decl\n");}
+#line 1493 "tiny.tab.c"
+    break;
+
+  case 32: /* exp_decl: exp SEMI  */
+#line 197 "tiny.y"
+               {printf(" Entrou em exp SEMI\n");}
+#line 1499 "tiny.tab.c"
+    break;
+
+  case 33: /* exp_decl: SEMI  */
+#line 198 "tiny.y"
+           {printf(" Entrou em SEMI\n");}
+#line 1505 "tiny.tab.c"
+    break;
+
+  case 34: /* sel_decl: IF LPAREN exp RPAREN stmt  */
+#line 201 "tiny.y"
+                                {printf(" Entrou em IF LPAREN exp RPAREN stmt\n");}
+#line 1511 "tiny.tab.c"
+    break;
+
+  case 35: /* sel_decl: IF LPAREN exp RPAREN stmt ELSE stmt  */
+#line 202 "tiny.y"
+                                          {printf(" Entrou em IF LPAREN exp RPAREN stmt ELSE stmt\n");}
+#line 1517 "tiny.tab.c"
+    break;
+
+  case 36: /* repeat_decl: WHILE LPAREN exp RPAREN stmt  */
+#line 205 "tiny.y"
+                                   {printf(" Entrou em WHILE LPAREN exp RPAREN stmt\n");}
+#line 1523 "tiny.tab.c"
+    break;
+
+  case 37: /* return_decl: RETURN SEMI  */
+#line 208 "tiny.y"
+                  {printf(" Entrou em RETURN SEMI\n");}
+#line 1529 "tiny.tab.c"
+    break;
+
+  case 38: /* return_decl: RETURN exp SEMI  */
+#line 209 "tiny.y"
+                      {printf(" Entrou em RETURN exp SEMI\n");}
+#line 1535 "tiny.tab.c"
+    break;
+
+  case 39: /* exp: var ASSIGN exp  */
+#line 212 "tiny.y"
+                     {printf(" Entrou em var ASSIGN exp\n");}
+#line 1541 "tiny.tab.c"
+    break;
+
+  case 40: /* exp: simple_exp  */
+#line 213 "tiny.y"
+                 {printf(" Entrou em simple_exp\n");}
+#line 1547 "tiny.tab.c"
+    break;
+
+  case 41: /* var: ID  */
+#line 216 "tiny.y"
+         {printf(" Entrou em ID\n");}
+#line 1553 "tiny.tab.c"
+    break;
+
+  case 42: /* var: ID LCOLCH exp RCOLCH  */
+#line 217 "tiny.y"
+                           {printf(" Entrou em ID LCOLCH exp RCOLCH\n");}
+#line 1559 "tiny.tab.c"
+    break;
+
+  case 43: /* simple_exp: soma_exp relacional soma_exp  */
+#line 220 "tiny.y"
+                                   {printf(" Entrou em soma_exp relacional soma_exp\n");}
+#line 1565 "tiny.tab.c"
+    break;
+
+  case 44: /* simple_exp: soma_exp  */
+#line 221 "tiny.y"
+               {printf(" Entrou em soma_exp\n");}
+#line 1571 "tiny.tab.c"
+    break;
+
+  case 45: /* relacional: LEQ  */
+#line 224 "tiny.y"
+          {printf(" Entrou em LEQ\n");}
+#line 1577 "tiny.tab.c"
+    break;
+
+  case 46: /* relacional: LESS  */
+#line 225 "tiny.y"
+           {printf(" Entrou em LESS\n");}
+#line 1583 "tiny.tab.c"
+    break;
+
+  case 47: /* relacional: GREATER  */
+#line 226 "tiny.y"
+              {printf(" Entrou em GREATER\n");}
+#line 1589 "tiny.tab.c"
+    break;
+
+  case 48: /* relacional: GEQ  */
+#line 227 "tiny.y"
+          {printf(" Entrou em GEQ\n");}
+#line 1595 "tiny.tab.c"
+    break;
+
+  case 49: /* relacional: COMPARE  */
+#line 228 "tiny.y"
+             {printf(" Entrou em COMPARE\n");}
+#line 1601 "tiny.tab.c"
+    break;
+
+  case 50: /* relacional: DIFF  */
+#line 229 "tiny.y"
+           {printf(" Entrou em DIFF\n");}
+#line 1607 "tiny.tab.c"
+    break;
+
+  case 51: /* soma_exp: soma_exp soma term  */
+#line 232 "tiny.y"
+                         {printf(" Entrou em soma_exp soma term\n");}
+#line 1613 "tiny.tab.c"
+    break;
+
+  case 52: /* soma_exp: term  */
+#line 233 "tiny.y"
+           {printf(" Entrou em term\n");}
 #line 1619 "tiny.tab.c"
+    break;
+
+  case 53: /* soma: PLUS  */
+#line 236 "tiny.y"
+           {printf(" Entrou em PLUS\n");}
+#line 1625 "tiny.tab.c"
+    break;
+
+  case 54: /* soma: MINUS  */
+#line 237 "tiny.y"
+            {printf(" Entrou em MINUS\n");}
+#line 1631 "tiny.tab.c"
+    break;
+
+  case 55: /* term: term mult factor  */
+#line 240 "tiny.y"
+                       {printf(" Entrou em term mult factor\n");}
+#line 1637 "tiny.tab.c"
+    break;
+
+  case 56: /* term: factor  */
+#line 241 "tiny.y"
+             {printf(" Entrou em factor\n");}
+#line 1643 "tiny.tab.c"
+    break;
+
+  case 57: /* mult: TIMES  */
+#line 244 "tiny.y"
+            {printf(" Entrou em TIMES\n");}
+#line 1649 "tiny.tab.c"
+    break;
+
+  case 58: /* mult: OVER  */
+#line 245 "tiny.y"
+           {printf(" Entrou em OVER\n");}
+#line 1655 "tiny.tab.c"
+    break;
+
+  case 59: /* factor: LPAREN exp RPAREN  */
+#line 248 "tiny.y"
+                        {printf(" Entrou em LPAREN\n");}
+#line 1661 "tiny.tab.c"
+    break;
+
+  case 60: /* factor: var  */
+#line 249 "tiny.y"
+          {printf(" Entrou em var\n");}
+#line 1667 "tiny.tab.c"
+    break;
+
+  case 61: /* factor: ativation  */
+#line 250 "tiny.y"
+                {printf(" Entrou em activation\n");}
+#line 1673 "tiny.tab.c"
+    break;
+
+  case 62: /* factor: NUM  */
+#line 251 "tiny.y"
+          {printf(" Entrou em NUM\n");}
+#line 1679 "tiny.tab.c"
+    break;
+
+  case 63: /* ativation: ID LPAREN args RPAREN  */
+#line 254 "tiny.y"
+                            {printf(" Entrou em ID LPAREN args RPAREN\n");}
+#line 1685 "tiny.tab.c"
+    break;
+
+  case 64: /* args: arg_lista  */
+#line 257 "tiny.y"
+                {printf(" Entrou em arg_lista\n");}
+#line 1691 "tiny.tab.c"
+    break;
+
+  case 65: /* args: %empty  */
+#line 258 "tiny.y"
+             {printf(" Entrou em empty\n");}
+#line 1697 "tiny.tab.c"
+    break;
+
+  case 66: /* arg_lista: arg_lista COMMA exp  */
+#line 261 "tiny.y"
+                          {printf(" Entrou em arg_lista COMMA exp\n");}
+#line 1703 "tiny.tab.c"
+    break;
+
+  case 67: /* arg_lista: exp  */
+#line 262 "tiny.y"
+          {printf(" Entrou em exp\n");}
+#line 1709 "tiny.tab.c"
+    break;
+
+
+#line 1713 "tiny.tab.c"
 
       default: break;
     }
@@ -1808,7 +1902,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 184 "tiny.y"
+#line 264 "tiny.y"
 
 
 int yyerror(char * message)

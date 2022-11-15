@@ -56,24 +56,29 @@ decl
       ;
 var_decl    
       : type_esp ID{
+        printf("tokenString: %s\n", tokenString);
         savedName = copyString(tokenString);
         savedLineNo = lineno; 
+        
         }
         SEMI{
-        $$ = newDeclNode(VarK);
-        $$->type = $1->type;
-        $$->attr.name = savedName;
-        $$->lineno = savedLineNo;
+        $$ = $1;
+        $$->child[0] = newDeclNode(VarK);
+
+        $$->child[0]->type = $1->type;
+        $$->child[0]->attr.name = savedName;
+        $$->child[0]->lineno = savedLineNo;
+        printf("lineno: %d\n", $$->child[0]->lineno);
         }
-      | type_esp ID{
+      | type_esp ID {
         savedName = copyString(tokenString);
         savedLineNo = lineno; 
         } LCOLCH NUM RCOLCH SEMI {
-        printf(" Entrou em type_esp ID LCOLCH NUM RCOLCH\n");
-        $$ = newDeclNode(ArrayK);
-        $$->type = $1->type;
-        $$->attr.name = savedName;
-        $$->lineno = savedLineNo;
+            $$ = $1;
+            $$->child[0] = newDeclNode(ArrayK);
+            $$->child[0]->type = $1->type;
+            $$->child[0]->attr.name = savedName;
+            $$->child[0]->lineno = savedLineNo;
         }
       ;
 type_esp    
@@ -81,30 +86,105 @@ type_esp
       | VOID {$$ = newTypeNode(Void);}
       ;
 func_decl   
-      : type_esp ID LPAREN params RPAREN comp_decl {printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");}
+      : type_esp ID {
+        savedName = copyString(tokenString);
+        savedLineNo = lineno; 
+      }LPAREN params RPAREN comp_decl {
+        printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
+        $$ = $1;
+        $$->child[0] = newFuncNode();
+        $$->child[0]->type = $1->type;
+        $$->child[0]->attr.name = savedName;
+        $$->child[0]->lineno = savedLineNo;
+        $$->child[0]->child[0] = $5;
+        $$->child[0]->child[1] = $7;
+        }
       ;
 params
-      : param_list {printf(" Entrou em param_list\n");}
+      : param_list {
+        printf(" Entrou em param_list\n");
+        $$ = $1;
+      }
       | VOID {printf(" Entrou em VOID\n");}
       ;
 param_list
-      : param_list COMMA param {printf(" Entrou em param_list COMMA param\n");}
-      | param {printf(" Entrou em param\n");}
+      : param_list COMMA param {
+        printf(" Entrou em param_list COMMA param\n");
+        YYSTYPE t = $1;
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = $3;
+        $$ = $1;
+        }
+        else $$ = $3;
+                        
+        }
+      | param {
+        printf(" Entrou em param\n");
+        $$ = $1;
+        }
       ;
 param
-    :type_esp ID {printf(" Entrou em type_esp ID\n");}
-    |type_esp ID LCOLCH RCOLCH {printf(" Entrou em type_esp ID LCOLCH RCOLCH\n");}
+    :type_esp ID {
+        printf(" Entrou em type_esp ID\n");
+        savedName = copyString(tokenString);
+        savedLineNo = lineno; 
+        $$ = $1;
+        $$->child[0] = newParamNode(VarK);
+        $$->child[0]->type = $1->type;
+        $$->child[0]->attr.name = savedName;
+        $$->child[0]->lineno = lineno;
+        }
+    |type_esp ID{
+        savedName = copyString(tokenString);
+        savedLineNo = lineno;
+    } LCOLCH RCOLCH {
+        printf(" Entrou em type_esp ID LCOLCH RCOLCH\n");
+        $$ = $1;
+        $$->child[0] = newParamNode(ArrayK);
+        $$->child[0]->type = $1->type;
+        $$->child[0]->attr.name = savedName;
+        $$->child[0]->lineno = lineno;
+    }
     ;
 comp_decl
-    : LBRAC local_decl stmt_lista RBRAC {printf(" Entrou em LBRAC local_decl stmt_lista RBRAC\n");}
+    : LBRAC local_decl stmt_lista RBRAC {
+        printf(" Entrou em LBRAC local_decl stmt_lista RBRAC\n");
+        // considerando o local_decl e stmt_lista irmãos
+    }
     ;
 local_decl
-    : local_decl var_decl {printf(" Entrou em local_decl var_decl\n");}
-    | %empty {printf(" Entrou em empty\n");}
+    : local_decl var_decl {
+        printf(" Entrou em local_decl var_decl\n");
+        YYSTYPE t = $1;
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = $2;
+        $$ = $1;
+        }
+        else $$ = $2;
+        }
+    | %empty {
+        printf(" Entrou em empty\n");
+        }
     ;
 stmt_lista
-    : stmt_lista stmt {printf(" Entrou em stmt_lista stmt\n");}
-    | %empty {printf(" Entrou em empty\n");}
+    : stmt_lista stmt {
+        printf(" Entrou em stmt_lista stmt\n");
+        YYSTYPE t = $1;
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = $2;
+        $$ = $1;
+        }
+        else $$ = $2;
+        }
+    | %empty {
+        printf(" Entrou em empty\n");
+        }
     ;
 stmt
     : exp_decl {printf(" Entrou em exp_decl\n");}

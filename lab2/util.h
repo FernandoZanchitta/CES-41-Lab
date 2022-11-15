@@ -36,10 +36,20 @@ void printTree( TreeNode * );
 /* Function newDeclNode creates a new declaration
  * node for syntax tree construction
  */
-TreeNode * newDeclNode();
+TreeNode * newDeclNode(DeclKind);
 
 /* 
 * Function newTypeNode creates a new type node for syntax tree construction
 */
-TreeNode * newTypeNode();
+TreeNode * newTypeNode(ExpType);
+
+/*
+* Function newFuncNode creates a new function node for syntax tree construction
+*/
+TreeNode * newFuncNode();
+
+/*
+* Function newParamNode creates a new param node for syntax tree construction
+*/
+TreeNode * newParamNode(DeclKind);
 #endif
