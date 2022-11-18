@@ -56,7 +56,7 @@ decl
       ;
 var_decl    
       : type_esp ID{
-        printf("tokenString: %s\n", tokenString);
+        printf("ID_name em var_decl: %s\n", ID_name);
         savedName = copyString(ID_name);
         savedLineNo = lineno; 
         
@@ -89,12 +89,12 @@ func_decl
       : type_esp ID {
         savedName = copyString(ID_name);
         savedLineNo = lineno; 
-      }LPAREN params RPAREN comp_decl {
-        printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
         $$ = $1;
         $$->child[0] = newFuncNode();
-        $$->child[0]->type = $1->type;
         $$->child[0]->attr.name = savedName;
+      }LPAREN params RPAREN comp_decl {
+        printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
+        $$->child[0]->type = $1->type;
         $$->child[0]->lineno = savedLineNo;
         $$->child[0]->child[0] = $5;
         $$->child[0]->child[1] = $7;
@@ -127,7 +127,7 @@ param_list
       ;
 param
     :type_esp ID {
-        printf(" Entrou em type_esp ID\n");
+        fprintf(listing,"ID_name em param: %s\n", ID_name);
         savedName = copyString(ID_name);
         savedLineNo = lineno; 
         $$ = $1;
@@ -136,16 +136,13 @@ param
         $$->child[0]->attr.name = savedName;
         $$->child[0]->lineno = lineno;
         }
-    |type_esp ID{
-        savedName = copyString(tokenString);
-        savedLineNo = lineno;
-    } LCOLCH RCOLCH {
+    |type_esp ID LCOLCH RCOLCH {
         printf(" Entrou em type_esp ID LCOLCH RCOLCH\n");
         $$ = $1;
         $$->child[0] = newParamNode(ArrayK);
         $$->child[0]->type = $1->type;
-        $$->child[0]->attr.name = savedName;
-        $$->child[0]->lineno = lineno;
+        $$->child[0]->attr.name = copyString(ID_name);
+        $$->child[0]->lineno = savedLineNo;
     }
     ;
 comp_decl
