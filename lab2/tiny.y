@@ -105,7 +105,10 @@ params
         printf(" Entrou em param_list\n");
         $$ = $1;
       }
-      | VOID {printf(" Entrou em VOID\n");}
+      | VOID {
+        printf(" Entrou em VOID\n");
+        $$ = NULL;
+        }
       ;
 param_list
       : param_list COMMA param {
@@ -231,6 +234,10 @@ exp_decl
 sel_decl
     : IF LPAREN exp RPAREN stmt {
         printf(" Entrou em IF LPAREN exp RPAREN stmt\n");
+        $$ = newStmtNode(IfK);
+        $$->child[0] = $3;
+        $$->child[1] = $5;
+
         }
     | IF LPAREN exp RPAREN stmt ELSE stmt {
         printf(" Entrou em IF LPAREN exp RPAREN stmt ELSE stmt\n");
@@ -263,7 +270,10 @@ exp
         }
     ;
 var
-    : ID {printf(" Entrou em ID\n");}
+    : ID {
+        printf(" Entrou em ID\n");
+        $$ = newExpNode(IdK);
+        $$->attr.name = copyString(ID_name);}
     | ID LCOLCH exp RCOLCH {printf(" Entrou em ID LCOLCH exp RCOLCH\n");}
     ;
 simple_exp
@@ -311,7 +321,13 @@ soma
         }
     ;
 term
-    : term mult factor {printf(" Entrou em term mult factor\n");}
+    : term mult factor {
+        printf(" Entrou em term mult factor\n");
+        $$ = $2;
+        $$->child[0] = $1;
+        $$->child[1] = $3;
+        $$->attr.op = $2->attr.op;
+        }
     | factor {
         printf(" Entrou em factor\n");
         $$ = $1;
@@ -330,7 +346,10 @@ mult
         }
     ;
 factor
-    : LPAREN exp RPAREN {printf(" Entrou em LPAREN exp RPAREN\n");}
+    : LPAREN exp RPAREN {
+        printf(" Entrou em LPAREN exp RPAREN\n");
+        $$ = $2;
+        }
     | var {
         printf(" Entrou em var\n");
         $$ = $1;
@@ -346,7 +365,12 @@ factor
         }
     ;
 ativation
-    : ID LPAREN args RPAREN {printf(" Entrou em ID LPAREN args RPAREN\n");}
+    : ID LPAREN args RPAREN {
+        printf(" Entrou em ID LPAREN args RPAREN\n");
+        $$ = newExpNode(ActivationK);
+        $$->attr.name = copyString(ID_name);
+        $$->child[0] = $3;
+        }
     ;
 args
     : arg_lista {
@@ -359,8 +383,20 @@ args
         }
     ;
 arg_lista
-    : arg_lista COMMA exp {printf(" Entrou em arg_lista COMMA exp\n");}
-    | exp {printf(" Entrou em exp\n");}
+    : arg_lista COMMA exp {
+        printf(" Entrou em arg_lista COMMA exp\n");
+        YYSTYPE t = $1;
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = $3;
+        $$ = $1;
+        }
+        else $$ = $3;}
+    | exp {
+        printf(" Entrou em exp\n");
+        $$ = $1;
+        }
     ;
 %%
 

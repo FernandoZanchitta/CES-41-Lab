@@ -1,4 +1,4 @@
-int teste ( int a, int c, int d[]) {
+int teste ( int a) {
     int b;
-    void ef;
+    b=2;
 }
