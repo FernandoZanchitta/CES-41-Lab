@@ -56,7 +56,7 @@ decl
       ;
 var_decl    
       : type_esp ID{
-        printf("tokenString: %s\n", tokenString);
+        printf("ID_name em var_decl: %s\n", ID_name);
         savedName = copyString(ID_name);
         savedLineNo = lineno; 
         
@@ -89,12 +89,12 @@ func_decl
       : type_esp ID {
         savedName = copyString(ID_name);
         savedLineNo = lineno; 
-      }LPAREN params RPAREN comp_decl {
-        printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
         $$ = $1;
         $$->child[0] = newFuncNode();
-        $$->child[0]->type = $1->type;
         $$->child[0]->attr.name = savedName;
+      }LPAREN params RPAREN comp_decl {
+        printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
+        $$->child[0]->type = $1->type;
         $$->child[0]->lineno = savedLineNo;
         $$->child[0]->child[0] = $5;
         $$->child[0]->child[1] = $7;
@@ -105,7 +105,10 @@ params
         printf(" Entrou em param_list\n");
         $$ = $1;
       }
-      | VOID {printf(" Entrou em VOID\n");}
+      | VOID {
+        printf(" Entrou em VOID\n");
+        $$ = NULL;
+        }
       ;
 param_list
       : param_list COMMA param {
@@ -127,7 +130,7 @@ param_list
       ;
 param
     :type_esp ID {
-        printf(" Entrou em type_esp ID\n");
+        fprintf(listing,"ID_name em param: %s\n", ID_name);
         savedName = copyString(ID_name);
         savedLineNo = lineno; 
         $$ = $1;
@@ -136,16 +139,13 @@ param
         $$->child[0]->attr.name = savedName;
         $$->child[0]->lineno = lineno;
         }
-    |type_esp ID{
-        savedName = copyString(tokenString);
-        savedLineNo = lineno;
-    } LCOLCH RCOLCH {
+    |type_esp ID LCOLCH RCOLCH {
         printf(" Entrou em type_esp ID LCOLCH RCOLCH\n");
         $$ = $1;
         $$->child[0] = newParamNode(ArrayK);
         $$->child[0]->type = $1->type;
-        $$->child[0]->attr.name = savedName;
-        $$->child[0]->lineno = lineno;
+        $$->child[0]->attr.name = copyString(ID_name);
+        $$->child[0]->lineno = savedLineNo;
     }
     ;
 comp_decl
@@ -234,6 +234,10 @@ exp_decl
 sel_decl
     : IF LPAREN exp RPAREN stmt {
         printf(" Entrou em IF LPAREN exp RPAREN stmt\n");
+        $$ = newStmtNode(IfK);
+        $$->child[0] = $3;
+        $$->child[1] = $5;
+
         }
     | IF LPAREN exp RPAREN stmt ELSE stmt {
         printf(" Entrou em IF LPAREN exp RPAREN stmt ELSE stmt\n");
@@ -242,15 +246,24 @@ sel_decl
 repeat_decl
     : WHILE LPAREN exp RPAREN stmt {
         printf(" Entrou em WHILE LPAREN exp RPAREN stmt\n");
+        $$ = newStmtNode(RepeatK);
+        $$->child[0] = $3;
+        $$->child[1] = $5;
         }
     ;
 return_decl
     : RETURN SEMI {
         printf(" Entrou em RETURN SEMI\n");
+        $$ = newStmtNode(ReturnK);
+        $$->attr.name = copyString(tokenString);
         }
     | RETURN exp SEMI {
         printf(" Entrou em RETURN exp SEMI\n");
+        $$ = newStmtNode(ReturnK);
+        $$->child[0] = $2;
+        $$->attr.name = copyString(tokenString);
         }
+
     ;
 exp
     : var ASSIGN exp {
@@ -258,7 +271,8 @@ exp
         $$ = newStmtNode(AssignK);
         $$->child[0] = $1;
         $$->child[1] = $3;
-        $$->attr.op = ASSIGN;
+        // $$->attr.op = ASSIGN;
+        $$->attr.name = $1->attr.name;
         }
     | simple_exp {
         printf(" Entrou em simple_exp\n");
@@ -266,8 +280,14 @@ exp
         }
     ;
 var
-    : ID {printf(" Entrou em ID\n");}
-    | ID LCOLCH exp RCOLCH {printf(" Entrou em ID LCOLCH exp RCOLCH\n");}
+    : ID {
+        printf(" Entrou em ID\n");
+        $$ = newExpNode(IdK);
+        $$->attr.name = copyString(ID_name);}
+    | ID LCOLCH exp RCOLCH {
+        printf(" Entrou em ID LCOLCH exp RCOLCH\n");
+        // todo: entender qual tipo de no é esse
+        }
     ;
 simple_exp
     : soma_exp relacional soma_exp {
@@ -288,14 +308,40 @@ relacional
         $$ = newExpNode(OpK);
         $$->attr.op = LEQ;
     }
-    | LESS {printf(" Entrou em LESS\n");}
-    | GREATER {printf(" Entrou em GREATER\n");}
-    | GEQ {printf(" Entrou em GEQ\n");}
-    | COMPARE{printf(" Entrou em COMPARE\n");}
-    | DIFF {printf(" Entrou em DIFF\n");}
+    | LESS {
+        printf(" Entrou em LESS\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = LESS;
+        }
+    | GREATER {
+        printf(" Entrou em GREATER\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = GREATER;
+        }
+    | GEQ {
+        printf(" Entrou em GEQ\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = GEQ;
+        }
+    | COMPARE{
+        printf(" Entrou em COMPARE\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = COMPARE;
+        }
+    | DIFF {
+        printf(" Entrou em DIFF\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = DIFF;
+        }
     ;
 soma_exp
-    : soma_exp soma term {printf(" Entrou em soma_exp soma term\n");}
+    : soma_exp soma term {
+        printf(" Entrou em soma_exp soma term\n");
+        $$ = $2;
+        $$->child[0] = $1;
+        $$->child[1] = $3;
+        $$->lineno = lineno;
+    }
     | term {
         printf(" Entrou em term\n");
         $$ = $1;
@@ -314,7 +360,13 @@ soma
         }
     ;
 term
-    : term mult factor {printf(" Entrou em term mult factor\n");}
+    : term mult factor {
+        printf(" Entrou em term mult factor\n");
+        $$ = $2;
+        $$->child[0] = $1;
+        $$->child[1] = $3;
+        $$->attr.op = $2->attr.op;
+        }
     | factor {
         printf(" Entrou em factor\n");
         $$ = $1;
@@ -333,7 +385,10 @@ mult
         }
     ;
 factor
-    : LPAREN exp RPAREN {printf(" Entrou em LPAREN exp RPAREN\n");}
+    : LPAREN exp RPAREN {
+        printf(" Entrou em LPAREN exp RPAREN\n");
+        $$ = $2;
+        }
     | var {
         printf(" Entrou em var\n");
         $$ = $1;
@@ -345,11 +400,17 @@ factor
     | NUM {
         printf(" Entrou em NUM\n");
         $$ = newExpNode(ConstK);
+        fprintf(listing, "NUM: %s\n", tokenString);
         $$->attr.val = atoi(tokenString);
         }
     ;
 ativation
-    : ID LPAREN args RPAREN {printf(" Entrou em ID LPAREN args RPAREN\n");}
+    : ID LPAREN args RPAREN {
+        printf(" Entrou em ID LPAREN args RPAREN\n");
+        $$ = newExpNode(ActivationK);
+        $$->attr.name = copyString(ID_name);
+        $$->child[0] = $3;
+        }
     ;
 args
     : arg_lista {
@@ -362,8 +423,20 @@ args
         }
     ;
 arg_lista
-    : arg_lista COMMA exp {printf(" Entrou em arg_lista COMMA exp\n");}
-    | exp {printf(" Entrou em exp\n");}
+    : arg_lista COMMA exp {
+        printf(" Entrou em arg_lista COMMA exp\n");
+        YYSTYPE t = $1;
+        if (t != NULL)
+        { while (t->sibling != NULL)
+            t = t->sibling;
+        t->sibling = $3;
+        $$ = $1;
+        }
+        else $$ = $3;}
+    | exp {
+        printf(" Entrou em exp\n");
+        $$ = $1;
+        }
     ;
 %%
 

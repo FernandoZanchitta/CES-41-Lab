@@ -67,12 +67,7 @@ TokenType getToken(void)
   currentToken = yylex();
   strncpy(tokenString,yytext,MAXTOKENLEN);
   if(currentToken == ID){
-    //fprintf(listing,"Empilhando tokenString = %s\n", tokenString);
-    //push_back_id(tokenString, stack);
-    //char * topo = top_id(stack);
-    //fprintf(listing," topo da pilha: %s\n", topo);
     strcpy(ID_name, tokenString);
-    //fprintf(listing, "ID_name = %s\n", ID_name);
   }
   if (TraceScan) {
     printToken(currentToken,tokenString);
