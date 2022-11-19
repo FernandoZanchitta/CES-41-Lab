@@ -2,6 +2,6 @@ all:
 	bison -d tiny.y
 	flex tiny.l
 	gcc -c *.c  
-	gcc -o tiny *.o -ly -ll 
+	gcc -o tiny *.o -lfl
 clear:
 	rm *.o *.tab.* *.yy.*

@@ -2,3 +2,8 @@
  flex tiny.l
  gcc -c *.c
  gcc -o tiny *.o -ly -lfl
+
+Removendo -ly e deixando só -lfl funcionou
+
+- Rodar casos de teste
+./tiny test/ex.c
