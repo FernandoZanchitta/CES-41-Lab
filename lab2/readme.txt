@@ -6,4 +6,4 @@
 Removendo -ly e deixando só -lfl funcionou
 
 - Rodar casos de teste
-./tiny test/ex.c
+./build/tiny test/ex.c
