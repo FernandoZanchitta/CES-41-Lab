@@ -284,7 +284,10 @@ var
         printf(" Entrou em ID\n");
         $$ = newExpNode(IdK);
         $$->attr.name = copyString(ID_name);}
-    | ID LCOLCH exp RCOLCH {printf(" Entrou em ID LCOLCH exp RCOLCH\n");}
+    | ID LCOLCH exp RCOLCH {
+        printf(" Entrou em ID LCOLCH exp RCOLCH\n");
+        // todo: entender qual tipo de no é esse
+        }
     ;
 simple_exp
     : soma_exp relacional soma_exp {
@@ -305,11 +308,31 @@ relacional
         $$ = newExpNode(OpK);
         $$->attr.op = LEQ;
     }
-    | LESS {printf(" Entrou em LESS\n");}
-    | GREATER {printf(" Entrou em GREATER\n");}
-    | GEQ {printf(" Entrou em GEQ\n");}
-    | COMPARE{printf(" Entrou em COMPARE\n");}
-    | DIFF {printf(" Entrou em DIFF\n");}
+    | LESS {
+        printf(" Entrou em LESS\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = LESS;
+        }
+    | GREATER {
+        printf(" Entrou em GREATER\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = GREATER;
+        }
+    | GEQ {
+        printf(" Entrou em GEQ\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = GEQ;
+        }
+    | COMPARE{
+        printf(" Entrou em COMPARE\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = COMPARE;
+        }
+    | DIFF {
+        printf(" Entrou em DIFF\n");
+        $$ = newExpNode(OpK);
+        $$->attr.op = DIFF;
+        }
     ;
 soma_exp
     : soma_exp soma term {

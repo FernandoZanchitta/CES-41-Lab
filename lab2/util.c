@@ -232,7 +232,7 @@ void printTree( TreeNode * tree )
     else if (tree->nodekind==ExpK)
     { switch (tree->kind.exp) {
         case OpK:
-          fprintf(listing,"Op: ");
+          fprintf(listing,"Op:");
           printToken(tree->attr.op,"\0");
           break;
         case ConstK:
