@@ -71,7 +71,7 @@ var_decl
         printf("lineno: %d\n", $$->child[0]->lineno);
         }
       | type_esp ID {
-        savedName = copyString(tokenString);
+        savedName = copyString(ID_name);
         savedLineNo = lineno; 
         } LCOLCH NUM RCOLCH SEMI {
             $$ = $1;
@@ -94,6 +94,7 @@ func_decl
         $$->child[0]->attr.name = savedName;
       }LPAREN params RPAREN comp_decl {
         printf(" Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
+        $$ = $3;
         $$->child[0]->type = $1->type;
         $$->child[0]->lineno = savedLineNo;
         $$->child[0]->child[0] = $5;
@@ -131,12 +132,11 @@ param_list
 param
     :type_esp ID {
         fprintf(listing,"ID_name em param: %s\n", ID_name);
-        savedName = copyString(ID_name);
         savedLineNo = lineno; 
         $$ = $1;
         $$->child[0] = newParamNode(VarK);
         $$->child[0]->type = $1->type;
-        $$->child[0]->attr.name = savedName;
+        $$->child[0]->attr.name = copyString(ID_name);
         $$->child[0]->lineno = lineno;
         }
     |type_esp ID LCOLCH RCOLCH {
@@ -160,7 +160,6 @@ comp_decl
         $$ = $2;
         }
         else{
-            printf("passou\n");
             $$ = $3;
         } 
     }
@@ -241,6 +240,10 @@ sel_decl
         }
     | IF LPAREN exp RPAREN stmt ELSE stmt {
         printf(" Entrou em IF LPAREN exp RPAREN stmt ELSE stmt\n");
+        $$ = newStmtNode(IfK);
+        $$->child[0] = $3;
+        $$->child[1] = $5;
+        $$->child[2] = $7;
         }
     ;
 repeat_decl
@@ -283,10 +286,18 @@ var
     : ID {
         printf(" Entrou em ID\n");
         $$ = newExpNode(IdK);
-        $$->attr.name = copyString(ID_name);}
-    | ID LCOLCH exp RCOLCH {
+        $$->attr.name = copyString(ID_name);
+        }
+    | ID {
+        savedName = copyString(ID_name);
+        savedLineNo = lineno;
+        }
+    LCOLCH exp RCOLCH {
         printf(" Entrou em ID LCOLCH exp RCOLCH\n");
         // todo: entender qual tipo de no é esse
+        $$ = newExpNode(IdK);
+        $$->attr.name = savedName;
+        $$->child[0] = $4;
         }
     ;
 simple_exp
@@ -405,11 +416,14 @@ factor
         }
     ;
 ativation
-    : ID LPAREN args RPAREN {
+    : ID {
+        savedName = copyString(ID_name);
+        savedLineNo = lineno;
+    }LPAREN args RPAREN {
         printf(" Entrou em ID LPAREN args RPAREN\n");
         $$ = newExpNode(ActivationK);
-        $$->attr.name = copyString(ID_name);
-        $$->child[0] = $3;
+        $$->attr.name = savedName;
+        $$->child[0] = $4;
         }
     ;
 args

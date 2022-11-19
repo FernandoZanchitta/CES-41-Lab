@@ -47,7 +47,7 @@ whitespace  [ \t]+
 "{"             {return LBRAC;}
 "}"             {return RBRAC;}
 {number}        {return NUM;}
-{identifier}    {return ID;}
+{identifier}    {strncpy(ID_name,yytext,MAXTOKENLEN);return ID;}
 {newline}       {lineno++;}
 {whitespace}    {/* skip whitespace */}
 "/*"            {return BEGCOM;}  
@@ -59,16 +59,12 @@ TokenType getToken(void)
   TokenType currentToken;
   if (firstTime)
   { firstTime = FALSE;
-    create_stack_id(stack);
     lineno++;
     yyin = source;
     yyout = listing;
   }
   currentToken = yylex();
   strncpy(tokenString,yytext,MAXTOKENLEN);
-  if(currentToken == ID){
-    strcpy(ID_name, tokenString);
-  }
   if (TraceScan) {
     printToken(currentToken,tokenString);
   }
