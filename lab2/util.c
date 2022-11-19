@@ -35,26 +35,86 @@ void printToken( TokenType token, const char* tokenString )
          "reserved word: %s\n",tokenString);
       }
       break;
-    case PLUS: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"+\n");} break;
-    case MINUS: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"-\n");} break;
-    case TIMES: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"*\n");} break;
-    case OVER: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"/\n");} break;
-    case LESS: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"<\n");} break;
-    case LEQ: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"<=\n");} break;
-    case GREATER: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,">\n");} break;
-    case GEQ: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,">=\n");} break;
-    case ASSIGN: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"=\n");} break;
-    case COMPARE: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"==\n");} break;
-    case DIFF: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"!=\n");} break;
-    case SEMI: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,";\n");} break;
-    case COMMA: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,",\n");} break;
-    case LPAREN: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"(\n");} break;
-    case RPAREN: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,")\n");} break;
-    case LCOLCH: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"[\n");} break;
-    case RCOLCH: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"]\n");} break;
-    case LBRAC: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"{\n");} break;
-    case RBRAC: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"}\n");} break;
-    case ENDFILE: if(FlagComment == 0){ fprintf(listing,"\t%d: ",lineno); fprintf(listing,"EOF\n");} break;
+    case PLUS: if(FlagComment == 0){
+      fprintf(listing,"+\n");
+      } 
+      break;
+    case MINUS: if(FlagComment == 0){
+      fprintf(listing,"-\n");
+      } 
+      break;
+    case TIMES: if(FlagComment == 0){
+      fprintf(listing,"*\n");
+      } 
+      break;
+    case OVER: if(FlagComment == 0){
+      fprintf(listing,"/\n");
+      } 
+      break;
+    case LESS: if(FlagComment == 0){
+      fprintf(listing,"<\n");
+      } 
+      break;
+    case LEQ: if(FlagComment == 0){
+      fprintf(listing,"<=\n");
+      } 
+      break;
+    case GREATER: if(FlagComment == 0){
+      fprintf(listing,">\n");
+      } 
+      break;
+    case GEQ: if(FlagComment == 0){
+      fprintf(listing,">=\n");
+      } 
+      break;
+    case ASSIGN: if(FlagComment == 0){
+      fprintf(listing,"=\n");
+      } 
+      break;
+    case COMPARE: if(FlagComment == 0){
+      fprintf(listing,"==\n");
+      } 
+      break;
+    case DIFF: if(FlagComment == 0){
+      fprintf(listing,"!=\n");
+      } 
+      break;
+    case SEMI: if(FlagComment == 0){
+      fprintf(listing,";\n");
+      } 
+      break;
+    case COMMA: if(FlagComment == 0){
+      fprintf(listing,",\n");
+      } 
+      break;
+    case LPAREN: if(FlagComment == 0){
+      fprintf(listing,"(\n");
+      } 
+      break;
+    case RPAREN: if(FlagComment == 0){
+      fprintf(listing,")\n");
+      } 
+      break;
+    case LCOLCH: if(FlagComment == 0){
+      fprintf(listing,"[\n");
+      } 
+      break;
+    case RCOLCH: if(FlagComment == 0){
+      fprintf(listing,"]\n");
+      } 
+      break;
+    case LBRAC: if(FlagComment == 0){
+      fprintf(listing,"{\n");
+      } 
+      break;
+    case RBRAC: if(FlagComment == 0){
+      fprintf(listing,"}\n");
+      } 
+      break;
+    case ENDFILE: if(FlagComment == 0){
+      fprintf(listing,"EOF\n");
+      } 
+      break;
     case NUM: 
       if(FlagComment == 0){
         fprintf(listing,"\t%d: ",lineno);
@@ -161,13 +221,13 @@ void printTree( TreeNode * tree )
     if (tree->nodekind==StmtK)
     { switch (tree->kind.stmt) {
         case IfK:
-          fprintf(listing,"If\n");
+          fprintf(listing,"If:\n");
           break;
         case RepeatK:
-          fprintf(listing,"Repeat\n");
+          fprintf(listing,"Repeat:\n");
           break;
         case AssignK:
-          fprintf(listing,"Assign\n");
+          fprintf(listing,"Assign:\n");
           break;
         case ReturnK:
           fprintf(listing,"Return\n");
@@ -200,10 +260,10 @@ void printTree( TreeNode * tree )
     else if(tree->nodekind == TypeK){
       switch(tree->type){
         case Integer:
-          fprintf(listing,"Integer Node\n");
+          fprintf(listing,"Type: int\n");
           break;
         case Void:
-          fprintf(listing,"Void Node\n");
+          fprintf(listing,"Type: void\n");
           break;
         default:
           fprintf(listing,"Unknown TypeNode kind\n");

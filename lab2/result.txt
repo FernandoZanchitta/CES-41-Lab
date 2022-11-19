@@ -1,0 +1,141 @@
+
+TINY COMPILATION: test/teste_sortArrays.c
+
+Syntax tree:
+  Type: int
+    ID: x
+  Type: int
+    Function: minloc
+      Type: int
+        Param: a
+      Type: int
+        Param: low
+      Type: int
+        Param: high
+      Type: int
+        ID: i
+      Type: int
+        ID: x
+      Type: int
+        ID: k
+      Assign:
+        Id: k
+        Id: low
+      Assign:
+        Id: x
+        Id: a
+          Id: low
+      Assign:
+        Id: i
+        Op:+
+          Id: low
+          Const: 1
+      Repeat:
+        Op:<
+          Id: i
+          Id: high
+        If:
+          Op:<
+            Id: a
+              Id: i
+            Id: x
+          Assign:
+            Id: x
+            Id: a
+              Id: i
+          Assign:
+            Id: k
+            Id: i
+        Assign:
+          Id: i
+          Op:+
+            Id: i
+            Const: 1
+      Return
+        Id: k
+  Type: void
+    Function: sort
+      Type: int
+        Param: a
+      Type: int
+        Param: low
+      Type: int
+        Param: high
+      Type: int
+        ID: i
+      Type: int
+        ID: k
+      Assign:
+        Id: i
+        Id: low
+      Repeat:
+        Op:<
+          Id: i
+          Op:-
+            Id: high
+            Const: 1
+        Type: int
+          ID: t
+        Assign:
+          Id: k
+          Activation: minloc
+            Id: a
+            Id: i
+            Id: high
+        Assign:
+          Id: t
+          Id: a
+            Id: k
+        Assign:
+          Id: a
+            Id: k
+          Id: a
+            Id: i
+        Assign:
+          Id: a
+            Id: i
+          Id: t
+        Assign:
+          Id: i
+          Op:+
+            Id: i
+            Const: 1
+  Type: void
+    Function: main
+      Type: int
+        ID: i
+      Assign:
+        Id: i
+        Const: 0
+      Repeat:
+        Op:<
+          Id: i
+          Const: 10
+        Assign:
+          Id: x
+            Id: i
+          Activation: input
+        Assign:
+          Id: i
+          Op:+
+            Id: i
+            Const: 1
+      Activation: sort
+        Id: x
+        Const: 0
+        Const: 10
+      Assign:
+        Id: i
+        Const: 0
+      Repeat:
+        Op:<
+          Id: i
+          Const: 10
+        Activation: x
+          Id: x
+            Id: i
+        Assign:
+          Id: i
+          Op:+
+            Id: i
+            Const: 1
