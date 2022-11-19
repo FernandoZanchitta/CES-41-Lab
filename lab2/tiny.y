@@ -246,15 +246,24 @@ sel_decl
 repeat_decl
     : WHILE LPAREN exp RPAREN stmt {
         printf(" Entrou em WHILE LPAREN exp RPAREN stmt\n");
+        $$ = newStmtNode(RepeatK);
+        $$->child[0] = $3;
+        $$->child[1] = $5;
         }
     ;
 return_decl
     : RETURN SEMI {
         printf(" Entrou em RETURN SEMI\n");
+        $$ = newStmtNode(ReturnK);
+        $$->attr.name = copyString(tokenString);
         }
     | RETURN exp SEMI {
         printf(" Entrou em RETURN exp SEMI\n");
+        $$ = newStmtNode(ReturnK);
+        $$->child[0] = $2;
+        $$->attr.name = copyString(tokenString);
         }
+
     ;
 exp
     : var ASSIGN exp {
@@ -262,7 +271,8 @@ exp
         $$ = newStmtNode(AssignK);
         $$->child[0] = $1;
         $$->child[1] = $3;
-        $$->attr.op = ASSIGN;
+        // $$->attr.op = ASSIGN;
+        $$->attr.name = $1->attr.name;
         }
     | simple_exp {
         printf(" Entrou em simple_exp\n");
@@ -302,7 +312,13 @@ relacional
     | DIFF {printf(" Entrou em DIFF\n");}
     ;
 soma_exp
-    : soma_exp soma term {printf(" Entrou em soma_exp soma term\n");}
+    : soma_exp soma term {
+        printf(" Entrou em soma_exp soma term\n");
+        $$ = $2;
+        $$->child[0] = $1;
+        $$->child[1] = $3;
+        $$->lineno = lineno;
+    }
     | term {
         printf(" Entrou em term\n");
         $$ = $1;
@@ -361,6 +377,7 @@ factor
     | NUM {
         printf(" Entrou em NUM\n");
         $$ = newExpNode(ConstK);
+        fprintf(listing, "NUM: %s\n", tokenString);
         $$->attr.val = atoi(tokenString);
         }
     ;
