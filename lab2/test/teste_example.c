@@ -1,4 +1,6 @@
 void main(int a)
 {
-/*daedae*/
+/*adeadeadaee*/
+
+/* dadaedea */
 } 

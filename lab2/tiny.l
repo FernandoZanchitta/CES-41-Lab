@@ -65,6 +65,15 @@ TokenType getToken(void)
   }
   currentToken = yylex();
   strncpy(tokenString,yytext,MAXTOKENLEN);
+  if(currentToken == BEGCOM && FlagComment == 0){
+    FlagComment = 1;
+    currentToken = getToken();
+    while(currentToken != ENDCOM){
+      currentToken = getToken();
+    }
+    FlagComment = 0;
+    currentToken = getToken();
+  }
   if (TraceScan) {
     printToken(currentToken,tokenString);
   }
