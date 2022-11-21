@@ -65,11 +65,17 @@ TokenType getToken(void)
   }
   currentToken = yylex();
   strncpy(tokenString,yytext,MAXTOKENLEN);
+  if(currentToken == 0 && FlagComment == 1){
+    printf("\nERRO: Operador de comentário não fechado\n");
+    FlagComment == 0;
+    return currentToken;
+  }
   if(currentToken == BEGCOM && FlagComment == 0){
     FlagComment = 1;
     currentToken = getToken();
-    while(currentToken != ENDCOM){
+    while(currentToken != ENDCOM && FlagComment == 1){
       currentToken = getToken();
+      if(currentToken == 0) break;
     }
     FlagComment = 0;
     currentToken = getToken();
