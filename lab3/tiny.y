@@ -277,7 +277,7 @@ exp
         $$->child[0] = $1;
         $$->child[1] = $3;
         // $$->attr.op = ASSIGN;
-        $$->attr.name = $1->attr.name;
+        //$$->attr.name = $1->attr.name; // atribui o nome da variável
         }
     | simple_exp {
         // printf(" Entrou em simple_exp\n");
@@ -415,6 +415,7 @@ factor
         $$ = newExpNode(ConstK);
         // fprintf(listing, "NUM: %s\n", tokenString);
         $$->attr.val = atoi(tokenString);
+        $$-> type = Integer;
         }
     ;
 ativation

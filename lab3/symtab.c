@@ -47,20 +47,48 @@ typedef struct LineListRec
  */
 typedef struct BucketListRec
    { char * name;
+     int type;
+     char * scope;
+     int type_data;
      LineList lines;
      int memloc ; /* memory location for variable */
+
      struct BucketListRec * next;
    } * BucketList;
 
 /* the hash table */
 static BucketList hashTable[SIZE];
 
+char * mapType(int type){
+  switch(type){
+    case 0:
+      return "var";
+    case 1:
+      return "ary";
+    case 2:
+      return "func";
+    default:
+      return "ukn";
+  }
+}
+char * mapType_Data(int type_data){
+  switch(type_data){
+    case 0:
+      return "void";
+    case 1:
+      return "int";
+    default:
+      return "ukn";
+  }
+}
+
+
 /* Procedure st_insert inserts line numbers and
  * memory locations into the symbol table
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-void st_insert( char * name, int lineno, int loc )
+void st_insert( char * name, int lineno, int loc,int type ,int type_data)
 { int h = hash(name);
   BucketList l =  hashTable[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
@@ -71,6 +99,8 @@ void st_insert( char * name, int lineno, int loc )
     l->lines = (LineList) malloc(sizeof(struct LineListRec));
     l->lines->lineno = lineno;
     l->memloc = loc;
+    l->type = type;
+    l->type_data = type_data;
     l->lines->next = NULL;
     l->next = hashTable[h];
     hashTable[h] = l; }
@@ -101,14 +131,17 @@ int st_lookup ( char * name )
  */
 void printSymTab(FILE * listing)
 { int i;
-  fprintf(listing,"Variable Name  Location   Line Numbers\n");
-  fprintf(listing,"-------------  --------   ------------\n");
+  fprintf(listing,"Variable Name  Type  Scope  Type of Data  Location  Line Numbers\n");
+  fprintf(listing,"-------------  ----  -----  ------------  --------  ------------\n");
   for (i=0;i<SIZE;++i)
   { if (hashTable[i] != NULL)
     { BucketList l = hashTable[i];
       while (l != NULL)
       { LineList t = l->lines;
         fprintf(listing,"%-14s ",l->name);
+        fprintf(listing,"%-5s  ",mapType(l->type));
+        fprintf(listing,"%-5s  ","main");
+        fprintf(listing,"%-12s  ",mapType_Data(l->type_data));
         fprintf(listing,"%-8d  ",l->memloc);
         while (t != NULL)
         { fprintf(listing,"%4d ",t->lineno);

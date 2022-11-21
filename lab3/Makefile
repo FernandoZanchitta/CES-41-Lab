@@ -2,8 +2,8 @@ all:
 	flex tiny.l
 	bison -d tiny.y
 	gcc -c *.c
-	gcc -o tiny *.o -ly -ll
+	gcc -o build/tiny *.o -ly -ll
 run:
-	./tiny teste.tny
+	./build/tiny test/ex.c
 clear:
 	rm *.o *.tab.* *.yy.*

@@ -576,7 +576,7 @@ static const yytype_int16 yyrline[] =
      221,   227,   231,   236,   243,   252,   260,   265,   274,   282,
      288,   293,   293,   306,   313,   319,   324,   329,   334,   339,
      344,   351,   358,   364,   369,   376,   383,   389,   394,   401,
-     405,   409,   413,   421,   421,   432,   436,   442,   452
+     405,   409,   413,   422,   422,   433,   437,   443,   453
 };
 #endif
 
@@ -1601,7 +1601,7 @@ yyreduce:
         yyval->child[0] = yyvsp[-2];
         yyval->child[1] = yyvsp[0];
         // $$->attr.op = ASSIGN;
-        yyval->attr.name = yyvsp[-2]->attr.name;
+        //$$->attr.name = $1->attr.name; // atribui o nome da variável
         }
 #line 1607 "tiny.tab.c"
     break;
@@ -1843,50 +1843,51 @@ yyreduce:
         yyval = newExpNode(ConstK);
         // fprintf(listing, "NUM: %s\n", tokenString);
         yyval->attr.val = atoi(tokenString);
+        yyval-> type = Integer;
         }
-#line 1848 "tiny.tab.c"
+#line 1849 "tiny.tab.c"
     break;
 
   case 63: /* $@5: %empty  */
-#line 421 "tiny.y"
+#line 422 "tiny.y"
          {
         savedName = copyString(ID_name);
         savedLineNo = lineno;
     }
-#line 1857 "tiny.tab.c"
+#line 1858 "tiny.tab.c"
     break;
 
   case 64: /* ativation: ID $@5 LPAREN args RPAREN  */
-#line 424 "tiny.y"
+#line 425 "tiny.y"
                         {
         // printf(" Entrou em ID LPAREN args RPAREN\n");
         yyval = newExpNode(ActivationK);
         yyval->attr.name = savedName;
         yyval->child[0] = yyvsp[-1];
         }
-#line 1868 "tiny.tab.c"
+#line 1869 "tiny.tab.c"
     break;
 
   case 65: /* args: arg_lista  */
-#line 432 "tiny.y"
+#line 433 "tiny.y"
                 {
         // printf(" Entrou em arg_lista\n");
         yyval = yyvsp[0];
         }
-#line 1877 "tiny.tab.c"
+#line 1878 "tiny.tab.c"
     break;
 
   case 66: /* args: %empty  */
-#line 436 "tiny.y"
+#line 437 "tiny.y"
              {
         // printf(" Entrou em empty\n");
         yyval = NULL;
         }
-#line 1886 "tiny.tab.c"
+#line 1887 "tiny.tab.c"
     break;
 
   case 67: /* arg_lista: arg_lista COMMA exp  */
-#line 442 "tiny.y"
+#line 443 "tiny.y"
                           {
         // printf(" Entrou em arg_lista COMMA exp\n");
         YYSTYPE t = yyvsp[-2];
@@ -1897,20 +1898,20 @@ yyreduce:
         yyval = yyvsp[-2];
         }
         else yyval = yyvsp[0];}
-#line 1901 "tiny.tab.c"
+#line 1902 "tiny.tab.c"
     break;
 
   case 68: /* arg_lista: exp  */
-#line 452 "tiny.y"
+#line 453 "tiny.y"
           {
         // printf(" Entrou em exp\n");
         yyval = yyvsp[0];
         }
-#line 1910 "tiny.tab.c"
+#line 1911 "tiny.tab.c"
     break;
 
 
-#line 1914 "tiny.tab.c"
+#line 1915 "tiny.tab.c"
 
       default: break;
     }
@@ -2103,7 +2104,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 457 "tiny.y"
+#line 458 "tiny.y"
 
 
 int yyerror(char * message)

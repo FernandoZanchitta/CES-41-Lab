@@ -13,6 +13,7 @@
 /* counter for variable memory locations */
 static int location = 0;
 
+
 /* Procedure traverse is a generic recursive 
  * syntax tree traversal routine:
  * it applies preProc in preorder and postProc 
@@ -58,11 +59,11 @@ static void insertNode( TreeNode * t)
         case ArrayK:
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++);
+            st_insert(t->attr.name,t->lineno,location++, t->kind.decl, t->type);
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0);
+            st_insert(t->attr.name,t->lineno,0,t->kind.decl, t->type);
           break;
         default:
           break;
@@ -74,11 +75,23 @@ static void insertNode( TreeNode * t)
         case ArrayK:
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++);
+            st_insert(t->attr.name,t->lineno,location++,t->kind.decl, t->type);
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0);
+            st_insert(t->attr.name,t->lineno,0,t->kind.decl, t->type);
+          break;
+        default:
+          break;
+      }
+      break;
+    case ExpK:
+      switch (t->kind.exp)
+      { case IdK:
+          if(st_lookup(t->attr.name) == -1)
+            fprintf(listing,"Erro semântico: Variável %s não declarada na linha %d", t->attr.name, t->lineno);
+          else
+            st_insert(t->attr.name,t->lineno,0,t->kind.decl, t->type);
           break;
         default:
           break;
@@ -116,8 +129,9 @@ static void checkNode(TreeNode * t)
           if ((t->child[0]->type != Integer) ||
               (t->child[1]->type != Integer))
             typeError(t,"Op applied to non-integer");
-          if ((t->attr.op == EQ) || (t->attr.op == LT))
-            t->type = Boolean;
+          if ((t->attr.op == COMPARE) || (t->attr.op == LESS) || (t->attr.op == GREATER) 
+             || (t->attr.op == DIFF) || (t->attr.op == LEQ) || (t->attr.op == GEQ))
+            t->type = Void;
           else
             t->type = Integer;
           break;
@@ -132,17 +146,17 @@ static void checkNode(TreeNode * t)
     case StmtK:
       switch (t->kind.stmt)
       { case IfK:
-          if (t->child[0]->type == Integer)
+          if (t->child[0]->type == Integer) //exp
             typeError(t->child[0],"if test is not Boolean");
           break;
         case AssignK:
-          if (t->child[0]->type != Integer)
+          if (t->child[0]->type != Integer)//stm
             typeError(t->child[0],"assignment of non-integer value");
           break;
-        case WriteK:
-          if (t->child[0]->type != Integer)
-            typeError(t->child[0],"write of non-integer value");
-          break;
+        // case WriteK:
+        //   if (t->child[0]->type != Integer)
+        //     typeError(t->child[0],"write of non-integer value");
+        //   break;
         case RepeatK:
           if (t->child[1]->type == Integer)
             typeError(t->child[1],"repeat test is not Boolean");
