@@ -82,8 +82,6 @@ var_decl
             $$->child[0]->type = $1->type;
             $$->child[0]->attr.name = savedName;
             $$->child[0]->lineno = savedLineNo;
-            $$->child[1] = newExpNode(ConstK);
-            $$->child[1]->attr.val = atoi(copyString(NUM_name));
         }
       ;
 type_esp    
@@ -95,7 +93,7 @@ func_decl
         savedName = copyString(ID_name);
         savedLineNo = lineno; 
         $$ = $1;
-        $$->child[0] = newDeclNode(FuncK);
+        $$->child[0] = newFuncNode();
         $$->child[0]->attr.name = savedName;
       }LPAREN params RPAREN comp_decl {
         // fprintf(listing," Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
@@ -279,7 +277,7 @@ exp
         $$->child[0] = $1;
         $$->child[1] = $3;
         // $$->attr.op = ASSIGN;
-        //$$->attr.name = $1->attr.name; // atribui o nome da variável
+        $$->attr.name = $1->attr.name;
         }
     | simple_exp {
         // printf(" Entrou em simple_exp\n");
