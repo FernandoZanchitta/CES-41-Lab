@@ -67,7 +67,7 @@ TokenType getToken(void)
   strncpy(tokenString,yytext,MAXTOKENLEN);
   if(currentToken == 0 && FlagComment == 1){
     printf("\nERRO: Operador de comentário não fechado\n");
-    FlagComment == 0;
+    FlagComment = 0;
     return currentToken;
   }
   if(currentToken == BEGCOM && FlagComment == 0){
