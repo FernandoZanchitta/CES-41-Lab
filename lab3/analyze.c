@@ -13,6 +13,11 @@
 /* counter for variable memory locations */
 static int location = 0;
 
+static void typeError(TreeNode * t, char * message)
+{ fprintf(listing,"Type error at line %d: %s\n",t->lineno,message);
+  Error = TRUE;
+}
+
 
 /* Procedure traverse is a generic recursive 
  * syntax tree traversal routine:
@@ -53,17 +58,30 @@ static void nullProc(TreeNode * t)
 */
 static void insertNode( TreeNode * t)
 { switch (t->nodekind)
-  { case DeclK:
+  {
+    case DeclK:
       switch (t->kind.decl)
       { case VarK:
         case ArrayK:
           if (st_lookup(t->attr.name) == -1)
           /* not yet in table, so treat as new definition */
-            st_insert(t->attr.name,t->lineno,location++, t->kind.decl, t->type);
+            if(t->type == Integer)
+              st_insert(t->attr.name,t->lineno,location++, t->kind.decl, t->type);
+            else
+              typeError(t,"Type not supported");
           else
           /* already in table, so ignore location, 
              add line number of use only */ 
-            st_insert(t->attr.name,t->lineno,0,t->kind.decl, t->type);
+            typeError(t,"ERROR: Variable redeclared\n");
+          break;
+
+        case FuncK:
+          if (st_lookup(t->attr.name) == -1)
+          /* not yet in table, so treat as new definition */
+            st_insert(t->attr.name,t->lineno,location++, t->kind.decl, t->type);
+          else
+          /* already in table, so print error message */
+            typeError(t,"ERROR: Function redeclared\n");
           break;
         default:
           break;
@@ -89,7 +107,7 @@ static void insertNode( TreeNode * t)
       switch (t->kind.exp)
       { case IdK:
           if(st_lookup(t->attr.name) == -1)
-            fprintf(listing,"Erro semântico: Variável %s não declarada na linha %d", t->attr.name, t->lineno);
+            fprintf(listing,"ERROR: Variable %s not declared in line %d", t->attr.name, t->lineno);
           else
             st_insert(t->attr.name,t->lineno,0,t->kind.decl, t->type);
           break;
@@ -113,10 +131,6 @@ void buildSymtab(TreeNode * syntaxTree)
   }
 }
 
-static void typeError(TreeNode * t, char * message)
-{ fprintf(listing,"Type error at line %d: %s\n",t->lineno,message);
-  Error = TRUE;
-}
 
 /* Procedure checkNode performs
  * type checking at a single tree node
@@ -126,9 +140,13 @@ static void checkNode(TreeNode * t)
   { case ExpK:
       switch (t->kind.exp)
       { case OpK:
+          fprintf(listing,"OpK\n");
           if ((t->child[0]->type != Integer) ||
-              (t->child[1]->type != Integer))
+              (t->child[1]->type != Integer)){
             typeError(t,"Op applied to non-integer");
+
+              }
+          fprintf(listing,"Type of childs: %d %d", t->child[0]->type, t->child[1]->type);
           if ((t->attr.op == COMPARE) || (t->attr.op == LESS) || (t->attr.op == GREATER) 
              || (t->attr.op == DIFF) || (t->attr.op == LEQ) || (t->attr.op == GEQ))
             t->type = Void;
@@ -136,8 +154,14 @@ static void checkNode(TreeNode * t)
             t->type = Integer;
           break;
         case ConstK:
-        case IdK:
           t->type = Integer;
+          break;
+        case IdK:
+          // fprintf(listing,"IdK\n");
+          // procurar tipo na tabela de simbolos:
+          // fprintf(listing,"name: %s\n",t->attr.name);
+          t->type = st_lookup_type(t->attr.name);
+          // fprintf(listing,"tipo atribuido: %s\n",mapType_Data(t->type)) ;
           break;
         default:
           break;
@@ -150,8 +174,11 @@ static void checkNode(TreeNode * t)
             typeError(t->child[0],"if test is not Boolean");
           break;
         case AssignK:
+          // fprintf(listing,"AssignK\n");
           if (t->child[0]->type != Integer)//stm
-            typeError(t->child[0],"assignment of non-integer value");
+            {
+              // fprintf(listing,"Name of child: %s ::: Type of child: %d\n",t->child[0]->attr.name ,t->child[0]->type);
+              typeError(t->child[0],"assignment of non-integer value");}
           break;
         // case WriteK:
         //   if (t->child[0]->type != Integer)

@@ -1,6 +1,5 @@
-int main(void){
-    int x[10];
-    int y;
-    x = 1 + 1;
-    y = y + x;
+void main(void){
+    int x;
+    int x;
 }
+void xyz(void){}
