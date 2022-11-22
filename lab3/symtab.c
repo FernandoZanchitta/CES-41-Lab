@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "symtab.h"
-
+#include "globals.h"
 /* SIZE is the size of the hash table */
 #define SIZE 211
 
@@ -125,6 +125,20 @@ int st_lookup ( char * name )
   else return l->memloc;
 }
 
+/* Function st_lookup_type returns the type
+ * of a variable or -1 if not found
+ */
+int st_lookup_type ( char * name )
+{ int h = hash(name);
+  BucketList l =  hashTable[h];
+  while ((l != NULL) && (strcmp(name,l->name) != 0))
+    l = l->next;
+  if (l == NULL) {
+    fprintf(listing,"Error: %s not found in symbol table\n", name);
+    return -1;
+  }
+  else return l->type;
+}
 /* Procedure printSymTab prints a formatted 
  * listing of the symbol table contents 
  * to the listing file

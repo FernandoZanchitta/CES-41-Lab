@@ -571,12 +571,12 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,    37,    37,    40,    49,    54,    55,    61,    61,    76,
-      76,    88,    89,    92,    92,   108,   112,   118,   130,   136,
-     145,   155,   171,   182,   188,   199,   205,   209,   213,   217,
-     221,   227,   231,   236,   243,   252,   260,   265,   274,   282,
-     288,   293,   293,   306,   313,   319,   324,   329,   334,   339,
-     344,   351,   358,   364,   369,   376,   383,   389,   394,   401,
-     405,   409,   413,   422,   422,   433,   437,   443,   453
+      76,    90,    91,    94,    94,   110,   114,   120,   132,   138,
+     147,   157,   173,   184,   190,   201,   207,   211,   215,   219,
+     223,   229,   233,   238,   245,   254,   262,   267,   276,   284,
+     290,   295,   295,   308,   315,   321,   326,   331,   336,   341,
+     346,   353,   360,   366,   371,   378,   385,   391,   396,   403,
+     407,   411,   415,   423,   423,   434,   438,   444,   454
 };
 #endif
 
@@ -1294,36 +1294,38 @@ yyreduce:
             yyval->child[0]->type = yyvsp[-6]->type;
             yyval->child[0]->attr.name = savedName;
             yyval->child[0]->lineno = savedLineNo;
+            yyval->child[0]->child[1] = newExpNode(ConstK);
+            yyval->child[0]->child[1]->attr.val = atoi(copyString(NUM_name));
         }
-#line 1299 "tiny.tab.c"
+#line 1301 "tiny.tab.c"
     break;
 
   case 11: /* type_esp: INT  */
-#line 88 "tiny.y"
+#line 90 "tiny.y"
             {yyval = newTypeNode(Integer);}
-#line 1305 "tiny.tab.c"
+#line 1307 "tiny.tab.c"
     break;
 
   case 12: /* type_esp: VOID  */
-#line 89 "tiny.y"
+#line 91 "tiny.y"
              {yyval = newTypeNode(Void);}
-#line 1311 "tiny.tab.c"
+#line 1313 "tiny.tab.c"
     break;
 
   case 13: /* @3: %empty  */
-#line 92 "tiny.y"
+#line 94 "tiny.y"
                     {
         savedName = copyString(ID_name);
         savedLineNo = lineno; 
         yyval = yyvsp[-1];
-        yyval->child[0] = newFuncNode();
+        yyval->child[0] = newDeclNode(FuncK);
         yyval->child[0]->attr.name = savedName;
       }
-#line 1323 "tiny.tab.c"
+#line 1325 "tiny.tab.c"
     break;
 
   case 14: /* func_decl: type_esp ID @3 LPAREN params RPAREN comp_decl  */
-#line 98 "tiny.y"
+#line 100 "tiny.y"
                                       {
         // fprintf(listing," Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
         yyval = yyvsp[-4];
@@ -1332,29 +1334,29 @@ yyreduce:
         yyval->child[0]->child[0] = yyvsp[-2];
         yyval->child[0]->child[1] = yyvsp[0];
         }
-#line 1336 "tiny.tab.c"
+#line 1338 "tiny.tab.c"
     break;
 
   case 15: /* params: param_list  */
-#line 108 "tiny.y"
+#line 110 "tiny.y"
                    {
         // printf(" Entrou em param_list\n");
         yyval = yyvsp[0];
       }
-#line 1345 "tiny.tab.c"
+#line 1347 "tiny.tab.c"
     break;
 
   case 16: /* params: VOID  */
-#line 112 "tiny.y"
+#line 114 "tiny.y"
              {
         // printf(" Entrou em VOID\n");
         yyval = NULL;
         }
-#line 1354 "tiny.tab.c"
+#line 1356 "tiny.tab.c"
     break;
 
   case 17: /* param_list: param_list COMMA param  */
-#line 118 "tiny.y"
+#line 120 "tiny.y"
                                {
         // printf(" Entrou em param_list COMMA param\n");
         YYSTYPE t = yyvsp[-2];
@@ -1367,20 +1369,20 @@ yyreduce:
         else yyval = yyvsp[0];
                         
         }
-#line 1371 "tiny.tab.c"
+#line 1373 "tiny.tab.c"
     break;
 
   case 18: /* param_list: param  */
-#line 130 "tiny.y"
+#line 132 "tiny.y"
               {
         // printf(" Entrou em param\n");
         yyval = yyvsp[0];
         }
-#line 1380 "tiny.tab.c"
+#line 1382 "tiny.tab.c"
     break;
 
   case 19: /* param: type_esp ID  */
-#line 136 "tiny.y"
+#line 138 "tiny.y"
                  {
         // fprintf(listing,"ID_name em param: %s\n", ID_name);
         savedLineNo = lineno; 
@@ -1390,11 +1392,11 @@ yyreduce:
         yyval->child[0]->attr.name = copyString(ID_name);
         yyval->child[0]->lineno = lineno;
         }
-#line 1394 "tiny.tab.c"
+#line 1396 "tiny.tab.c"
     break;
 
   case 20: /* param: type_esp ID LCOLCH RCOLCH  */
-#line 145 "tiny.y"
+#line 147 "tiny.y"
                                {
         // printf(" Entrou em type_esp ID LCOLCH RCOLCH\n");
         yyval = yyvsp[-3];
@@ -1403,11 +1405,11 @@ yyreduce:
         yyval->child[0]->attr.name = copyString(ID_name);
         yyval->child[0]->lineno = savedLineNo;
     }
-#line 1407 "tiny.tab.c"
+#line 1409 "tiny.tab.c"
     break;
 
   case 21: /* comp_decl: LBRAC local_decl stmt_lista RBRAC  */
-#line 155 "tiny.y"
+#line 157 "tiny.y"
                                         {
         // printf(" Entrou em LBRAC local_decl stmt_lista RBRAC\n");
         // considerando o local_decl e stmt_lista irmãos
@@ -1422,11 +1424,11 @@ yyreduce:
             yyval = yyvsp[-1];
         } 
     }
-#line 1426 "tiny.tab.c"
+#line 1428 "tiny.tab.c"
     break;
 
   case 22: /* local_decl: local_decl var_decl  */
-#line 171 "tiny.y"
+#line 173 "tiny.y"
                           {
         // printf(" Entrou em local_decl var_decl\n");
         YYSTYPE t = yyvsp[-1];
@@ -1438,20 +1440,20 @@ yyreduce:
         }
         else yyval = yyvsp[0];
         }
-#line 1442 "tiny.tab.c"
+#line 1444 "tiny.tab.c"
     break;
 
   case 23: /* local_decl: %empty  */
-#line 182 "tiny.y"
+#line 184 "tiny.y"
              {
         // printf(" Entrou em empty\n");
         yyval = NULL;
         }
-#line 1451 "tiny.tab.c"
+#line 1453 "tiny.tab.c"
     break;
 
   case 24: /* stmt_lista: stmt_lista stmt  */
-#line 188 "tiny.y"
+#line 190 "tiny.y"
                       {
         // printf(" Entrou em stmt_lista stmt\n");
         YYSTYPE t = yyvsp[-1];
@@ -1463,82 +1465,82 @@ yyreduce:
         }
         else yyval = yyvsp[0];
          }
-#line 1467 "tiny.tab.c"
+#line 1469 "tiny.tab.c"
     break;
 
   case 25: /* stmt_lista: %empty  */
-#line 199 "tiny.y"
+#line 201 "tiny.y"
              {
         // printf(" Entrou em empty\n");
         yyval = NULL;
         }
-#line 1476 "tiny.tab.c"
+#line 1478 "tiny.tab.c"
     break;
 
   case 26: /* stmt: exp_decl  */
-#line 205 "tiny.y"
+#line 207 "tiny.y"
                {
         // printf(" Entrou em exp_decl\n");
         yyval = yyvsp[0];
         }
-#line 1485 "tiny.tab.c"
+#line 1487 "tiny.tab.c"
     break;
 
   case 27: /* stmt: comp_decl  */
-#line 209 "tiny.y"
+#line 211 "tiny.y"
                 {
         // printf(" Entrou em comp_decl\n");
         yyval = yyvsp[0];
         }
-#line 1494 "tiny.tab.c"
+#line 1496 "tiny.tab.c"
     break;
 
   case 28: /* stmt: sel_decl  */
-#line 213 "tiny.y"
+#line 215 "tiny.y"
                {
         // printf(" Entrou em sel_decl\n");
         yyval = yyvsp[0];
         }
-#line 1503 "tiny.tab.c"
+#line 1505 "tiny.tab.c"
     break;
 
   case 29: /* stmt: repeat_decl  */
-#line 217 "tiny.y"
+#line 219 "tiny.y"
                   {
         // printf(" Entrou em repeat_decl\n");
         yyval = yyvsp[0];
         }
-#line 1512 "tiny.tab.c"
+#line 1514 "tiny.tab.c"
     break;
 
   case 30: /* stmt: return_decl  */
-#line 221 "tiny.y"
+#line 223 "tiny.y"
                   {
         // printf(" Entrou em return_decl\n");
         yyval = yyvsp[0];
         }
-#line 1521 "tiny.tab.c"
+#line 1523 "tiny.tab.c"
     break;
 
   case 31: /* exp_decl: exp SEMI  */
-#line 227 "tiny.y"
+#line 229 "tiny.y"
                {
         // printf(" Entrou em exp SEMI\n");
         yyval = yyvsp[-1];
         }
-#line 1530 "tiny.tab.c"
+#line 1532 "tiny.tab.c"
     break;
 
   case 32: /* exp_decl: SEMI  */
-#line 231 "tiny.y"
+#line 233 "tiny.y"
            {
         // printf(" Entrou em SEMI\n");
         }
-#line 1538 "tiny.tab.c"
+#line 1540 "tiny.tab.c"
     break;
 
   case 33: /* sel_decl: IF LPAREN exp RPAREN stmt  */
-#line 236 "tiny.y"
+#line 238 "tiny.y"
                                 {
         // printf(" Entrou em IF LPAREN exp RPAREN stmt\n");
         yyval = newStmtNode(IfK);
@@ -1546,11 +1548,11 @@ yyreduce:
         yyval->child[1] = yyvsp[0];
 
         }
-#line 1550 "tiny.tab.c"
+#line 1552 "tiny.tab.c"
     break;
 
   case 34: /* sel_decl: IF LPAREN exp RPAREN stmt ELSE stmt  */
-#line 243 "tiny.y"
+#line 245 "tiny.y"
                                           {
         // printf(" Entrou em IF LPAREN exp RPAREN stmt ELSE stmt\n");
         yyval = newStmtNode(IfK);
@@ -1558,43 +1560,43 @@ yyreduce:
         yyval->child[1] = yyvsp[-2];
         yyval->child[2] = yyvsp[0];
         }
-#line 1562 "tiny.tab.c"
+#line 1564 "tiny.tab.c"
     break;
 
   case 35: /* repeat_decl: WHILE LPAREN exp RPAREN stmt  */
-#line 252 "tiny.y"
+#line 254 "tiny.y"
                                    {
         // printf(" Entrou em WHILE LPAREN exp RPAREN stmt\n");
         yyval = newStmtNode(RepeatK);
         yyval->child[0] = yyvsp[-2];
         yyval->child[1] = yyvsp[0];
         }
-#line 1573 "tiny.tab.c"
+#line 1575 "tiny.tab.c"
     break;
 
   case 36: /* return_decl: RETURN SEMI  */
-#line 260 "tiny.y"
+#line 262 "tiny.y"
                   {
         // printf(" Entrou em RETURN SEMI\n");
         yyval = newStmtNode(ReturnK);
         yyval->attr.name = copyString(tokenString);
         }
-#line 1583 "tiny.tab.c"
+#line 1585 "tiny.tab.c"
     break;
 
   case 37: /* return_decl: RETURN exp SEMI  */
-#line 265 "tiny.y"
+#line 267 "tiny.y"
                       {
         // printf(" Entrou em RETURN exp SEMI\n");
         yyval = newStmtNode(ReturnK);
         yyval->child[0] = yyvsp[-1];
         yyval->attr.name = copyString(tokenString);
         }
-#line 1594 "tiny.tab.c"
+#line 1596 "tiny.tab.c"
     break;
 
   case 38: /* exp: var ASSIGN exp  */
-#line 274 "tiny.y"
+#line 276 "tiny.y"
                      {
         // printf(" Entrou em var ASSIGN exp\n");
         yyval = newStmtNode(AssignK);
@@ -1603,39 +1605,39 @@ yyreduce:
         // $$->attr.op = ASSIGN;
         //$$->attr.name = $1->attr.name; // atribui o nome da variável
         }
-#line 1607 "tiny.tab.c"
+#line 1609 "tiny.tab.c"
     break;
 
   case 39: /* exp: simple_exp  */
-#line 282 "tiny.y"
+#line 284 "tiny.y"
                  {
         // printf(" Entrou em simple_exp\n");
         yyval = yyvsp[0];
         }
-#line 1616 "tiny.tab.c"
+#line 1618 "tiny.tab.c"
     break;
 
   case 40: /* var: ID  */
-#line 288 "tiny.y"
+#line 290 "tiny.y"
          {
         // printf(" Entrou em ID\n");
         yyval = newExpNode(IdK);
         yyval->attr.name = copyString(ID_name);
         }
-#line 1626 "tiny.tab.c"
+#line 1628 "tiny.tab.c"
     break;
 
   case 41: /* $@4: %empty  */
-#line 293 "tiny.y"
+#line 295 "tiny.y"
          {
         savedName = copyString(ID_name);
         savedLineNo = lineno;
         }
-#line 1635 "tiny.tab.c"
+#line 1637 "tiny.tab.c"
     break;
 
   case 42: /* var: ID $@4 LCOLCH exp RCOLCH  */
-#line 297 "tiny.y"
+#line 299 "tiny.y"
                       {
         // printf(" Entrou em ID LCOLCH exp RCOLCH\n");
         // todo: entender qual tipo de no é esse
@@ -1643,11 +1645,11 @@ yyreduce:
         yyval->attr.name = savedName;
         yyval->child[0] = yyvsp[-1];
         }
-#line 1647 "tiny.tab.c"
+#line 1649 "tiny.tab.c"
     break;
 
   case 43: /* simple_exp: soma_exp relacional soma_exp  */
-#line 306 "tiny.y"
+#line 308 "tiny.y"
                                    {
         // printf(" Entrou em soma_exp relacional soma_exp\n");
         yyval = yyvsp[-1];
@@ -1655,80 +1657,80 @@ yyreduce:
         yyval->child[1] = yyvsp[0];
         yyval->lineno = lineno;
         }
-#line 1659 "tiny.tab.c"
+#line 1661 "tiny.tab.c"
     break;
 
   case 44: /* simple_exp: soma_exp  */
-#line 313 "tiny.y"
+#line 315 "tiny.y"
                {
         // printf(" Entrou em soma_exp\n");
         yyval = yyvsp[0];
         }
-#line 1668 "tiny.tab.c"
+#line 1670 "tiny.tab.c"
     break;
 
   case 45: /* relacional: LEQ  */
-#line 319 "tiny.y"
+#line 321 "tiny.y"
           {
         // printf(" Entrou em LEQ\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = LEQ;
     }
-#line 1678 "tiny.tab.c"
+#line 1680 "tiny.tab.c"
     break;
 
   case 46: /* relacional: LESS  */
-#line 324 "tiny.y"
+#line 326 "tiny.y"
            {
         // printf(" Entrou em LESS\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = LESS;
         }
-#line 1688 "tiny.tab.c"
+#line 1690 "tiny.tab.c"
     break;
 
   case 47: /* relacional: GREATER  */
-#line 329 "tiny.y"
+#line 331 "tiny.y"
               {
         // printf(" Entrou em GREATER\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = GREATER;
         }
-#line 1698 "tiny.tab.c"
+#line 1700 "tiny.tab.c"
     break;
 
   case 48: /* relacional: GEQ  */
-#line 334 "tiny.y"
+#line 336 "tiny.y"
           {
         // printf(" Entrou em GEQ\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = GEQ;
         }
-#line 1708 "tiny.tab.c"
+#line 1710 "tiny.tab.c"
     break;
 
   case 49: /* relacional: COMPARE  */
-#line 339 "tiny.y"
+#line 341 "tiny.y"
              {
         // printf(" Entrou em COMPARE\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = COMPARE;
         }
-#line 1718 "tiny.tab.c"
+#line 1720 "tiny.tab.c"
     break;
 
   case 50: /* relacional: DIFF  */
-#line 344 "tiny.y"
+#line 346 "tiny.y"
            {
         // printf(" Entrou em DIFF\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = DIFF;
         }
-#line 1728 "tiny.tab.c"
+#line 1730 "tiny.tab.c"
     break;
 
   case 51: /* soma_exp: soma_exp soma term  */
-#line 351 "tiny.y"
+#line 353 "tiny.y"
                          {
         // printf(" Entrou em soma_exp soma term\n");
         yyval = yyvsp[-1];
@@ -1736,40 +1738,40 @@ yyreduce:
         yyval->child[1] = yyvsp[0];
         yyval->lineno = lineno;
     }
-#line 1740 "tiny.tab.c"
+#line 1742 "tiny.tab.c"
     break;
 
   case 52: /* soma_exp: term  */
-#line 358 "tiny.y"
+#line 360 "tiny.y"
            {
         // printf(" Entrou em term\n");
         yyval = yyvsp[0];
         }
-#line 1749 "tiny.tab.c"
+#line 1751 "tiny.tab.c"
     break;
 
   case 53: /* soma: PLUS  */
-#line 364 "tiny.y"
+#line 366 "tiny.y"
            {
         // printf(" Entrou em PLUS\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = PLUS;
         }
-#line 1759 "tiny.tab.c"
+#line 1761 "tiny.tab.c"
     break;
 
   case 54: /* soma: MINUS  */
-#line 369 "tiny.y"
+#line 371 "tiny.y"
             {
         // printf(" Entrou em MINUS\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = MINUS;
         }
-#line 1769 "tiny.tab.c"
+#line 1771 "tiny.tab.c"
     break;
 
   case 55: /* term: term mult factor  */
-#line 376 "tiny.y"
+#line 378 "tiny.y"
                        {
         // printf(" Entrou em term mult factor\n");
         yyval = yyvsp[-1];
@@ -1777,117 +1779,116 @@ yyreduce:
         yyval->child[1] = yyvsp[0];
         yyval->attr.op = yyvsp[-1]->attr.op;
         }
-#line 1781 "tiny.tab.c"
+#line 1783 "tiny.tab.c"
     break;
 
   case 56: /* term: factor  */
-#line 383 "tiny.y"
+#line 385 "tiny.y"
              {
         // printf(" Entrou em factor\n");
         yyval = yyvsp[0];
         }
-#line 1790 "tiny.tab.c"
+#line 1792 "tiny.tab.c"
     break;
 
   case 57: /* mult: TIMES  */
-#line 389 "tiny.y"
+#line 391 "tiny.y"
             {
         // printf(" Entrou em TIMES\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = TIMES;
         }
-#line 1800 "tiny.tab.c"
+#line 1802 "tiny.tab.c"
     break;
 
   case 58: /* mult: OVER  */
-#line 394 "tiny.y"
+#line 396 "tiny.y"
            {
         // printf(" Entrou em OVER\n");
         yyval = newExpNode(OpK);
         yyval->attr.op = OVER;
         }
-#line 1810 "tiny.tab.c"
+#line 1812 "tiny.tab.c"
     break;
 
   case 59: /* factor: LPAREN exp RPAREN  */
-#line 401 "tiny.y"
+#line 403 "tiny.y"
                         {
         // printf(" Entrou em LPAREN exp RPAREN\n");
         yyval = yyvsp[-1];
         }
-#line 1819 "tiny.tab.c"
+#line 1821 "tiny.tab.c"
     break;
 
   case 60: /* factor: var  */
-#line 405 "tiny.y"
+#line 407 "tiny.y"
           {
         // printf(" Entrou em var\n");
         yyval = yyvsp[0];
         }
-#line 1828 "tiny.tab.c"
+#line 1830 "tiny.tab.c"
     break;
 
   case 61: /* factor: ativation  */
-#line 409 "tiny.y"
+#line 411 "tiny.y"
                 {
         // printf(" Entrou em activation\n");
         yyval = yyvsp[0];
         }
-#line 1837 "tiny.tab.c"
+#line 1839 "tiny.tab.c"
     break;
 
   case 62: /* factor: NUM  */
-#line 413 "tiny.y"
+#line 415 "tiny.y"
           {
         // printf(" Entrou em NUM\n");
         yyval = newExpNode(ConstK);
         // fprintf(listing, "NUM: %s\n", tokenString);
         yyval->attr.val = atoi(tokenString);
-        yyval-> type = Integer;
         }
-#line 1849 "tiny.tab.c"
+#line 1850 "tiny.tab.c"
     break;
 
   case 63: /* $@5: %empty  */
-#line 422 "tiny.y"
+#line 423 "tiny.y"
          {
         savedName = copyString(ID_name);
         savedLineNo = lineno;
     }
-#line 1858 "tiny.tab.c"
+#line 1859 "tiny.tab.c"
     break;
 
   case 64: /* ativation: ID $@5 LPAREN args RPAREN  */
-#line 425 "tiny.y"
+#line 426 "tiny.y"
                         {
         // printf(" Entrou em ID LPAREN args RPAREN\n");
         yyval = newExpNode(ActivationK);
         yyval->attr.name = savedName;
         yyval->child[0] = yyvsp[-1];
         }
-#line 1869 "tiny.tab.c"
+#line 1870 "tiny.tab.c"
     break;
 
   case 65: /* args: arg_lista  */
-#line 433 "tiny.y"
+#line 434 "tiny.y"
                 {
         // printf(" Entrou em arg_lista\n");
         yyval = yyvsp[0];
         }
-#line 1878 "tiny.tab.c"
+#line 1879 "tiny.tab.c"
     break;
 
   case 66: /* args: %empty  */
-#line 437 "tiny.y"
+#line 438 "tiny.y"
              {
         // printf(" Entrou em empty\n");
         yyval = NULL;
         }
-#line 1887 "tiny.tab.c"
+#line 1888 "tiny.tab.c"
     break;
 
   case 67: /* arg_lista: arg_lista COMMA exp  */
-#line 443 "tiny.y"
+#line 444 "tiny.y"
                           {
         // printf(" Entrou em arg_lista COMMA exp\n");
         YYSTYPE t = yyvsp[-2];
@@ -1898,20 +1899,20 @@ yyreduce:
         yyval = yyvsp[-2];
         }
         else yyval = yyvsp[0];}
-#line 1902 "tiny.tab.c"
+#line 1903 "tiny.tab.c"
     break;
 
   case 68: /* arg_lista: exp  */
-#line 453 "tiny.y"
+#line 454 "tiny.y"
           {
         // printf(" Entrou em exp\n");
         yyval = yyvsp[0];
         }
-#line 1911 "tiny.tab.c"
+#line 1912 "tiny.tab.c"
     break;
 
 
-#line 1915 "tiny.tab.c"
+#line 1916 "tiny.tab.c"
 
       default: break;
     }
@@ -2104,7 +2105,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 458 "tiny.y"
+#line 459 "tiny.y"
 
 
 int yyerror(char * message)

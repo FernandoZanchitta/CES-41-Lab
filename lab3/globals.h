@@ -73,9 +73,9 @@ extern int lineno; /* source line number for listing */
 /***********   Syntax tree for parsing ************/
 /**************************************************/
 
-typedef enum {StmtK,ExpK,DeclK,FuncK,TypeK,ParamK} NodeKind;
+typedef enum {StmtK,ExpK,DeclK,TypeK,ParamK} NodeKind;
 typedef enum {IfK,RepeatK,AssignK,ReturnK} StmtKind;
-typedef enum {VarK, ArrayK} DeclKind;
+typedef enum {VarK, ArrayK,FuncK} DeclKind;
 typedef enum {OpK,ConstK,IdK,ActivationK} ExpKind;
 
 /* ExpType is used for type checking */
