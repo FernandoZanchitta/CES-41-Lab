@@ -291,9 +291,7 @@ void printTree( TreeNode * tree )
     else if(tree->nodekind == FuncK){
       fprintf(listing, "Function: %s\n", tree->attr.name);
     }
-    else if(tree->nodekind == ParamK){
-      fprintf(listing, "Param: %s\n", tree->attr.name);
-    }
+
     else fprintf(listing,"Unknown node kind\n");
     for (i=0;i<MAXCHILDREN;i++)
          printTree(tree->child[i]);
@@ -332,22 +330,21 @@ TreeNode * newTypeNode(ExpType type){
   }
   return t;
 }
-
 TreeNode * newParamNode(DeclKind kind)
-{
-  TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
-  int i;
-  if (t==NULL)
-    fprintf(listing,"Out of memory error at line %d\n",lineno);
-  else {
-    for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
-    t->sibling = NULL;
-    t->nodekind = ParamK;
-    t->kind.decl = kind;
-    t->lineno = lineno;
-  }
-  return t;
-}
+ {
+   TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
+   int i;
+   if (t==NULL)
+     fprintf(listing,"Out of memory error at line %d\n",lineno);
+   else {
+     for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
+     t->sibling = NULL;
+     t->nodekind = ParamK;
+     t->kind.decl = kind;
+     t->lineno = lineno;
+   }
+   return t;
+ }
 // TreeNode * newFuncNode(){
 //   TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
 //   int i;

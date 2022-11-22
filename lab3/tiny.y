@@ -93,15 +93,15 @@ type_esp
 func_decl   
       : type_esp ID {
         savedName = copyString(ID_name);
-        savedLineNo = lineno; 
+        savedLineNo = lineno;
         $$ = $1;
         $$->child[0] = newDeclNode(FuncK);
         $$->child[0]->attr.name = savedName;
+        $$->child[0]->lineno = savedLineNo;
       }LPAREN params RPAREN comp_decl {
         // fprintf(listing," Entrou em type_esp ID LPAREN params RPAREN comp_decl\n");
         $$ = $3;
-        $$->child[0]->type = $1->type;
-        $$->child[0]->lineno = savedLineNo;
+        $$->child[0]->type = $1->type;        
         $$->child[0]->child[0] = $5;
         $$->child[0]->child[1] = $7;
         }
@@ -136,8 +136,7 @@ param_list
       ;
 param
     :type_esp ID {
-        // fprintf(listing,"ID_name em param: %s\n", ID_name);
-        savedLineNo = lineno; 
+        // fprintf(listing,"ID_name em param: %s\n", ID_name); 
         $$ = $1;
         $$->child[0] = newParamNode(VarK);
         $$->child[0]->type = $1->type;
@@ -150,7 +149,7 @@ param
         $$->child[0] = newParamNode(ArrayK);
         $$->child[0]->type = $1->type;
         $$->child[0]->attr.name = copyString(ID_name);
-        $$->child[0]->lineno = savedLineNo;
+        $$->child[0]->lineno = lineno;
     }
     ;
 comp_decl
@@ -302,6 +301,7 @@ var
         $$ = newExpNode(IdK);
         $$->attr.name = savedName;
         $$->child[0] = $4;
+        $$->lineno = savedLineNo;
         }
     ;
 simple_exp
@@ -428,6 +428,7 @@ ativation
         $$ = newExpNode(ActivationK);
         $$->attr.name = savedName;
         $$->child[0] = $4;
+        $$->lineno = savedLineNo;
         }
     ;
 args

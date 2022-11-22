@@ -79,7 +79,7 @@ typedef enum {VarK, ArrayK,FuncK} DeclKind;
 typedef enum {OpK,ConstK,IdK,ActivationK} ExpKind;
 
 /* ExpType is used for type checking */
-typedef enum {Void,Integer,Boolean} ExpType;
+typedef enum {Void,Integer} ExpType;
 #define MAXCHILDREN 3
 
 typedef struct treeNode

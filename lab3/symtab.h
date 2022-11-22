@@ -30,4 +30,5 @@ int st_lookup_type ( char * name );
  */
 void printSymTab(FILE * listing);
 
+int st_find_main_bucket();
 #endif

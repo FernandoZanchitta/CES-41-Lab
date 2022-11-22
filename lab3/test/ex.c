@@ -1,5 +1,6 @@
-void main(void){
+
+void teste(void){
     int x;
-    int x;
+    b = x;
 }
 void xyz(void){}

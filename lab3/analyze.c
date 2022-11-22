@@ -204,3 +204,7 @@ static void checkNode(TreeNode * t)
 void typeCheck(TreeNode * syntaxTree)
 { traverse(syntaxTree,nullProc,checkNode);
 }
+
+void checkMain(){
+  st_find_main_bucket();
+}

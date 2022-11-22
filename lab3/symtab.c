@@ -167,3 +167,25 @@ void printSymTab(FILE * listing)
     }
   }
 } /* printSymTab */
+
+//find main bucket
+int st_find_main_bucket(){
+  char* name = "main";
+  int h = hash(name);
+  BucketList l =  hashTable[h];
+  while ((l != NULL) && (strcmp(name,l->name) != 0))
+    l = l->next;
+  if (l == 0) {
+    fprintf(listing,"Error: %s not found in symbol table\n", name);
+    return 0;
+  }
+  if(l->type != 2){
+    fprintf(listing,"Error: %s is not a function\n", name);
+    return 0;
+  }
+  if (l->type_data != 0){
+    fprintf(listing,"Error: %s is not a void function\n", name);
+    return 0;
+  }
+  return 1;
+}
