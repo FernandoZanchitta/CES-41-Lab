@@ -128,7 +128,7 @@ int st_lookup ( char * name )
 /* Function st_lookup_type returns the type
  * of a variable or -1 if not found
  */
-int st_lookup_type ( char * name )
+int st_lookup_type_data ( char * name )
 { int h = hash(name);
   BucketList l =  hashTable[h];
   while ((l != NULL) && (strcmp(name,l->name) != 0))
@@ -137,7 +137,7 @@ int st_lookup_type ( char * name )
     fprintf(listing,"Error: %s not found in symbol table\n", name);
     return -1;
   }
-  else return l->type;
+  else return l->type_data;
 }
 /* Procedure printSymTab prints a formatted 
  * listing of the symbol table contents 

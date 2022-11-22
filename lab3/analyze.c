@@ -108,8 +108,9 @@ static void insertNode( TreeNode * t)
       { case IdK:
           if(st_lookup(t->attr.name) == -1)
             fprintf(listing,"ERROR: Variable %s not declared in line %d", t->attr.name, t->lineno);
-          else
+          else{
             st_insert(t->attr.name,t->lineno,0,t->kind.decl, t->type);
+          }
           break;
         default:
           break;
@@ -157,11 +158,10 @@ static void checkNode(TreeNode * t)
           t->type = Integer;
           break;
         case IdK:
-          // fprintf(listing,"IdK\n");
-          // procurar tipo na tabela de simbolos:
-          // fprintf(listing,"name: %s\n",t->attr.name);
-          t->type = st_lookup_type(t->attr.name);
-          // fprintf(listing,"tipo atribuido: %s\n",mapType_Data(t->type)) ;
+          t->type = st_lookup_type_data(t->attr.name);
+          break;
+        case ActivationK:
+          t->type = st_lookup_type_data(t->attr.name);
           break;
         default:
           break;
@@ -170,20 +170,17 @@ static void checkNode(TreeNode * t)
     case StmtK:
       switch (t->kind.stmt)
       { case IfK:
-          if (t->child[0]->type == Integer) //exp
+          if (t->child[0]->type == Integer) //TODO: resolver problema no IF
             typeError(t->child[0],"if test is not Boolean");
           break;
         case AssignK:
-          // fprintf(listing,"AssignK\n");
           if (t->child[0]->type != Integer)//stm
             {
-              // fprintf(listing,"Name of child: %s ::: Type of child: %d\n",t->child[0]->attr.name ,t->child[0]->type);
-              typeError(t->child[0],"assignment of non-integer value");}
+              typeError(t->child[0],"Left side assignment of non-integer value");
+            }
+          if(t->child[1]->type != t->child[0]->type)
+            typeError(t->child[1],"Right side assignment of diferent type");
           break;
-        // case WriteK:
-        //   if (t->child[0]->type != Integer)
-        //     typeError(t->child[0],"write of non-integer value");
-        //   break;
         case RepeatK:
           if (t->child[1]->type == Integer)
             typeError(t->child[1],"repeat test is not Boolean");

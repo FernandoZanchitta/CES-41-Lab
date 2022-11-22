@@ -22,7 +22,7 @@ void st_insert( char * name, int lineno, int loc, int type, int type_data );
  */
 
 int st_lookup ( char * name );
-int st_lookup_type ( char * name );
+int st_lookup_type_data ( char * name );
 
 /* Procedure printSymTab prints a formatted 
  * listing of the symbol table contents 
