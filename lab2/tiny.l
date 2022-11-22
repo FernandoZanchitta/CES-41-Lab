@@ -13,6 +13,7 @@ char tokenString[MAXTOKENLEN+1];
 int FlagComment = 0;
 Stack_id * stack;
 char ID_name[MAXTOKENLEN+1];
+char NUM_name[MAXTOKENLEN+1];
 %}
 digit       [0-9]
 number      {digit}+
@@ -46,7 +47,7 @@ whitespace  [ \t]+
 "]"             {return RCOLCH;}
 "{"             {return LBRAC;}
 "}"             {return RBRAC;}
-{number}        {return NUM;}
+{number}        {strncpy(NUM_name,yytext,MAXTOKENLEN); return NUM;}
 {identifier}    {strncpy(ID_name,yytext,MAXTOKENLEN);return ID;}
 {newline}       {lineno++;}
 {whitespace}    {/* skip whitespace */}
@@ -67,7 +68,7 @@ TokenType getToken(void)
   strncpy(tokenString,yytext,MAXTOKENLEN);
   if(currentToken == 0 && FlagComment == 1){
     printf("\nERRO: Operador de comentário não fechado\n");
-    FlagComment == 0;
+    FlagComment = 0;
     return currentToken;
   }
   if(currentToken == BEGCOM && FlagComment == 0){
