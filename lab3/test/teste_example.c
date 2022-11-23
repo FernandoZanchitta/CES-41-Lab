@@ -1,7 +1,7 @@
 void main(int a)
 {
-/*adeadeadaee*/
     int b;
-    a = b;
-/* dadaedea */
+    int x;
+    if (a == b) x = 0;
+    else x = 1;
 } 

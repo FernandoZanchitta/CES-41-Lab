@@ -56,13 +56,6 @@ void emitRO( char *op, int r, int s, int t, char *c);
  */
 void emitRM( char * op, int r, int d, int s, char *c);
 
-void emitCheckCondition(int savedLoc);
-void emitValidCondition(int registeredId, int line);
-void emitIFK3(int savedLoc);
-void emitIFK4(int savedLoc);
-
-void emitAssignK(char * nameVar, int registerId);
-
 /* Function emitSkip skips "howMany" code
  * locations for later backpatch. It also
  * returns the current code position

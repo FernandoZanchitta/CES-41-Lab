@@ -53,26 +53,6 @@ void emitRM( char * op, int r, int d, int s, char *c)
   if (highEmitLoc < emitLoc)  highEmitLoc = emitLoc ;
 } /* emitRM */
 
-void emitCheckCondition(int savedLoc){
-  fprintf(code, "t%d = ", savedLoc);
-}
-
-void emitValidCondition(int registeredId, int line){
-  fprintf(code, "if_true t%d goto L%d", registeredId, line);
-}
-
-void emitIFK3(int savedLoc){
-  fprintf(code, "goto L%d", savedLoc);
-}
-
-void emitIFK4(int savedLoc){
-  fprintf(code, "L%d: ", savedLoc);
-}
-
-void emitAssignK(char * nameVar, int registerId){
-  fprintf(code, "%s = t%d", nameVar, registerId);
-}
-
 /* Function emitSkip skips "howMany" code
  * locations for later backpatch. It also
  * returns the current code position

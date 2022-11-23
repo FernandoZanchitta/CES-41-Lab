@@ -37,15 +37,23 @@ static void genStmt( TreeNode * tree)
          p2 = tree->child[1] ;
          p3 = tree->child[2] ;
          /* generate code for test expression */
-         int registerId = ac;
-         emitCheckCondition(registerId);
          cGen(p1);
-         emitValidCondition(registerId, registerId);
-         cGen(p3);
-         savedLoc2 = emitSkip(1) ;
-         emitIFK3(savedLoc2);
-         emitIFK4(savedLoc1);
+         savedLoc1 = emitSkip(1) ;
+         emitComment("if: jump to else belongs here");
+         /* recurse on then part */
          cGen(p2);
+         savedLoc2 = emitSkip(1) ;
+         emitComment("if: jump to end belongs here");
+         currentLoc = emitSkip(0) ;
+         emitBackup(savedLoc1) ;
+         emitRM_Abs("JEQ",ac,currentLoc,"if: jmp to else");
+         emitRestore() ;
+         /* recurse on else part */
+         cGen(p3);
+         currentLoc = emitSkip(0) ;
+         emitBackup(savedLoc2) ;
+         emitRM_Abs("LDA",pc,currentLoc,"jmp to end") ;
+         emitRestore() ;
          if (TraceCode)  emitComment("<- if") ;
          break; /* if_k */
 
@@ -56,39 +64,12 @@ static void genStmt( TreeNode * tree)
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
          savedLoc1 = emitSkip(0);
-         // emitComment("repeat: jump after body comes back here");
+         emitComment("repeat: jump after body comes back here");
          /* generate code for body */
-         emitComment("L1: ");
-         int registeredId = ac;
-         switch(p1->attr.op){
-            case LESS:
-               p1->attr.op = GEQ;
-               break;
-            case LEQ:
-               p1->attr.op = GREATER;
-               break;
-            case GREATER:
-               p1->attr.op = LEQ;
-               break;
-            case GEQ:
-               p1->attr.op = LESS;
-               break;
-            case COMPARE:
-               p1->attr.op = DIFF;
-               break;
-            case DIFF:
-               p1->attr.op = COMPARE;
-               break;
-            default:
-               break
-         }
-         emitCheckCondition(registeredId);
          cGen(p1);
-         emitValidCondition(registeredId, 2);
-         cGen(p2);
-         emitComment("goto L1");
          /* generate code for test */
-         // emitRM_Abs("JEQ",ac,savedLoc1,"repeat: jmp back to body");
+         cGen(p2);
+         emitRM_Abs("JEQ",ac,savedLoc1,"repeat: jmp back to body");
          if (TraceCode)  emitComment("<- repeat") ;
          break; /* repeat */
 
@@ -96,12 +77,14 @@ static void genStmt( TreeNode * tree)
          printf("---- assign k------\n");
          if (TraceCode) emitComment("-> assign") ;
          /* generate code for rhs */
-         p1 = tree->child[0]
-         p2 = tree->child[1]
-         int registerId = ac;
-         cGen(p2);
-         emitAssignK(p1->attr.name, registeredId);
-
+         printf("\nhere we have attr name: %d", tree->attr.op);
+         cGen(tree->child[0]);
+         cGen(tree->child[1]);
+         /* now store value */
+         // loc = st_lookup(tree->attr.name);
+         
+         // printf("\naqui temos: %d", loc);
+         // emitRM("ST",ac,loc,gp,"assign: store value");
          if (TraceCode)  emitComment("<- assign") ;
          break; /* assign_k */
       default:
