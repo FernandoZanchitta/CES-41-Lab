@@ -1,15 +1,10 @@
-void printf(int a)
-{
-    int b;
-}
 void main(int a)
 {
-/*adeadeadaee*/
     int b;
-    b = 1;
-
-/*     if (a == b ){
-        printf(3);
-    } */
-/* dadaedea */
-} 
+    int c;
+    int d;
+    d = f(b,c);
+}
+int f(int x, int y){
+    return x + y + 1;
+}

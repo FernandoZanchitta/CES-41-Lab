@@ -1,8 +1,10 @@
 all:
 	flex tiny.l
 	bison -d tiny.y
+	mkdir -p build
 	gcc -c *.c
-	gcc -o build/tiny *.o -ly -ll
+	gcc -o build/tiny *.o -lfl
+	rm *.o *.tab.* *.yy.*
 run:
 	./build/tiny test/ex.c
 	
