@@ -165,11 +165,31 @@ int st_lookup_type_data ( char * name )
   while ((l != NULL) && (strcmp(name,l->name) != 0))
     l = l->next;
   if (l == NULL) {
-    fprintf(listing,"Error: %s not found in symbol table\n", name);
+    // fprintf(listing,"Error: %s not found in symbol table\n", name);
     return -1;
   }
+  
   else return l->type_data;
 }
+
+
+int st_lookup_type ( char * name )
+{ int h = hash(name);
+  BucketList l =  hashTable[h];
+  while ((l != NULL) && (strcmp(name,l->name) != 0))
+    l = l->next;
+  if (l == NULL) {
+    // fprintf(listing,"Error: %s not found in symbol table\n", name);
+    return -1;
+  }
+  else {
+    // fprintf(listing,"Encontrei o nome %s com tipo %s", name, mapType(l->type));
+    
+    return l->type;
+    }
+}
+
+
 /* Procedure printSymTab prints a formatted 
  * listing of the symbol table contents 
  * to the listing file

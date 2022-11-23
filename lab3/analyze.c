@@ -73,7 +73,8 @@ static void insertNode(TreeNode *t)
     case ArrayK:
       if (
         // (st_lookup_scope(t->attr.name, "global") == -1) &&
-         (st_lookup_scope(t->attr.name, getScope()) == -1))
+         (st_lookup_scope(t->attr.name, getScope()) == -1) && ((st_lookup_scope(t->attr.name, "global") == -1) ||
+          (st_lookup_scope(t->attr.name, "global") != -1) && (st_lookup_type(t->attr.name) != 2)))
       {
         /* not yet in table, so treat as new definition */
         if (t->type == Integer)

@@ -11,10 +11,10 @@
 * Vark
 * -> assign
 * -> Id
-  2:     LD  0,1(5) 	load id value
+  2:     LD  0,3(5) 	load id value
 * <- Id
 * -> Id
-  3:     LD  0,2(5) 	load id value
+  3:     LD  0,4(5) 	load id value
 * <- Id
 * <- assign
 * End of execution.
