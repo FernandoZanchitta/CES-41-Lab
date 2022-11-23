@@ -15,7 +15,7 @@
 /* set NO_CODE to TRUE to get a compiler that does not
  * generate code
  */
-#define NO_CODE TRUE
+#define NO_CODE FALSE
 
 #include "util.h"
 #if NO_PARSE
@@ -81,8 +81,11 @@ int main( int argc, char * argv[] )
     checkMain();
   }
 #if !NO_CODE
+  printf("\n\nchecando erro\n\n");
   if (! Error)
-  { char * codefile;
+  {
+    printf("\n\naqui em no code\n\n");
+    char * codefile;
     int fnlen = strcspn(pgm,".");
     codefile = (char *) calloc(fnlen+4, sizeof(char));
     strncpy(codefile,pgm,fnlen);
