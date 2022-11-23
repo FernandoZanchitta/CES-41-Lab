@@ -83,4 +83,8 @@ void emitRestore(void);
  */
 void emitRM_Abs( char *op, int r, int a, char * c);
 
+void emitConst( int counter, int val, char*c);
+void emitID ( int counter, int loc, char* name, char* c);
+void emitOp( char *op, int counter, char* name1, char* name2, char *c);
+
 #endif

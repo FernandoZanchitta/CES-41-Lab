@@ -77,7 +77,7 @@ static void genStmt( TreeNode * tree)
          printf("---- assign k------\n");
          if (TraceCode) emitComment("-> assign") ;
          /* generate code for rhs */
-         printf("\nhere we have attr name: %d", tree->attr.op);
+         // printf("\nhere we have attr name: %d", tree->attr.op);
          cGen(tree->child[0]);
          cGen(tree->child[1]);
          /* now store value */
@@ -120,7 +120,8 @@ static void genExp( TreeNode * tree)
       printf("----ConstK---\n");
       if (TraceCode) emitComment("-> Const") ;
       /* gen code to load integer constant using LDC */
-      emitRM("LDC",ac,tree->attr.val,0,"load const");
+      // emitRM("LDC",ac,tree->attr.val,0,"load const");
+      emitConst(ac, tree->attr.val, "load const"); 
       if (TraceCode)  emitComment("<- Const") ;
       break; /* ConstK */
     
@@ -128,7 +129,8 @@ static void genExp( TreeNode * tree)
       printf("----IdK---\n");
       if (TraceCode) emitComment("-> Id") ;
       loc = st_lookup(tree->attr.name);
-      emitRM("LD",ac,loc,gp,"load id value");
+      // emitRM("LD",ac,loc,gp,"load id value");
+      emitID(ac, loc, tree->attr.name,"load id value");
       if (TraceCode)  emitComment("<- Id") ;
       break; /* IdK */
 
@@ -146,14 +148,15 @@ static void genExp( TreeNode * tree)
          /* gen code for ac = left arg */
          cGen(p1);
          /* gen code to push left operand */
-         emitRM("ST",ac,tmpOffset--,mp,"op: push left");
+         // emitRM("ST",ac,tmpOffset--,mp,"op: push left");
          /* gen code for ac = right operand */
          cGen(p2);
          /* now load left operand */
-         emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
+         // emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
          switch (tree->attr.op) {
             case PLUS :
-               emitRO("ADD",ac,ac1,ac,"op +");
+               // emitRO("ADD",ac,ac1,ac,"op +");
+               emitOp("+", ac, "c","d","op +");
                break;
             case MINUS :
                emitRO("SUB",ac,ac1,ac,"op -");
@@ -346,13 +349,13 @@ void codeGen(TreeNode * syntaxTree, char * codefile)
    emitComment("TINY Compilation to TM Code");
    emitComment(s);
    /* generate standard prelude */
-   emitComment("Standard prelude:");
-   emitRM("LD",mp,0,ac,"load maxaddress from location 0");
-   emitRM("ST",ac,0,ac,"clear location 0");
-   emitComment("End of standard prelude.");
+   // emitComment("Standard prelude:");
+   // emitRM("LD",mp,0,ac,"load maxaddress from location 0");
+   // emitRM("ST",ac,0,ac,"clear location 0");
+   emitComment("Begin of execution.");
    /* generate code for TINY program */ 
    cGen(syntaxTree);
    /* finish */
    emitComment("End of execution.");
-   emitRO("HALT",0,0,0,"");
+   // emitRO("HALT",0,0,0,"");
 }

@@ -1,21 +1,23 @@
 * TINY Compilation to TM Code
 * File: test/teste_example.tm
-* Standard prelude:
-  0:     LD  6,0(0) 	load maxaddress from location 0
-  1:     ST  0,0(0) 	clear location 0
-* End of standard prelude.
+* Begin of execution.
 * Ignored Void Declaration
 * FuncK
 * Ignored Integer Declaration
-* Ignored Integer Declaration
-* Vark
 * -> assign
 * -> Id
-  2:     LD  0,1(5) 	load id value
+  0:  r_0 = a;	load id value
 * <- Id
-* -> Id
-  3:     LD  0,2(5) 	load id value
-* <- Id
+* -> Op
+* -> Const
+  1:  r_0 = 1;	load const
+* <- Const
+  2:     ST  0,0(6) 	op: push left
+* -> Const
+  3:  r_0 = 2;	load const
+* <- Const
+  4:     LD  1,0(6) 	op: load left
+  5:  r_0  = c + d;	op +
+* <- Op
 * <- assign
 * End of execution.
-  4:   HALT  0,0,0 	
