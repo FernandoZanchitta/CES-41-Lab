@@ -27,7 +27,7 @@
 #ifndef YYPARSER
 
 /* the name of the following file may change */
-#include "cminus.tab.h"
+#include "tiny.tab.h"
 
 /* ENDFILE is implicitly defined by Yacc/Bison,
  * and not included in the tab.h file
@@ -74,9 +74,9 @@ extern int lineno; /* source line number for listing */
 /**************************************************/
 
 typedef enum {StmtK,ExpK,DeclK,TypeK,ParamK} NodeKind;
-typedef enum {IfK,RepeatK,AssignK,ReturnK,ReadK,WriteK} StmtKind;
+typedef enum {IfK,RepeatK,AssignK,ReturnK, ReadK, WriteK} StmtKind;
 typedef enum {VarK, ArrayK,FuncK} DeclKind;
-typedef enum {OpK,ConstK,IdK,ActivationK, LT, EQ} ExpKind;
+typedef enum {OpK,ConstK,IdK,ActivationK} ExpKind;
 
 /* ExpType is used for type checking */
 typedef enum {Void,Integer} ExpType;

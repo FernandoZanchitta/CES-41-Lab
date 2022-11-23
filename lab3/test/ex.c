@@ -1,1 +1,1 @@
-int main(void){a(b(i[2]));}
+int main(void){a(b(i[k]));}
