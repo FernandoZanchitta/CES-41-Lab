@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "ios": "c",
+        "analyze.h": "c",
+        "stdlib.h": "c",
+        "symtab.h": "c"
+    }
+}
