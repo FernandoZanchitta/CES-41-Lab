@@ -26,7 +26,6 @@ static void genStmt( TreeNode * tree)
 { TreeNode * p1, * p2, * p3;
   int savedLoc1,savedLoc2,currentLoc;
   int loc;
-  printf("\n\nestou aqui\n\n");
   switch (tree->kind.stmt) {
 
       case IfK :

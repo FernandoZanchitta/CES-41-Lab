@@ -81,10 +81,8 @@ int main( int argc, char * argv[] )
     checkMain();
   }
 #if !NO_CODE
-  printf("\n\nchecando erro\n\n");
   if (! Error)
   {
-    printf("\n\naqui em no code\n\n");
     char * codefile;
     int fnlen = strcspn(pgm,".");
     codefile = (char *) calloc(fnlen+4, sizeof(char));
