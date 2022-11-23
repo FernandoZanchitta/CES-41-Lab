@@ -77,13 +77,13 @@ static void insertNode(TreeNode *t)
         if (t->type == Integer)
           st_insert(t->attr.name, t->lineno, location++, t->kind.decl, t->type,getScope());
         else
-          fprintf(listing, "Type not supported");
+          fprintf(listing, "Semantic error: Type not supported");
       }
       else
       {
         /* already in table, so ignore location,
            add line number of use only */
-        fprintf(listing, "ERROR: Variable %s redeclared in line %d\n", t->attr.name, t->lineno);
+        fprintf(listing, "Semantic error: Variable %s redeclared in line %d\n", t->attr.name, t->lineno);
       }
       break;
 
@@ -96,7 +96,7 @@ static void insertNode(TreeNode *t)
       }
       else
         /* already in table, so print error message */
-        fprintf(listing, "ERROR: Function %s redeclared in line %d\n",t->attr.name, t->lineno);
+        fprintf(listing, " Semantic error: Function %s redeclared in line %d\n",t->attr.name, t->lineno);
       break;
     default:
       break;
@@ -128,7 +128,7 @@ static void insertNode(TreeNode *t)
       else if(st_lookup_scope(t->attr.name, getScope()) != -1) //achei no escopo atual
         st_insert(t->attr.name, t->lineno, 0, t->kind.decl, t->type,getScope());
       else if(st_lookup_scope(t->attr.name, "global") == -1 && st_lookup_scope(t->attr.name, getScope()) == -1) //não achei em nenhum escopo
-        fprintf(listing, "ERROR: Variable %s used but not declared in line %d\n", t->attr.name, t->lineno);
+        fprintf(listing, "Semantic error: Variable %s used but not declared in line %d\n", t->attr.name, t->lineno);
       break;
     default:
       break;
@@ -136,7 +136,7 @@ static void insertNode(TreeNode *t)
       if(st_lookup_scope(t->attr.name, "global") != -1 ) // achei na global
         st_insert(t->attr.name, t->lineno, 0, t->kind.decl, t->type,"global");
       else if ( st_lookup_scope(t->attr.name, getScope()) == -1) // não achei na local nem na global
-        fprintf(listing, "ERROR: Function %s not declared for activation in line %d\n", t->attr.name, t->lineno);
+        fprintf(listing, "Semantic error: Function %s not declared for activation in line %d\n", t->attr.name, t->lineno);
       else
       { // achei na local e não achei na global
         st_insert(t->attr.name, t->lineno, 0, t->kind.decl, t->type,getScope());

@@ -1,5 +1,8 @@
 /* ordenação por seleção */
 int x[10];
+/* Partes que não contem no sort*/
+int input(void){}
+void output(int z){}
 int minloc ( int a[], int low, int high )
 {
     int i; int x; int k;
