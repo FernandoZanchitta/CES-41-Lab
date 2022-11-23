@@ -28,6 +28,7 @@ char * getScope();
 int st_lookup ( char * name );
 int st_lookup_type_data ( char * name );
 int st_lookup_scope ( char * name, char* scope );
+int st_lookup_type ( char * name );
 /* Procedure printSymTab prints a formatted 
  * listing of the symbol table contents 
  * to the listing file

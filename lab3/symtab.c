@@ -165,11 +165,31 @@ int st_lookup_type_data ( char * name )
   while ((l != NULL) && (strcmp(name,l->name) != 0))
     l = l->next;
   if (l == NULL) {
-    fprintf(listing,"Error: %s not found in symbol table\n", name);
+    // fprintf(listing,"Error: %s not found in symbol table\n", name);
     return -1;
   }
+  
   else return l->type_data;
 }
+
+
+int st_lookup_type ( char * name )
+{ int h = hash(name);
+  BucketList l =  hashTable[h];
+  while ((l != NULL) && (strcmp(name,l->name) != 0))
+    l = l->next;
+  if (l == NULL) {
+    // fprintf(listing,"Error: %s not found in symbol table\n", name);
+    return -1;
+  }
+  else {
+    // fprintf(listing,"Encontrei o nome %s com tipo %s", name, mapType(l->type));
+    
+    return l->type;
+    }
+}
+
+
 /* Procedure printSymTab prints a formatted 
  * listing of the symbol table contents 
  * to the listing file
@@ -177,19 +197,21 @@ int st_lookup_type_data ( char * name )
 void printSymTab(FILE * listing)
 { int i;
   fprintf(listing,"Variable Name  Type  Scope  Type of Data  Location  Line Numbers\n");
-  fprintf(listing,"-------------  ----  -----  ------------  --------  ------------\n");
+  fprintf(listing,"-------------  ----  -----  ------------  --------  --------------------------\n");
   for (i=0;i<SIZE;++i)
   { if (hashTable[i] != NULL)
     { BucketList l = hashTable[i];
       while (l != NULL)
       { LineList t = l->lines;
         fprintf(listing,"%-14s ",l->name);
-        fprintf(listing,"%-5s  ",mapType(l->type));
-        fprintf(listing,"%-5s  ",l->scope);
-        fprintf(listing,"%-12s  ",mapType_Data(l->type_data));
-        fprintf(listing,"%-8d  ",l->memloc);
+        fprintf(listing,"%-7s ",mapType(l->type));
+        fprintf(listing,"%-8s ",l->scope);
+        fprintf(listing,"%-12s ",mapType_Data(l->type_data));
+        fprintf(listing,"%-8d ",l->memloc);
         while (t != NULL)
-        { fprintf(listing,"%4d ",t->lineno);
+        { 
+
+          if(t->lineno != 0 ) fprintf(listing,"%4d ",t->lineno);
           t = t->next;
         }
         fprintf(listing,"\n");

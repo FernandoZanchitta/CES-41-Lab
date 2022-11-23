@@ -14,7 +14,7 @@
 * -> if
 * -> Op
 * -> Id
-  2:     LD  0,1(5) 	load id value
+  2:     LD  0,3(5) 	load id value
 * <- Id
   3:     ST  0,0(6) 	op: push left
 * -> Id
