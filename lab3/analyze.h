@@ -8,6 +8,8 @@
 #ifndef _ANALYZE_H_
 #define _ANALYZE_H_
 
+void checkScopeOver(TreeNode * t);
+
 /* Function buildSymtab constructs the symbol 
  * table by preorder traversal of the syntax tree
  */
@@ -18,4 +20,5 @@ void buildSymtab(TreeNode *);
  */
 void typeCheck(TreeNode *);
 
+void checkMain();
 #endif

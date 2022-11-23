@@ -332,22 +332,21 @@ TreeNode * newTypeNode(ExpType type){
   }
   return t;
 }
-
 TreeNode * newParamNode(DeclKind kind)
-{
-  TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
-  int i;
-  if (t==NULL)
-    fprintf(listing,"Out of memory error at line %d\n",lineno);
-  else {
-    for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
-    t->sibling = NULL;
-    t->nodekind = ParamK;
-    t->kind.decl = kind;
-    t->lineno = lineno;
-  }
-  return t;
-}
+ {
+   TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
+   int i;
+   if (t==NULL)
+     fprintf(listing,"Out of memory error at line %d\n",lineno);
+   else {
+     for (i=0;i<MAXCHILDREN;i++) t->child[i] = NULL;
+     t->sibling = NULL;
+     t->nodekind = ParamK;
+     t->kind.decl = kind;
+     t->lineno = lineno;
+   }
+   return t;
+ }
 // TreeNode * newFuncNode(){
 //   TreeNode * t = (TreeNode *) malloc(sizeof(TreeNode));
 //   int i;

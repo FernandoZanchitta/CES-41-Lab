@@ -77,6 +77,8 @@ int main( int argc, char * argv[] )
     if (TraceAnalyze) fprintf(listing,"\nChecking Types...\n");
     typeCheck(syntaxTree);
     if (TraceAnalyze) fprintf(listing,"\nType Checking Finished\n");
+    if (TraceAnalyze) fprintf(listing,"\nChecking if main exists\n");
+    checkMain();
   }
 #if !NO_CODE
   if (! Error)

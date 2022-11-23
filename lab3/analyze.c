@@ -19,6 +19,7 @@ static void typeError(TreeNode * t, char * message)
 }
 
 
+
 /* Procedure traverse is a generic recursive 
  * syntax tree traversal routine:
  * it applies preProc in preorder and postProc 
@@ -63,22 +64,26 @@ static void insertNode( TreeNode * t)
       switch (t->kind.decl)
       { case VarK:
         case ArrayK:
-          if (st_lookup(t->attr.name) == -1)
+          if (st_lookup_scope(t->attr.name, getScope()) == -1){
           /* not yet in table, so treat as new definition */
             if(t->type == Integer)
               st_insert(t->attr.name,t->lineno,location++, t->kind.decl, t->type);
             else
               typeError(t,"Type not supported");
-          else
+          }else{
           /* already in table, so ignore location, 
-             add line number of use only */ 
+             add line number of use only */
             typeError(t,"ERROR: Variable redeclared\n");
+
+          }
           break;
 
         case FuncK:
-          if (st_lookup(t->attr.name) == -1)
+          if (st_lookup_scope(t->attr.name,getScope()) == -1){
           /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++, t->kind.decl, t->type);
+            changeScope(t->attr.name);
+          }
           else
           /* already in table, so print error message */
             typeError(t,"ERROR: Function redeclared\n");
@@ -91,7 +96,7 @@ static void insertNode( TreeNode * t)
       switch (t->kind.decl)
       { case VarK:
         case ArrayK:
-          if (st_lookup(t->attr.name) == -1)
+          if (st_lookup_scope(t->attr.name,getScope()) == -1)
           /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,t->kind.decl, t->type);
           else
@@ -106,10 +111,11 @@ static void insertNode( TreeNode * t)
     case ExpK:
       switch (t->kind.exp)
       { case IdK:
-          if(st_lookup(t->attr.name) == -1)
+          if(st_lookup_scope(t->attr.name,getScope()) == -1)
             fprintf(listing,"ERROR: Variable %s not declared in line %d", t->attr.name, t->lineno);
-          else
+          else{
             st_insert(t->attr.name,t->lineno,0,t->kind.decl, t->type);
+          }
           break;
         default:
           break;
@@ -124,7 +130,9 @@ static void insertNode( TreeNode * t)
  * table by preorder traversal of the syntax tree
  */
 void buildSymtab(TreeNode * syntaxTree)
-{ traverse(syntaxTree,insertNode,nullProc);
+{ 
+  changeScope("global");
+  traverse(syntaxTree,insertNode,checkScopeOver);
   if (TraceAnalyze)
   { fprintf(listing,"\nSymbol table:\n\n");
     printSymTab(listing);
@@ -140,13 +148,11 @@ static void checkNode(TreeNode * t)
   { case ExpK:
       switch (t->kind.exp)
       { case OpK:
-          fprintf(listing,"OpK\n");
           if ((t->child[0]->type != Integer) ||
               (t->child[1]->type != Integer)){
-            typeError(t,"Op applied to non-integer");
+            // typeError(t,"Op applied to non-integer");
 
               }
-          fprintf(listing,"Type of childs: %d %d", t->child[0]->type, t->child[1]->type);
           if ((t->attr.op == COMPARE) || (t->attr.op == LESS) || (t->attr.op == GREATER) 
              || (t->attr.op == DIFF) || (t->attr.op == LEQ) || (t->attr.op == GEQ))
             t->type = Void;
@@ -157,11 +163,10 @@ static void checkNode(TreeNode * t)
           t->type = Integer;
           break;
         case IdK:
-          // fprintf(listing,"IdK\n");
-          // procurar tipo na tabela de simbolos:
-          // fprintf(listing,"name: %s\n",t->attr.name);
-          t->type = st_lookup_type(t->attr.name);
-          // fprintf(listing,"tipo atribuido: %s\n",mapType_Data(t->type)) ;
+          t->type = st_lookup_type_data(t->attr.name);
+          break;
+        case ActivationK:
+          t->type = st_lookup_type_data(t->attr.name);
           break;
         default:
           break;
@@ -170,23 +175,16 @@ static void checkNode(TreeNode * t)
     case StmtK:
       switch (t->kind.stmt)
       { case IfK:
-          if (t->child[0]->type == Integer) //exp
-            typeError(t->child[0],"if test is not Boolean");
+          if (t->child[0]->type == Integer) //TODO: resolver problema no IF
+            typeError(t->child[0],"if test is not int");
           break;
         case AssignK:
-          // fprintf(listing,"AssignK\n");
           if (t->child[0]->type != Integer)//stm
             {
-              // fprintf(listing,"Name of child: %s ::: Type of child: %d\n",t->child[0]->attr.name ,t->child[0]->type);
-              typeError(t->child[0],"assignment of non-integer value");}
-          break;
-        // case WriteK:
-        //   if (t->child[0]->type != Integer)
-        //     typeError(t->child[0],"write of non-integer value");
-        //   break;
-        case RepeatK:
-          if (t->child[1]->type == Integer)
-            typeError(t->child[1],"repeat test is not Boolean");
+              typeError(t->child[0],"Left side assignment of non-integer value");
+            }
+          if(t->child[1]->type != t->child[0]->type)
+            typeError(t->child[1],"Right side assignment of diferent type");
           break;
         default:
           break;
@@ -204,3 +202,8 @@ static void checkNode(TreeNode * t)
 void typeCheck(TreeNode * syntaxTree)
 { traverse(syntaxTree,nullProc,checkNode);
 }
+
+void checkMain(){
+  st_find_main_bucket();
+}
+
