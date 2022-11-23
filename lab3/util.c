@@ -291,7 +291,9 @@ void printTree( TreeNode * tree )
     else if(tree->nodekind == FuncK){
       fprintf(listing, "Function: %s\n", tree->attr.name);
     }
-
+    else if(tree->nodekind == ParamK){
+      fprintf(listing, "Param: %s\n", tree->attr.name);
+    }
     else fprintf(listing,"Unknown node kind\n");
     for (i=0;i<MAXCHILDREN;i++)
          printTree(tree->child[i]);
