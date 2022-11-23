@@ -177,19 +177,21 @@ int st_lookup_type_data ( char * name )
 void printSymTab(FILE * listing)
 { int i;
   fprintf(listing,"Variable Name  Type  Scope  Type of Data  Location  Line Numbers\n");
-  fprintf(listing,"-------------  ----  -----  ------------  --------  ------------\n");
+  fprintf(listing,"-------------  ----  -----  ------------  --------  --------------------------\n");
   for (i=0;i<SIZE;++i)
   { if (hashTable[i] != NULL)
     { BucketList l = hashTable[i];
       while (l != NULL)
       { LineList t = l->lines;
         fprintf(listing,"%-14s ",l->name);
-        fprintf(listing,"%-5s  ",mapType(l->type));
-        fprintf(listing,"%-5s  ",l->scope);
-        fprintf(listing,"%-12s  ",mapType_Data(l->type_data));
-        fprintf(listing,"%-8d  ",l->memloc);
+        fprintf(listing,"%-7s ",mapType(l->type));
+        fprintf(listing,"%-8s ",l->scope);
+        fprintf(listing,"%-12s ",mapType_Data(l->type_data));
+        fprintf(listing,"%-8d ",l->memloc);
         while (t != NULL)
-        { fprintf(listing,"%4d ",t->lineno);
+        { 
+
+          if(t->lineno != 0 ) fprintf(listing,"%4d ",t->lineno);
           t = t->next;
         }
         fprintf(listing,"\n");
