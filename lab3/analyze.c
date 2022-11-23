@@ -19,6 +19,7 @@ static void typeError(TreeNode * t, char * message)
 }
 
 
+
 /* Procedure traverse is a generic recursive 
  * syntax tree traversal routine:
  * it applies preProc in preorder and postProc 
@@ -63,22 +64,26 @@ static void insertNode( TreeNode * t)
       switch (t->kind.decl)
       { case VarK:
         case ArrayK:
-          if (st_lookup(t->attr.name) == -1)
+          if (st_lookup_scope(t->attr.name, getScope()) == -1){
           /* not yet in table, so treat as new definition */
             if(t->type == Integer)
               st_insert(t->attr.name,t->lineno,location++, t->kind.decl, t->type);
             else
               typeError(t,"Type not supported");
-          else
+          }else{
           /* already in table, so ignore location, 
-             add line number of use only */ 
+             add line number of use only */
             typeError(t,"ERROR: Variable redeclared\n");
+
+          }
           break;
 
         case FuncK:
-          if (st_lookup(t->attr.name) == -1)
+          if (st_lookup_scope(t->attr.name,getScope()) == -1){
           /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++, t->kind.decl, t->type);
+            changeScope(t->attr.name);
+          }
           else
           /* already in table, so print error message */
             typeError(t,"ERROR: Function redeclared\n");
@@ -91,7 +96,7 @@ static void insertNode( TreeNode * t)
       switch (t->kind.decl)
       { case VarK:
         case ArrayK:
-          if (st_lookup(t->attr.name) == -1)
+          if (st_lookup_scope(t->attr.name,getScope()) == -1)
           /* not yet in table, so treat as new definition */
             st_insert(t->attr.name,t->lineno,location++,t->kind.decl, t->type);
           else
@@ -106,7 +111,7 @@ static void insertNode( TreeNode * t)
     case ExpK:
       switch (t->kind.exp)
       { case IdK:
-          if(st_lookup(t->attr.name) == -1)
+          if(st_lookup_scope(t->attr.name,getScope()) == -1)
             fprintf(listing,"ERROR: Variable %s not declared in line %d", t->attr.name, t->lineno);
           else{
             st_insert(t->attr.name,t->lineno,0,t->kind.decl, t->type);
@@ -125,7 +130,9 @@ static void insertNode( TreeNode * t)
  * table by preorder traversal of the syntax tree
  */
 void buildSymtab(TreeNode * syntaxTree)
-{ traverse(syntaxTree,insertNode,nullProc);
+{ 
+  changeScope("global");
+  traverse(syntaxTree,insertNode,checkScopeOver);
   if (TraceAnalyze)
   { fprintf(listing,"\nSymbol table:\n\n");
     printSymTab(listing);
@@ -141,13 +148,11 @@ static void checkNode(TreeNode * t)
   { case ExpK:
       switch (t->kind.exp)
       { case OpK:
-          fprintf(listing,"OpK\n");
           if ((t->child[0]->type != Integer) ||
               (t->child[1]->type != Integer)){
-            typeError(t,"Op applied to non-integer");
+            // typeError(t,"Op applied to non-integer");
 
               }
-          fprintf(listing,"Type of childs: %d %d", t->child[0]->type, t->child[1]->type);
           if ((t->attr.op == COMPARE) || (t->attr.op == LESS) || (t->attr.op == GREATER) 
              || (t->attr.op == DIFF) || (t->attr.op == LEQ) || (t->attr.op == GEQ))
             t->type = Void;
@@ -171,7 +176,7 @@ static void checkNode(TreeNode * t)
       switch (t->kind.stmt)
       { case IfK:
           if (t->child[0]->type == Integer) //TODO: resolver problema no IF
-            typeError(t->child[0],"if test is not Boolean");
+            typeError(t->child[0],"if test is not int");
           break;
         case AssignK:
           if (t->child[0]->type != Integer)//stm
@@ -180,10 +185,6 @@ static void checkNode(TreeNode * t)
             }
           if(t->child[1]->type != t->child[0]->type)
             typeError(t->child[1],"Right side assignment of diferent type");
-          break;
-        case RepeatK:
-          if (t->child[1]->type == Integer)
-            typeError(t->child[1],"repeat test is not Boolean");
           break;
         default:
           break;
@@ -205,3 +206,4 @@ void typeCheck(TreeNode * syntaxTree)
 void checkMain(){
   st_find_main_bucket();
 }
+

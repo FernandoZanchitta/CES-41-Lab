@@ -30,7 +30,19 @@ static int hash ( char * key )
   }
   return temp;
 }
-
+void changeScope(char * var){
+    strcpy(Scope, var);
+}
+void checkScopeOver(TreeNode * t){
+    if(t->nodekind == DeclK){
+        if(t->kind.decl == FuncK){
+            changeScope("global");
+        }
+    }
+}
+char * getScope(){
+    return Scope;
+}
 /* the list of line numbers of the source 
  * code in which a variable is referenced
  */
@@ -91,8 +103,10 @@ char * mapType_Data(int type_data){
 void st_insert( char * name, int lineno, int loc,int type ,int type_data)
 { int h = hash(name);
   BucketList l =  hashTable[h];
-  while ((l != NULL) && (strcmp(name,l->name) != 0))
+  while ((l != NULL) && (strcmp(name,l->name) != 0) || ((l != NULL) && (strcmp(name,l->name) == 0)  && (strcmp(getScope(),l->scope) != 0))){
     l = l->next;
+  }
+  // fprintf(listing, "stopped at %s in Scope: %s\n", name, getScope());
   if (l == NULL) /* variable not yet in table */
   { l = (BucketList) malloc(sizeof(struct BucketListRec));
     l->name = name;
@@ -100,6 +114,10 @@ void st_insert( char * name, int lineno, int loc,int type ,int type_data)
     l->lines->lineno = lineno;
     l->memloc = loc;
     l->type = type;
+    // fprintf(listing, "Scope: %s\n",Scope);
+    // strcpy(l->scope,Scope);
+    l->scope = (char *)malloc(sizeof(char)*100);
+    strcpy(l->scope,Scope);
     l->type_data = type_data;
     l->lines->next = NULL;
     l->next = hashTable[h];
@@ -124,7 +142,19 @@ int st_lookup ( char * name )
   if (l == NULL) return -1;
   else return l->memloc;
 }
-
+int st_lookup_scope ( char * name, char* scope )
+{ int h = hash(name);
+  BucketList l =  hashTable[h];
+  if(l!=NULL){
+  }
+  while ((l != NULL) && (strcmp(name,l->name) != 0) || ((l != NULL) && (strcmp(name,l->name) == 0)  && (strcmp(scope,l->scope) != 0))){
+    l = l->next;
+  }
+  if (l == NULL) return -1;
+  else {
+    return l->memloc;
+  }
+}
 /* Function st_lookup_type returns the type
  * of a variable or -1 if not found
  */
@@ -154,7 +184,7 @@ void printSymTab(FILE * listing)
       { LineList t = l->lines;
         fprintf(listing,"%-14s ",l->name);
         fprintf(listing,"%-5s  ",mapType(l->type));
-        fprintf(listing,"%-5s  ","main");
+        fprintf(listing,"%-5s  ",l->scope);
         fprintf(listing,"%-12s  ",mapType_Data(l->type_data));
         fprintf(listing,"%-8d  ",l->memloc);
         while (t != NULL)

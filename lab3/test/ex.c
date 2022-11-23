@@ -1,5 +1,6 @@
-int func(void){}
-int funcx(void){}
 void main(void){
-    int func;
+    int x;
+}
+void teste(void){
+    int x;
 }
