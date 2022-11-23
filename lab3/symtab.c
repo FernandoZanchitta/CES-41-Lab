@@ -100,10 +100,11 @@ char * mapType_Data(int type_data){
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-void st_insert( char * name, int lineno, int loc,int type ,int type_data)
+void st_insert( char * name, int lineno, int loc,int type ,int type_data,char * scope)
 { int h = hash(name);
   BucketList l =  hashTable[h];
-  while ((l != NULL) && (strcmp(name,l->name) != 0) || ((l != NULL) && (strcmp(name,l->name) == 0)  && (strcmp(getScope(),l->scope) != 0))){
+  while ((l != NULL) && (strcmp(name,l->name) != 0) ||
+   ((l != NULL) && (strcmp(name,l->name) == 0)  && (strcmp(scope,l->scope) != 0))){
     l = l->next;
   }
   // fprintf(listing, "stopped at %s in Scope: %s\n", name, getScope());
@@ -117,7 +118,7 @@ void st_insert( char * name, int lineno, int loc,int type ,int type_data)
     // fprintf(listing, "Scope: %s\n",Scope);
     // strcpy(l->scope,Scope);
     l->scope = (char *)malloc(sizeof(char)*100);
-    strcpy(l->scope,Scope);
+    strcpy(l->scope,scope);
     l->type_data = type_data;
     l->lines->next = NULL;
     l->next = hashTable[h];

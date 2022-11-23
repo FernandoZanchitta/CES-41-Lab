@@ -1,7 +1,6 @@
 /* Um programa para calcular mdc */
 int gdc(int u, int v)
 {
-    int x;
     if (v == 0)
         return u;
     else

@@ -16,7 +16,7 @@ char * mapType_Data(int type_data);
  * loc = memory location is inserted only the
  * first time, otherwise ignored
  */
-void st_insert( char * name, int lineno, int loc, int type, int type_data);
+void st_insert( char * name, int lineno, int loc, int type, int type_data, char * scope);
 char Scope[100];
 
 /* Function st_lookup returns the memory 

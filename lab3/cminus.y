@@ -299,9 +299,9 @@ var
         // printf(" Entrou em ID LCOLCH exp RCOLCH\n");
         // todo: entender qual tipo de no é esse
         $$ = newExpNode(IdK);
-        $$->attr.name = savedName;
+        $$->attr.name = copyString(ID_name);
+        $$->lineno = lineno;
         $$->child[0] = $4;
-        $$->lineno = savedLineNo;
         }
     ;
 simple_exp
@@ -424,7 +424,6 @@ ativation
         savedName = copyString(ID_name);
         savedLineNo = lineno;
     }LPAREN args RPAREN {
-        // printf(" Entrou em ID LPAREN args RPAREN\n");
         $$ = newExpNode(ActivationK);
         $$->attr.name = savedName;
         $$->child[0] = $4;

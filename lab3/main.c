@@ -10,12 +10,12 @@
 /* set NO_PARSE to TRUE to get a scanner-only compiler */
 #define NO_PARSE FALSE
 /* set NO_ANALYZE to TRUE to get a parser-only compiler */
-#define NO_ANALYZE FALSE
+#define NO_ANALYZE TRUE
 
 /* set NO_CODE to TRUE to get a compiler that does not
  * generate code
  */
-#define NO_CODE TRUE
+#define NO_CODE FALSE
 
 #include "util.h"
 #if NO_PARSE
@@ -39,8 +39,8 @@ FILE * code;
 /* allocate and set tracing flags */
 int EchoSource = FALSE;
 int TraceScan = FALSE;
-int TraceParse = FALSE;
-int TraceAnalyze = TRUE;
+int TraceParse = TRUE;
+int TraceAnalyze = FALSE;
 int TraceCode = FALSE;
 
 int Error = FALSE;

@@ -1,9 +1,10 @@
 all:
-	flex tiny.l
-	bison -d tiny.y
+	flex cminus.l
+	bison -d cminus.y
 	gcc -c *.c
-	gcc -o build/tiny *.o -ly -ll
+	gcc -o build/cminus *.o -ly -ll
+	rm *.o *.tab.* *.yy.*
 run:
-	./build/tiny test/ex.c
+	./build/cminus test/ex.c
 clear:
 	rm *.o *.tab.* *.yy.*
