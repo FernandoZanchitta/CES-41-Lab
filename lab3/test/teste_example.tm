@@ -20,4 +20,6 @@
   5:  r_0  = c + d;	op +
 * <- Op
 * <- assign
+* <- if
 * End of execution.
+ 28:   HALT  0,0,0 	

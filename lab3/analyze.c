@@ -71,7 +71,10 @@ static void insertNode(TreeNode *t)
     {
     case VarK:
     case ArrayK:
-      if ((st_lookup_scope(t->attr.name, "global") == -1) && (st_lookup_scope(t->attr.name, getScope()) == -1))
+      if (
+        // (st_lookup_scope(t->attr.name, "global") == -1) &&
+         (st_lookup_scope(t->attr.name, getScope()) == -1) && ((st_lookup_scope(t->attr.name, "global") == -1) ||
+          (st_lookup_scope(t->attr.name, "global") != -1) && (st_lookup_type(t->attr.name) != 2)))
       {
         /* not yet in table, so treat as new definition */
         if (t->type == Integer)
@@ -107,7 +110,9 @@ static void insertNode(TreeNode *t)
     {
     case VarK:
     case ArrayK:
-      if ((st_lookup_scope(t->attr.name, "global") == -1) && (st_lookup_scope(t->attr.name, getScope()) == -1))
+      if (
+        // (st_lookup_scope(t->attr.name, "global") == -1) &&
+       (st_lookup_scope(t->attr.name, getScope()) == -1))
         /* not yet in table, so treat as new definition */
         st_insert(t->attr.name, t->lineno, location++, t->kind.decl, t->type,getScope());
       else
@@ -123,10 +128,10 @@ static void insertNode(TreeNode *t)
     switch (t->kind.exp)
     {
     case IdK:
-      if(st_lookup_scope(t->attr.name, "global") != -1 ) //achei na global
-        st_insert(t->attr.name, t->lineno, 0, t->kind.decl, t->type,"global");
-      else if(st_lookup_scope(t->attr.name, getScope()) != -1) //achei no escopo atual
+      if(st_lookup_scope(t->attr.name, getScope()) != -1 ) //achei no escopo atual
         st_insert(t->attr.name, t->lineno, 0, t->kind.decl, t->type,getScope());
+      else if(st_lookup_scope(t->attr.name, "global") != -1) //achei na global
+        st_insert(t->attr.name, t->lineno, 0, t->kind.decl, t->type,"global");
       else if(st_lookup_scope(t->attr.name, "global") == -1 && st_lookup_scope(t->attr.name, getScope()) == -1) //não achei em nenhum escopo
         fprintf(listing, "Semantic error: Variable %s used but not declared in line %d\n", t->attr.name, t->lineno);
       break;
@@ -155,6 +160,8 @@ static void insertNode(TreeNode *t)
 void buildSymtab(TreeNode *syntaxTree)
 {
   changeScope("global");
+  st_insert("output", 0, location++, 2, 0,getScope());
+  st_insert("input", 0, location++, 2, 1,getScope());
   traverse(syntaxTree, insertNode, checkScopeOver);
   if (TraceAnalyze)
   {

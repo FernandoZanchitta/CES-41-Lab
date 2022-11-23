@@ -37,15 +37,23 @@ static void genStmt( TreeNode * tree)
          p2 = tree->child[1] ;
          p3 = tree->child[2] ;
          /* generate code for test expression */
-         int registerId = ac;
-         emitCheckCondition(registerId);
          cGen(p1);
-         emitValidCondition(registerId, registerId);
-         cGen(p3);
-         savedLoc2 = emitSkip(1) ;
-         emitIFK3(savedLoc2);
-         emitIFK4(savedLoc1);
+         savedLoc1 = emitSkip(1) ;
+         emitComment("if: jump to else belongs here");
+         /* recurse on then part */
          cGen(p2);
+         savedLoc2 = emitSkip(1) ;
+         emitComment("if: jump to end belongs here");
+         currentLoc = emitSkip(0) ;
+         emitBackup(savedLoc1) ;
+         emitRM_Abs("JEQ",ac,currentLoc,"if: jmp to else");
+         emitRestore() ;
+         /* recurse on else part */
+         cGen(p3);
+         currentLoc = emitSkip(0) ;
+         emitBackup(savedLoc2) ;
+         emitRM_Abs("LDA",pc,currentLoc,"jmp to end") ;
+         emitRestore() ;
          if (TraceCode)  emitComment("<- if") ;
          break; /* if_k */
 
@@ -56,39 +64,12 @@ static void genStmt( TreeNode * tree)
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
          savedLoc1 = emitSkip(0);
-         // emitComment("repeat: jump after body comes back here");
+         emitComment("repeat: jump after body comes back here");
          /* generate code for body */
-         emitComment("L1: ");
-         int registeredId = ac;
-         switch(p1->attr.op){
-            case LESS:
-               p1->attr.op = GEQ;
-               break;
-            case LEQ:
-               p1->attr.op = GREATER;
-               break;
-            case GREATER:
-               p1->attr.op = LEQ;
-               break;
-            case GEQ:
-               p1->attr.op = LESS;
-               break;
-            case COMPARE:
-               p1->attr.op = DIFF;
-               break;
-            case DIFF:
-               p1->attr.op = COMPARE;
-               break;
-            default:
-               break;
-         }
-         emitCheckCondition(registeredId);
          cGen(p1);
-         emitValidCondition(registeredId, 2);
-         cGen(p2);
-         emitComment("goto L1");
          /* generate code for test */
-         // emitRM_Abs("JEQ",ac,savedLoc1,"repeat: jmp back to body");
+         cGen(p2);
+         emitRM_Abs("JEQ",ac,savedLoc1,"repeat: jmp back to body");
          if (TraceCode)  emitComment("<- repeat") ;
          break; /* repeat */
 
@@ -96,11 +77,14 @@ static void genStmt( TreeNode * tree)
          printf("---- assign k------\n");
          if (TraceCode) emitComment("-> assign") ;
          /* generate code for rhs */
-         p1 = tree->child[0];
-         p2 = tree->child[1];
-         cGen(p2);
-         emitAssignK(p1->attr.name, registeredId);
-
+         printf("\nhere we have attr name: %d", tree->attr.op);
+         cGen(tree->child[0]);
+         cGen(tree->child[1]);
+         /* now store value */
+         // loc = st_lookup(tree->attr.name);
+         
+         // printf("\naqui temos: %d", loc);
+         // emitRM("ST",ac,loc,gp,"assign: store value");
          if (TraceCode)  emitComment("<- assign") ;
          break; /* assign_k */
       default:
@@ -119,8 +103,7 @@ static void genExp( TreeNode * tree)
       printf("----ConstK---\n");
       if (TraceCode) emitComment("-> Const") ;
       /* gen code to load integer constant using LDC */
-      // emitRM("LDC",ac,tree->attr.val,0,"load const");
-      emitConst(ac, tree->attr.val, "load const"); 
+      emitRM("LDC",ac,tree->attr.val,0,"load const");
       if (TraceCode)  emitComment("<- Const") ;
       break; /* ConstK */
     
@@ -128,8 +111,7 @@ static void genExp( TreeNode * tree)
       printf("----IdK---\n");
       if (TraceCode) emitComment("-> Id") ;
       loc = st_lookup(tree->attr.name);
-      // emitRM("LD",ac,loc,gp,"load id value");
-      emitID(ac, loc, tree->attr.name,"load id value");
+      emitRM("LD",ac,loc,gp,"load id value");
       if (TraceCode)  emitComment("<- Id") ;
       break; /* IdK */
 
@@ -147,15 +129,14 @@ static void genExp( TreeNode * tree)
          /* gen code for ac = left arg */
          cGen(p1);
          /* gen code to push left operand */
-         // emitRM("ST",ac,tmpOffset--,mp,"op: push left");
+         emitRM("ST",ac,tmpOffset--,mp,"op: push left");
          /* gen code for ac = right operand */
          cGen(p2);
          /* now load left operand */
-         // emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
+         emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
          switch (tree->attr.op) {
             case PLUS :
-               // emitRO("ADD",ac,ac1,ac,"op +");
-               emitOp("+", ac, "c","d","op +");
+               emitRO("ADD",ac,ac1,ac,"op +");
                break;
             case MINUS :
                emitRO("SUB",ac,ac1,ac,"op -");
@@ -348,13 +329,13 @@ void codeGen(TreeNode * syntaxTree, char * codefile)
    emitComment("TINY Compilation to TM Code");
    emitComment(s);
    /* generate standard prelude */
-   // emitComment("Standard prelude:");
-   // emitRM("LD",mp,0,ac,"load maxaddress from location 0");
-   // emitRM("ST",ac,0,ac,"clear location 0");
-   emitComment("Begin of execution.");
+   emitComment("Standard prelude:");
+   emitRM("LD",mp,0,ac,"load maxaddress from location 0");
+   emitRM("ST",ac,0,ac,"clear location 0");
+   emitComment("End of standard prelude.");
    /* generate code for TINY program */ 
    cGen(syntaxTree);
    /* finish */
    emitComment("End of execution.");
-   // emitRO("HALT",0,0,0,"");
+   emitRO("HALT",0,0,0,"");
 }

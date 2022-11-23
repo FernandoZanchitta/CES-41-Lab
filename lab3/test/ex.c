@@ -1,1 +1,5 @@
-int main(void){a(b(i[k]));}
+void exemplo(void){}
+void main(void){
+    int a; a=0;
+    b =a;
+}
