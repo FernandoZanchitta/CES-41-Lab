@@ -17,6 +17,7 @@
    stored, and incremeted when loaded again
 */
 static int tmpOffset = 0;
+static int ident = 0;
 
 /* prototype for internal recursive code generator */
 static void cGen (TreeNode * tree);
@@ -29,6 +30,8 @@ static void genStmt( TreeNode * tree)
   switch (tree->kind.stmt) {
 
       case IfK :
+         printf("---- if k------\n");
+
          if (TraceCode) emitComment("-> if") ;
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
@@ -55,6 +58,8 @@ static void genStmt( TreeNode * tree)
          break; /* if_k */
 
       case RepeatK:
+         printf("---- repeat k------\n");
+
          if (TraceCode) emitComment("-> repeat") ;
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
@@ -69,27 +74,38 @@ static void genStmt( TreeNode * tree)
          break; /* repeat */
 
       case AssignK:
+         printf("---- assign k------\n");
          if (TraceCode) emitComment("-> assign") ;
          /* generate code for rhs */
+         printf("\nhere we have attr name: %d", tree->attr.op);
          cGen(tree->child[0]);
+         cGen(tree->child[1]);
          /* now store value */
-         loc = st_lookup(tree->attr.name);
-         emitRM("ST",ac,loc,gp,"assign: store value");
+         // loc = st_lookup(tree->attr.name);
+         
+         // printf("\naqui temos: %d", loc);
+         // emitRM("ST",ac,loc,gp,"assign: store value");
          if (TraceCode)  emitComment("<- assign") ;
          break; /* assign_k */
 
       case ReadK:
+         printf("\n---- read k------\n");
+
          emitRO("IN",ac,0,0,"read integer value");
          loc = st_lookup(tree->attr.name);
          emitRM("ST",ac,loc,gp,"read: store value");
          break;
       case WriteK:
+         printf("\n---- write k------\n");
+
          /* generate code for expression to write */
          cGen(tree->child[0]);
          /* now output it */
          emitRO("OUT",ac,0,0,"write ac");
          break;
       default:
+         printf("\n---- default------\n");
+
          break;
     }
 } /* genStmt */
@@ -101,6 +117,7 @@ static void genExp( TreeNode * tree)
   switch (tree->kind.exp) {
 
     case ConstK :
+      printf("----ConstK---\n");
       if (TraceCode) emitComment("-> Const") ;
       /* gen code to load integer constant using LDC */
       emitRM("LDC",ac,tree->attr.val,0,"load const");
@@ -108,6 +125,7 @@ static void genExp( TreeNode * tree)
       break; /* ConstK */
     
     case IdK :
+      printf("----IdK---\n");
       if (TraceCode) emitComment("-> Id") ;
       loc = st_lookup(tree->attr.name);
       emitRM("LD",ac,loc,gp,"load id value");
@@ -115,7 +133,14 @@ static void genExp( TreeNode * tree)
       break; /* IdK */
 
     case OpK :
+         printf("----OpK---\n");
          if (TraceCode) emitComment("-> Op") ;
+         if (tree->child[0] == NULL){
+            printf("c1 null");
+         }
+         if (tree->child[1] == NULL){
+            printf("c2 null");
+         }
          p1 = tree->child[0];
          p2 = tree->child[1];
          /* gen code for ac = left arg */
@@ -139,14 +164,38 @@ static void genExp( TreeNode * tree)
             case OVER :
                emitRO("DIV",ac,ac1,ac,"op /");
                break;
-            case LT :
+            case LESS :
                emitRO("SUB",ac,ac1,ac,"op <") ;
                emitRM("JLT",ac,2,pc,"br if true") ;
                emitRM("LDC",ac,0,ac,"false case") ;
                emitRM("LDA",pc,1,pc,"unconditional jmp") ;
                emitRM("LDC",ac,1,ac,"true case") ;
                break;
-            case EQ :
+            // todo: check
+            case LEQ :
+               emitRO("SUB",ac,ac1,ac,"op <=") ;
+               emitRM("JLT",ac,2,pc,"br if true") ;
+               emitRM("LDC",ac,0,ac,"false case") ;
+               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
+               emitRM("LDC",ac,1,ac,"true case") ;
+               break;
+            // todo: check
+            case GREATER :
+               emitRO("SUB",ac,ac1,ac,"op >") ;
+               emitRM("JLT",ac,2,pc,"br if true") ;
+               emitRM("LDC",ac,0,ac,"false case") ;
+               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
+               emitRM("LDC",ac,1,ac,"true case") ;
+               break;
+            // todo: check
+            case GEQ :
+               emitRO("SUB",ac,ac1,ac,"op >=") ;
+               emitRM("JLT",ac,2,pc,"br if true") ;
+               emitRM("LDC",ac,0,ac,"false case") ;
+               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
+               emitRM("LDC",ac,1,ac,"true case") ;
+               break;
+            case COMPARE :
                emitRO("SUB",ac,ac1,ac,"op ==") ;
                emitRM("JEQ",ac,2,pc,"br if true");
                emitRM("LDC",ac,0,ac,"false case") ;
@@ -165,22 +214,119 @@ static void genExp( TreeNode * tree)
   }
 } /* genExp */
 
+
+
+/* Procedure genType generates code at an expression node */
+static void genType( TreeNode * tree)
+{ 
+  switch (tree->type) {
+    case Void :
+      if (TraceCode) emitComment("Ignored Void Declaration");
+      cGen(tree->child[0]);
+      break; /* Void */
+    case Integer :
+      if (TraceCode) emitComment("Ignored Integer Declaration");
+      cGen(tree->child[0]);
+      break; /* Integer */
+    default:
+      break;
+      if (TraceCode)  emitComment("<- Not Recognized Type") ;
+  }
+} /* genType */
+
+/* Procedure genType generates code at an expression node */
+static void genDecl( TreeNode * tree)
+{ 
+  switch (tree->kind.decl) {
+    case VarK :
+      if (TraceCode) emitComment("Vark");
+      cGen(tree->child[0]);
+      break; /* Void */    
+    case ArrayK :
+      if (TraceCode) emitComment("ArrayK");
+      cGen(tree->child[0]);
+      break; /* Integer */
+   case FuncK :
+      if (TraceCode) emitComment("FuncK");
+      for (int i = 0; i < 10000; i ++){
+         if (tree->child[i] != NULL) {
+            cGen(tree->child[i]);
+         }
+         else {
+            break;
+         }
+      }
+      break; /* Integer */
+    default:
+      break;
+      if (TraceCode)  emitComment("default genDecl");
+  }
+} /* genType */
+
+// /* Procedure genExp generates code at an expression node */
+// static void genType( TreeNode * tree)
+// { int loc;
+//   TreeNode * p1, * p2;
+//   switch (tree->type) {
+//     case Void :
+//       if (TraceCode) emitComment("-> Void") ;
+//       /* gen code to load integer constant using LDC */
+//       emitRM("LDC",ac,tree->attr.val,0,"load const");
+//       if (TraceCode)  emitComment("<- Void") ;
+//       break; /* Void */
+    
+//     case Integer :
+//       if (TraceCode) emitComment("-> Integer") ;
+//       loc = st_lookup(tree->attr.name);
+//       emitRM("LD",ac,loc,gp,"load id value");
+//       if (TraceCode)  emitComment("<- Integer") ;
+//       break; /* Integer */
+
+//     default:
+//       break;
+//       if (TraceCode)  emitComment("<- Integer") ;
+//   }
+// } /* genExp */
+
 /* Procedure cGen recursively generates code by
  * tree traversal
  */
 static void cGen( TreeNode * tree)
-{ if (tree != NULL)
-  { switch (tree->nodekind) {
+{ 
+   if (tree != NULL)
+  {  
+   // ident ++;
+   // for (int i = 0;i<ident;i++){
+   //    printf("  ");
+   // }
+   switch (tree->nodekind) {
       case StmtK:
+        printf("StmtK\n");
         genStmt(tree);
         break;
       case ExpK:
+        printf("ExpK\n");
         genExp(tree);
         break;
+      case DeclK:
+        printf("DeclK\n");
+        genDecl(tree);
+        break;
+      case TypeK:
+         printf("TypeK\n");
+         genType(tree);
+         break;
+      case ParamK:
+         printf("ParamK\n");
+         // genParam(tree);
+         break;
       default:
         break;
     }
-    cGen(tree->sibling);
+
+   if(tree->sibling != NULL){
+      cGen(tree->sibling);
+   }
   }
 }
 
@@ -194,8 +340,7 @@ static void cGen( TreeNode * tree)
  * file name as a comment in the code file
  */
 void codeGen(TreeNode * syntaxTree, char * codefile)
-{  
-   char * s = malloc(strlen(codefile)+7);
+{  char * s = malloc(strlen(codefile)+7);
    strcpy(s,"File: ");
    strcat(s,codefile);
    emitComment("TINY Compilation to TM Code");
@@ -205,7 +350,7 @@ void codeGen(TreeNode * syntaxTree, char * codefile)
    emitRM("LD",mp,0,ac,"load maxaddress from location 0");
    emitRM("ST",ac,0,ac,"clear location 0");
    emitComment("End of standard prelude.");
-   /* generate code for TINY program */
+   /* generate code for TINY program */ 
    cGen(syntaxTree);
    /* finish */
    emitComment("End of execution.");

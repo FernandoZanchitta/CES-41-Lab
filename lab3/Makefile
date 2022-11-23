@@ -2,9 +2,9 @@ all:
 	flex cminus.l
 	bison -d cminus.y
 	gcc -c *.c
-	gcc -o build/cminus *.o -ly -ll
+	gcc -o build/cminus *.o -lfl
 	rm *.o *.tab.* *.yy.*
 run:
-	./build/cminus test/ex.c
+	./build/cminus test/teste_example.c && cat test/teste_example.tm
 clear:
 	rm *.o *.tab.* *.yy.*
