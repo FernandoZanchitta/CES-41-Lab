@@ -352,6 +352,7 @@ void codeGen(TreeNode * syntaxTree, char * codefile)
    // emitRM("LD",mp,0,ac,"load maxaddress from location 0");
    // emitRM("ST",ac,0,ac,"clear location 0");
    emitComment("Begin of execution.");
+   
    /* generate code for TINY program */ 
    cGen(syntaxTree);
    /* finish */

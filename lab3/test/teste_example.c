@@ -1,8 +1,9 @@
 void main(int a)
 {
 /*adeadeadaee*/
-    a = 1*2;
     int b;
-    b = 8 + a;
+    int x;
+    if (a == b) x = 0;
+    else x = 1;
 /* dadaedea */
 } 
