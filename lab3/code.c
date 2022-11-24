@@ -105,6 +105,7 @@ void emitIFK4(int savedLoc){
 void emitAssignK(char * nameVar, int registerId){
   fprintf(code, "%3d:  %s = t%d",emitLoc++, nameVar, registerId);
   fprintf(code,"\n") ;
+}
 void emitCompare(char *s1, int d){
   fprintf(code, "%s == %d", s1, d);
 }
