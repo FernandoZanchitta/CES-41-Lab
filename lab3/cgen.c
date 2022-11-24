@@ -21,7 +21,6 @@ static int tmpOffset = 0;
 static int ident = 0;
 registerNum = 0;
 codeBlockNum = 0;
-
 /* prototype for internal recursive code generator */
 static void cGen (TreeNode * tree);
 
@@ -114,6 +113,36 @@ static void genStmt( TreeNode * tree)
     }
 } /* genStmt */
 
+void processExp(char* op, TreeNode * p1, TreeNode * p2, ExpKind p1_type, ExpKind p2_type, int op1, int op2){
+   if (p1_type == OpK && p2_type == OpK){
+      emitOp(op, ac, &op1, NULL, NULL, &op2, NULL, NULL, op);
+   }
+   else if (p1_type == OpK && p2_type == ConstK){
+      emitOp(op, ac, &op1, NULL, NULL, NULL, &p2->attr.val, NULL, op);
+   }
+   else if (p1_type == OpK && p2_type == IdK){
+      emitOp(op, ac, &op1, NULL, NULL, NULL, NULL, p2->attr.name, op);
+   }
+   else if (p1_type == IdK && p2_type == OpK){
+      emitOp(op, ac, NULL, NULL, p1->attr.name, &op2, NULL, NULL, op);
+   }
+   else if (p1_type == IdK && p2_type == ConstK){
+      emitOp(op, ac, NULL, NULL, p1->attr.name, NULL, &p2->attr.val, NULL, op);
+   }
+   else if (p1_type == IdK && p2_type == IdK){
+      emitOp(op, ac, NULL, NULL, p1->attr.name, NULL, NULL, p2->attr.name,op);
+   }
+   else if (p1_type == ConstK && p2_type == OpK){
+      emitOp(op, ac, NULL, &p1->attr.val, NULL, &op2, NULL, NULL, op);
+   }
+   else if (p1_type == ConstK && p2_type == IdK){
+      emitOp(op, ac, NULL, &p1->attr.val, NULL, NULL, NULL, p2->attr.name, op);
+   }
+   else if (p1_type == ConstK && p2_type == ConstK){
+      emitOp(op, ac, NULL, &p1->attr.val, NULL, NULL, &p2->attr.val, NULL, op);
+   }
+}
+
 /* Procedure genExp generates code at an expression node */
 static void genExp( TreeNode * tree)
 { int loc;
@@ -125,7 +154,7 @@ static void genExp( TreeNode * tree)
       // if (TraceCode) emitComment("-> Const") ;
       /* gen code to load integer constant using LDC */
       // emitRM("LDC",ac,tree->attr.val,0,"load const");
-      emitConst(ac, tree->attr.val, "load const"); 
+      // emitConst(ac, tree->attr.val, "load const"); 
       // if (TraceCode)  emitComment("<- Const") ;
       break; /* ConstK */
     
@@ -134,7 +163,7 @@ static void genExp( TreeNode * tree)
       // if (TraceCode) emitComment("-> Id") ;
       loc = st_lookup(tree->attr.name);
       // emitRM("LD",ac,loc,gp,"load id value");
-      emitID(ac, loc, tree->attr.name,"load id value");
+      // emitID(ac, loc, tree->attr.name,"load id value");
       // if (TraceCode)  emitComment("<- Id") ;
       break; /* IdK */
 
@@ -151,29 +180,40 @@ static void genExp( TreeNode * tree)
          p2 = tree->child[1];
          printTree(tree);
          /* gen code for ac = left arg */
-         int is_p1_value = 1;
-         int is_p2_value = 1;
+         int p1_type = OpK;
+         int p2_type = OpK;
 
          if (p1->nodekind == ExpK){
             if (p1->kind.exp == OpK){
-               cGen(p1);
+               p1_type = OpK;
             }
             else{
-               is_p1_value = 0;
+               if (p1->kind.exp == IdK){
+                  p1_type = IdK;
+               }
+               else {
+                  p1_type = ConstK;
+               }
             }
          }
-         /* gen code to push left operand */
-         // emitRM("ST",ac,tmpOffset--,mp,"op: push left");
-         /* gen code for ac = right operand */
+         cGen(p1);
+
+
          if (p2->nodekind == ExpK){
             if (p2->kind.exp == OpK){
-               cGen(p2);
+               p2_type = OpK;
             }
             else{
-               is_p2_value = 0;
+               if (p2->kind.exp == IdK){
+                  p2_type = IdK;
+               }
+               else {
+                  p2_type = ConstK;
+               }
             }
          }
-         
+         cGen(p2);
+
          int nested_ops = 0;
          if (p2->nodekind == ExpK){
             struct treeNode* current_op;
@@ -187,39 +227,38 @@ static void genExp( TreeNode * tree)
             nested_ops = 0;
          }
          
+         int op1 = registerNum - 1;
+         int op2 = registerNum - 2 - (2*nested_ops);
          printf("registerNum: %d\n", registerNum);
          /* now load left operand */
          // emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
          switch (tree->attr.op) {
             case PLUS :
-               emitOp("+", ac, registerNum - 1 , is_p1_value,registerNum - 2 - (2*nested_ops), is_p2_value,"op +");
+               processExp("+", p1, p2, p1_type, p2_type, op1,op2); 
                break;
             case MINUS :
-               emitOp("-", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op -");
+               processExp("-", p1, p2, p1_type, p2_type, op1,op2); 
                break;
             case TIMES :
-               emitOp("*", ac, registerNum - 1 , is_p1_value,registerNum - 2 - (2*nested_ops), is_p2_value,"op *");
+               processExp("*", p1, p2, p1_type, p2_type, op1,op2); 
                break;
             case OVER :
-               emitOp("/", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op /");
+               processExp("/", p1, p2, p1_type, p2_type, op1,op2); 
                break;
             case LESS :
-               emitOp("<", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op <");
+               processExp("-", p1, p2, p1_type, p2_type, op1,op2); 
                break;
-            // todo: check
             case LEQ :
-               emitOp("<=", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op <=");
+               processExp("<=", p1, p2, p1_type, p2_type, op1,op2); 
                break;
-            // todo: check
             case GREATER :
-               emitOp(">", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op >");
+               processExp(">", p1, p2, p1_type, p2_type, op1,op2); 
                break;
-            // todo: check
             case GEQ :
-               emitOp(">=", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op >=");
+               processExp(">=", p1, p2, p1_type, p2_type, op1,op2); 
                break;
             case COMPARE :
-               emitOp("==", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op ==");
+               processExp("==", p1, p2, p1_type, p2_type, op1,op2); 
                break;
             default:
                emitComment("BUG: Unknown operator");

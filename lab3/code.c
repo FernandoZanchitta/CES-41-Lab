@@ -22,24 +22,37 @@ static int highEmitLoc = 0;
 void emitComment( char * c )
 { if (TraceCode) fprintf(code,"* %s\n",c);}
 
-/* Procedure emitRO emits a register-only
- * TM instruction
- * op = the opcode
- * r = target register = ac
- * s = 1st source register
- * t = 2nd source register
- * c = a comment to be printed if TraceCode is TRUE
- */
-void emitRO( char *op, int r, int s, int t, char *c)
-{ fprintf(code,"%3d:  %5s  %d,%d,%d ",emitLoc++,op,r,s,t);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
-} /* emitRO */
-
-void emitOp( char *op, int counter, int r_op1, int is_value_1, int r_op2, int is_value_2,char *c)
-{ fprintf(code,"%3d:  r_%d  = r_%d %s r_%d;", emitLoc++, registerNum++, r_op1, op, r_op2);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
+void emitOp( char *op, int counter, int* op1, int* const_1, char* id_1, int* op2, int* const_2, char* id_2,char *c)
+{ 
+  if (op1 != NULL && op2 != NULL){
+    fprintf(code,"%3d:  r_%d  = r_%d %s r_%d;", emitLoc++, registerNum++, *op1, op, *op2);
+  }
+  else if (op1 != NULL && const_2 != NULL){
+    fprintf(code,"%3d:  r_%d  = r_%d %s %d;", emitLoc++, registerNum++, *op1, op, *const_2);
+  }
+  else if (op1 != NULL && id_2 != NULL){
+    fprintf(code,"%3d:  r_%d  = r_%d %s %s;", emitLoc++, registerNum++, *op1, op, id_2);
+  }
+  else if (const_1 != NULL && op2 != NULL){
+    fprintf(code,"%3d:  r_%d  = %d %s r_%d;", emitLoc++, registerNum++, *const_1, op, *op2);
+  }
+  else if (id_1 != NULL && op2 != NULL){
+    fprintf(code,"%3d:  r_%d  = %s %s r_%d;", emitLoc++, registerNum++, id_1, op, *op2);
+  }
+  else if (const_1 != NULL && id_2 != NULL){
+    fprintf(code,"%3d:  r_%d  = %d %s %s;", emitLoc++, registerNum++, *const_1, op, id_2);
+  }
+  else if (id_1 != NULL && id_2 != NULL){
+    fprintf(code,"%3d:  r_%d  = %s %s %s;", emitLoc++, registerNum++, id_1, op, id_2);
+  }
+  else if (id_1 != NULL && const_2 != NULL){
+    fprintf(code,"%3d:  r_%d  = %s %s %d;", emitLoc++, registerNum++, id_1, op, *const_2);
+  }
+  else if (const_1 != NULL && const_2 != NULL){
+    fprintf(code,"%3d:  r_%d  = %d %s %d;", emitLoc++, registerNum++, *const_1, op, *const_2);
+  }
+   
+  if (TraceCode) fprintf(code,"\top %s",c) ;
   fprintf(code,"\n") ;
   if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
 } /* emitRO */
@@ -62,20 +75,6 @@ void emitID ( int counter, int loc, char* name, char* c)
 } /* emitID */
 
 
-/* Procedure emitRM emits a register-to-memory
- * TM instruction
- * op = the opcode
- * r = target register
- * d = the offset
- * s = the base register
- * c = a comment to be printed if TraceCode is TRUE
- */
-void emitRM( char * op, int r, int d, int s, char *c)
-{ fprintf(code,"%3d:  %5s  %d,%d(%d) ",emitLoc++,op,r,d,s);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc)  highEmitLoc = emitLoc ;
-} /* emitRM */
 
 void emitCheckCondition(int savedLoc){
   fprintf(code, "%3d:  r_%d = ",emitLoc++, registerNum-1);
@@ -96,9 +95,6 @@ void emitIFK4(int savedLoc){
 
 void emitAssignK(char * nameVar, int registerId){
   fprintf(code, "%3d:  %s = r_%d;\n",emitLoc++, nameVar, registerNum-1);
-}
-void emitCompare(char *s1, int d){
-  fprintf(code, "%s == %d", s1, d);
 }
 
 /* Function emitSkip skips "howMany" code
@@ -127,19 +123,3 @@ void emitBackup( int loc)
 void emitRestore(void)
 { emitLoc = highEmitLoc;}
 
-/* Procedure emitRM_Abs converts an absolute reference 
- * to a pc-relative reference when emitting a
- * register-to-memory TM instruction
- * op = the opcode
- * r = target register
- * a = the absolute location in memory
- * c = a comment to be printed if TraceCode is TRUE
- */
-void emitRM_Abs( char *op, int r, int a, char * c)
-{ fprintf(code,"%3d:  %5s  %d,%d(%d) ",
-               emitLoc,op,r,a-(emitLoc+1),pc);
-  ++emitLoc ;
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
-} /* emitRM_Abs */

@@ -43,17 +43,6 @@ void emitComment( char * c );
  * t = 2nd source register
  * c = a comment to be printed if TraceCode is TRUE
  */
-void emitRO( char *op, int r, int s, int t, char *c);
-
-/* Procedure emitRM emits a register-to-memory
- * TM instruction
- * op = the opcode
- * r = target register
- * d = the offset
- * s = the base register
- * c = a comment to be printed if TraceCode is TRUE
- */
-void emitRM( char * op, int r, int d, int s, char *c);
 
 void emitCheckCondition(int savedLoc);
 void emitValidCondition(int currentLoc);
@@ -70,29 +59,8 @@ void emitCompare(char *s1, int d);
  */
 int emitSkip( int howMany);
 
-/* Procedure emitBackup backs up to 
- * loc = a previously skipped location
- */
-void emitBackup( int loc);
-
-/* Procedure emitRestore restores the current 
- * code position to the highest previously
- * unemitted position
- */
-void emitRestore(void);
-
-/* Procedure emitRM_Abs converts an absolute reference 
- * to a pc-relative reference when emitting a
- * register-to-memory TM instruction
- * op = the opcode
- * r = target register
- * a = the absolute location in memory
- * c = a comment to be printed if TraceCode is TRUE
- */
-void emitRM_Abs( char *op, int r, int a, char * c);
 
 void emitConst( int counter, int val, char*c);
 void emitID ( int counter, int loc, char* name, char* c);
-void emitOp( char *op, int counter, int r_op1, int is_value_1, int r_op2, int is_value_2,char *c);
-
+void emitOp( char *op, int counter, int* op1, int* const_1, char* id_1, int* op2, int* const_2, char* id_2,char *c);
 #endif
