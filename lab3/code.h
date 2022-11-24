@@ -52,6 +52,8 @@ void emitIFK3(int savedLoc);
 void emitIFK4(int savedLoc);
 
 void emitAssignK(char * nameVar, int registerId);
+void emitAssignArrayK(char * nameVar, char * indexArray, int registerId);
+void emitAssignArrayConstK(char * nameVar, int indexArray, int registerId);
 
 void emitCompare(char *s1, int d);
 

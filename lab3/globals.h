@@ -138,6 +138,8 @@ extern int Error;
 /* Register Number */
 extern int registerNum;
 
+extern int emitLoc;
+
 /* IF-ELSE Block Number */
 extern int codeBlockNum;
 #endif

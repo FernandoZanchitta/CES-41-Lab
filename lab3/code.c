@@ -10,7 +10,7 @@
 #include "code.h"
 
 /* TM location number for current instruction emission */
-static int emitLoc = 0 ;
+emitLoc = 0 ;
 /* Highest TM location emitted so far
    For use in conjunction with emitSkip,
    emitBackup, and emitRestore */
@@ -99,6 +99,12 @@ void emitIFK4(int savedLoc){
 
 void emitAssignK(char * nameVar, int registerId){
   fprintf(code, "%3d:  %s = r_%d;\n",emitLoc++, nameVar, registerNum-1);
+}
+void emitAssignArrayK(char * nameVar, char * indexArray, int registerId){
+  fprintf(code, "%3d:  %s[%s] = r_%d;\n",emitLoc++, nameVar, indexArray, registerNum-1);
+}
+void emitAssignArrayConstK(char * nameVar, int indexArray, int registerId){
+  fprintf(code, "%3d:  %s[%d] = r_%d;\n",emitLoc++, nameVar, indexArray, registerNum-1);
 }
 
 void emitCompare(char *s1, int d){

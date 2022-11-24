@@ -30,6 +30,7 @@ static void genStmt( TreeNode * tree)
   int currentLoc, nextLoc;
   int loc;
   int registerId;
+
   switch (tree->kind.stmt) {
 
       case IfK :
@@ -87,6 +88,7 @@ static void genStmt( TreeNode * tree)
          cGen(p1);
          emitValidCondition(registerId, currentLoc + 1);
          cGen(p2);
+         emitIFK3(currentLoc);
          nextLoc = codeBlockNum ;
          codeBlockNum++;
          emitCodeBlock(nextLoc+1);
@@ -103,7 +105,19 @@ static void genStmt( TreeNode * tree)
          p2 = tree->child[1];
          registerId = ac;
          cGen(p2);
-         emitAssignK(p1->attr.name, registerId);
+         printTree(p1);
+         printf("\n\naqui teremos: %d\n", p1->kind.decl);
+         if(p1->child[0] != NULL){
+            printf("\nentrei no if yooooooooooo\n");
+            if(p1->child[0]->kind.exp == ConstK){
+               printf("\nreeeeee eh constante \n");
+               emitAssignArrayConstK(p1->attr.name, p1->child[0]->attr.val, registerId);
+            }else{
+               emitAssignArrayK(p1->attr.name, p1->child[0]->attr.name, registerId);
+            }
+         }else{
+            emitAssignK(p1->attr.name, registerId);
+         }
 
          // if (TraceCode)  emitComment("<- assign") ;
          break; /* assign_k */
@@ -114,7 +128,21 @@ static void genStmt( TreeNode * tree)
 } /* genStmt */
 
 void processExp(char* op, TreeNode * p1, TreeNode * p2, ExpKind p1_type, ExpKind p2_type, int op1, int op2){
-   if (p1_type == OpK && p2_type == OpK){
+   if(p1_type == ArrayK && p2_type != ArrayK){
+      if(p1->child[0]->kind.exp == ConstK){
+         fprintf(code, "%3d: r_%d = %d * 4\n", emitLoc, registerNum++, p1->child[0]->attr.val);         
+      }else{
+         fprintf(code, "%3d: r_%d = %s * 4\n", emitLoc, registerNum++, p1->attr.name);
+      }
+      fprintf(code, "%3d: r_%d = %s[r_%d]\n", emitLoc, registerNum++, p1->attr.name, registerNum-1);
+      fprintf(code, "%3d: r_%d = r_%d %s --", emitLoc, registerNum++, registerNum-2, op);
+   }
+   else if(p1_type != ArrayK && p2_type == ArrayK){
+
+   }else if(p1_type == ArrayK && p2_type == ArrayK){
+
+   }
+   else if (p1_type == OpK && p2_type == OpK){
       emitOp(op, ac, &op1, NULL, NULL, &op2, NULL, NULL, op);
    }
    else if (p1_type == OpK && p2_type == ConstK){
@@ -228,7 +256,14 @@ static void genExp( TreeNode * tree)
          else {
             nested_ops = 0;
          }
-         
+
+         if(p1->kind.decl == ArrayK){
+            p1_type = ArrayK;
+         }
+         if(p2->kind.decl == ArrayK){
+            p2_type = ArrayK;
+         }
+         emitLoc
          // int op1 = registerNum - 1;
          // int op2 = registerNum - 2 - (2*nested_ops);
          // printf("registerNum: %d\n", registerNum);
@@ -297,6 +332,7 @@ static void genType( TreeNode * tree)
 /* Procedure genType generates code at an expression node */
 static void genDecl( TreeNode * tree)
 { 
+   TreeNode * p1;
   switch (tree->kind.decl) {
     case VarK :
       // if (TraceCode) emitComment("Vark");
@@ -304,6 +340,8 @@ static void genDecl( TreeNode * tree)
       break; /* Void */    
     case ArrayK :
       // if (TraceCode) emitComment("ArrayK");
+      p1 = tree->child[1];
+
       cGen(tree->child[0]);
       break; /* Integer */
    case FuncK :
