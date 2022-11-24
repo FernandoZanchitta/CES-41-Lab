@@ -83,25 +83,28 @@ void emitRM( char * op, int r, int d, int s, char *c)
 } /* emitRM */
 
 void emitCheckCondition(int savedLoc){
-  fprintf(code, "\nt%d = ", savedLoc);
+  fprintf(code, "%3d:  t%d = ",emitLoc++, savedLoc);
+  fprintf(code,"\n") ;
 }
 
 void emitValidCondition(int registeredId, int line){
-  fprintf(code, "\nif_true t%d goto L%d", registeredId, line);
+  fprintf(code, "%3d:  if_true t%d goto L%d",emitLoc++, registeredId, line);
+  fprintf(code,"\n") ;
 }
 
 void emitIFK3(int savedLoc){
-  fprintf(code, "\ngoto L%d", savedLoc);
+  fprintf(code, "%3d:  goto L%d",emitLoc++, savedLoc);
+  fprintf(code,"\n") ;
 }
 
 void emitIFK4(int savedLoc){
-  fprintf(code, "\nL%d: ", savedLoc);
+  fprintf(code, "%3d:  L%d: ",emitLoc++, savedLoc);
+  fprintf(code,"\n") ;
 }
 
 void emitAssignK(char * nameVar, int registerId){
-  fprintf(code, "\n%s = t%d", nameVar, registerId);
-}
-
+  fprintf(code, "%3d:  %s = t%d",emitLoc++, nameVar, registerId);
+  fprintf(code,"\n") ;
 void emitCompare(char *s1, int d){
   fprintf(code, "%s == %d", s1, d);
 }
