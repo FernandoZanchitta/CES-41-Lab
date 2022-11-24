@@ -2,7 +2,8 @@ void main(int a)
 {
 /*adeadeadaee */
     int b;
-    a = 1*2;
-    b = 8 + a;
+    int x;
+    x = 4;
+    b = 6+x;
 /* dadaedea */
 } 

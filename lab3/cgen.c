@@ -18,6 +18,8 @@
 */
 static int tmpOffset = 0;
 static int ident = 0;
+registerNum = 0;
+codeBlockNum = 0;
 
 /* prototype for internal recursive code generator */
 static void cGen (TreeNode * tree);
@@ -25,7 +27,7 @@ static void cGen (TreeNode * tree);
 /* Procedure genStmt generates code at a statement node */
 static void genStmt( TreeNode * tree)
 { TreeNode * p1, * p2, * p3;
-  int savedLoc1,savedLoc2,currentLoc;
+  int currentLoc, nextLoc;
   int loc;
   int registerId;
   switch (tree->kind.stmt) {
@@ -39,13 +41,14 @@ static void genStmt( TreeNode * tree)
          p3 = tree->child[2] ;
          /* generate code for test expression */
          int registerId = ac;
-         emitCheckCondition(registerId);
          cGen(p1);
-         emitValidCondition(registerId, registerId);
+         currentLoc = codeBlockNum;
+         emitValidCondition(currentLoc);
          cGen(p3);
-         savedLoc2 = emitSkip(1) ;
-         emitIFK3(savedLoc2);
-         emitIFK4(savedLoc1);
+         nextLoc = codeBlockNum ;
+         codeBlockNum++;
+         emitIFK3(codeBlockNum);
+         emitIFK4(nextLoc);
          cGen(p2);
          if (TraceCode)  emitComment("<- if") ;
          break; /* if_k */
@@ -56,7 +59,6 @@ static void genStmt( TreeNode * tree)
          if (TraceCode) emitComment("-> repeat") ;
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
-         savedLoc1 = emitSkip(0);
          // emitComment("repeat: jump after body comes back here");
          /* generate code for body */
          emitComment("L1: ");
@@ -85,7 +87,7 @@ static void genStmt( TreeNode * tree)
          }
          emitCheckCondition(registerId);
          cGen(p1);
-         emitValidCondition(registerId, 2);
+         emitValidCondition(registerId);
          cGen(p2);
          emitComment("goto L1");
          /* generate code for test */
@@ -147,44 +149,75 @@ static void genExp( TreeNode * tree)
          p1 = tree->child[0];
          p2 = tree->child[1];
          /* gen code for ac = left arg */
-         cGen(p1);
+         int is_p1_value = 1;
+         int is_p2_value = 1;
+
+         if (p1->nodekind == ExpK){
+            if (p1->kind.exp == OpK){
+               cGen(p1);
+            }
+            else{
+               is_p1_value = 0;
+            }
+         }
          /* gen code to push left operand */
          // emitRM("ST",ac,tmpOffset--,mp,"op: push left");
          /* gen code for ac = right operand */
-         cGen(p2);
+         if (p2->nodekind == ExpK){
+            if (p2->kind.exp == OpK){
+               cGen(p2);
+            }
+            else{
+               is_p2_value = 0;
+            }
+         }
+         
+         int nested_ops = 0;
+         if (p2->nodekind == ExpK){
+            struct treeNode* current_op;
+            current_op = p2;
+            while (current_op->nodekind == ExpK && current_op->kind.exp == OpK){
+               current_op = current_op->child[0];
+               nested_ops++;
+            }
+         } 
+         else {
+            nested_ops = 0;
+         }
+         
+         printf("registerNum: %d\n", registerNum);
          /* now load left operand */
          // emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
          switch (tree->attr.op) {
             case PLUS :
-               // emitRO("ADD",ac,ac1,ac,"op +");
-               emitOp("+", ac, "c","d","op +");
+               emitOp("+", ac, registerNum - 1 , is_p1_value,registerNum - 2 - (2*nested_ops), is_p2_value,"op +");
                break;
             case MINUS :
-               emitOp("-", ac, "c","d","op -");
+               emitOp("-", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op -");
                break;
             case TIMES :
-               emitOp("*", ac, "c","d","op *");
+               emitOp("*", ac, registerNum - 1 , is_p1_value,registerNum - 2 - (2*nested_ops), is_p2_value,"op *");
                break;
             case OVER :
-               emitOp("/", ac, "c","d","op /");
+               emitOp("/", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op /");
                break;
             case LESS :
-               emitOp("<", ac, "c","d","op <");
+               emitOp("<", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op <");
                break;
             // todo: check
             case LEQ :
-               emitOp("<=", ac, "c","d","op <=");
+               emitOp("<=", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op <=");
                break;
             // todo: check
             case GREATER :
-               emitOp(">", ac, "c","d","op >");
+               emitOp(">", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op >");
                break;
             // todo: check
             case GEQ :
-               emitOp(">=", ac, "c","d","op >=");
+               emitOp(">=", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op >=");
                break;
             case COMPARE :
-               emitOp("==", ac, "c","d","op ==");
+               emitOp("==", ac, registerNum - 1 , 1,registerNum - 2- (2*nested_ops), 1,"op ==");
                break;
             default:
                emitComment("BUG: Unknown operator");

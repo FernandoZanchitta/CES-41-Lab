@@ -134,4 +134,10 @@ extern int TraceCode;
 
 /* Error = TRUE prevents further passes if an error occurs */
 extern int Error; 
+
+/* Register Number */
+extern int registerNum;
+
+/* IF-ELSE Block Number */
+extern int codeBlockNum;
 #endif

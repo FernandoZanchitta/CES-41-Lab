@@ -5,7 +5,6 @@
 /* Compiler Construction: Principles and Practice   */
 /* Kenneth C. Louden                                */
 /****************************************************/
-
 #ifndef _CODE_H_
 #define _CODE_H_
 
@@ -57,7 +56,7 @@ void emitRO( char *op, int r, int s, int t, char *c);
 void emitRM( char * op, int r, int d, int s, char *c);
 
 void emitCheckCondition(int savedLoc);
-void emitValidCondition(int registeredId, int line);
+void emitValidCondition(int currentLoc);
 void emitIFK3(int savedLoc);
 void emitIFK4(int savedLoc);
 
@@ -92,6 +91,6 @@ void emitRM_Abs( char *op, int r, int a, char * c);
 
 void emitConst( int counter, int val, char*c);
 void emitID ( int counter, int loc, char* name, char* c);
-void emitOp( char *op, int counter, char* name1, char* name2, char *c);
+void emitOp( char *op, int counter, int r_op1, int is_value_1, int r_op2, int is_value_2,char *c);
 
 #endif

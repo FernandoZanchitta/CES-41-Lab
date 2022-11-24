@@ -11,11 +11,6 @@
 
 /* TM location number for current instruction emission */
 static int emitLoc = 0 ;
-
-/* Register Number */
-static int registerNum = 0 ;
-
-
 /* Highest TM location emitted so far
    For use in conjunction with emitSkip,
    emitBackup, and emitRestore */
@@ -42,8 +37,8 @@ void emitRO( char *op, int r, int s, int t, char *c)
   if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
 } /* emitRO */
 
-void emitOp( char *op, int counter, char* name1, char* name2, char *c)
-{ fprintf(code,"%3d:  r_%d  = %s %s %s;", emitLoc++, registerNum++, name1, op, name2);
+void emitOp( char *op, int counter, int r_op1, int is_value_1, int r_op2, int is_value_2,char *c)
+{ fprintf(code,"%3d:  r_%d  = r_%d %s r_%d;", emitLoc++, registerNum++, r_op1, op, r_op2);
   if (TraceCode) fprintf(code,"\t%s",c) ;
   fprintf(code,"\n") ;
   if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
@@ -83,28 +78,24 @@ void emitRM( char * op, int r, int d, int s, char *c)
 } /* emitRM */
 
 void emitCheckCondition(int savedLoc){
-  fprintf(code, "%3d:  t%d = ",emitLoc++, savedLoc);
+  fprintf(code, "%3d:  r_%d = ",emitLoc++, registerNum-1);
   fprintf(code,"\n") ;
 }
 
-void emitValidCondition(int registeredId, int line){
-  fprintf(code, "%3d:  if_true t%d goto L%d",emitLoc++, registeredId, line);
-  fprintf(code,"\n") ;
+void emitValidCondition(int currentLoc){
+  fprintf(code, "%3d:  if_true r_%d goto L%d\n",emitLoc++, registerNum-1, currentLoc);
 }
 
 void emitIFK3(int savedLoc){
-  fprintf(code, "%3d:  goto L%d",emitLoc++, savedLoc);
-  fprintf(code,"\n") ;
+  fprintf(code, "%3d:  goto L%d\n",emitLoc++, savedLoc);
 }
 
 void emitIFK4(int savedLoc){
-  fprintf(code, "%3d:  L%d: ",emitLoc++, savedLoc);
-  fprintf(code,"\n") ;
+  fprintf(code, "%3d:  L%d: \n",emitLoc++, savedLoc);
 }
 
 void emitAssignK(char * nameVar, int registerId){
-  fprintf(code, "%3d:  %s = t%d",emitLoc++, nameVar, registerId);
-  fprintf(code,"\n") ;
+  fprintf(code, "%3d:  %s = r_%d;\n",emitLoc++, nameVar, registerNum-1);
 }
 
 /* Function emitSkip skips "howMany" code
