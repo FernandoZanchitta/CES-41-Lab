@@ -97,6 +97,9 @@ void emitIFK4(int savedLoc){
 void emitAssignK(char * nameVar, int registerId){
   fprintf(code, "%3d:  %s = r_%d;\n",emitLoc++, nameVar, registerNum-1);
 }
+void emitCompare(char *s1, int d){
+  fprintf(code, "%s == %d", s1, d);
+}
 
 /* Function emitSkip skips "howMany" code
  * locations for later backpatch. It also

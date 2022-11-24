@@ -62,6 +62,8 @@ void emitIFK4(int savedLoc);
 
 void emitAssignK(char * nameVar, int registerId);
 
+void emitCompare(char *s1, int d);
+
 /* Function emitSkip skips "howMany" code
  * locations for later backpatch. It also
  * returns the current code position
