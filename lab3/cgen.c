@@ -297,6 +297,7 @@ static void genDecl( TreeNode * tree)
  */
 static void cGen( TreeNode * tree)
 { 
+   printf("aquiaqui temos cgen");
    if (tree != NULL)
   {  
    // ident ++;
@@ -351,12 +352,12 @@ void codeGen(TreeNode * syntaxTree, char * codefile)
    emitComment(s);
    /* generate standard prelude */
    // emitComment("Standard prelude:");
-   // emitRM("LD",mp,0,ac,"load maxaddress from location 0");
-   // emitRM("ST",ac,0,ac,"clear location 0");
+   emitRM("LD",mp,0,ac,"load maxaddress from location 0");
+   emitRM("ST",ac,0,ac,"clear location 0");
    emitComment("Begin of execution.");
    /* generate code for TINY program */ 
    cGen(syntaxTree);
    /* finish */
    emitComment("End of execution.");
-   // emitRO("HALT",0,0,0,"");
+   emitRO("HALT",0,0,0,"");
 }
