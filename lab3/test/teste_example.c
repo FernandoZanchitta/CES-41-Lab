@@ -1,20 +1,21 @@
-/*
-teste de comentarios
-*/
-int x[10];
-int minloc ( int a[], int low, int high)
-{ int i; int x; int k;
-k = low;
-x = a[low];
-i = low + 1;
-while(i < high)
-{ if (a[i] < x)
-{ x = a[i];
-k=i; }
-i = i + 1;
+/* Um programa para calcular mdc */
+
+int gdc (int u, int v)
+{
+    int r;
+if (v == 0) {r = u; return r;}
+else {r = gdc(v,u-u/v*v); return r;}
+
+/* u-u / v*v == u mod v */
 }
-return k;
-}
-void main (int a){
-    
+
+void main(int c)
+{
+int x;
+int y;
+int a;
+c= 5;
+x = 3;
+y = 5+x;
+a = gdc(x,y) + 4;
 }

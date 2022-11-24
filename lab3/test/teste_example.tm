@@ -1,21 +1,19 @@
-int minloc:	param a param low param high 
-  0: k = low;
-  1: x = a[low];
-  2: r_0 = low + 1;
-  3: i = r_0;
-L0:
-  4: r_1 = i >= high;
-  5: if_true r_1 goto L1
-  6: r_2 = a - x;
-  7: if_true r_2 goto L0
-  8: goto L1
-  9: L0: 
- 10: x = a[i];
- 11: k = i;
- 12: L1: 
- 13: r_3 = i + 1;
- 14: i = r_3;
- 15: goto L0
-L2:
-return i;
-void main:	param a return;
+int gdc:	param u param v 
+  0: r_0 = v == 0;
+  1: if_true r_0 goto L0
+  2: r_1 = call gdc, 3
+  3: r = r_1;
+  4: goto L1
+  5: L0: 
+  6: r = u;
+  7: L1: 
+return r;
+void main:	param c 
+  8: c = r_1;
+  9: x = r_1;
+ 10: r_2 = 5 + x;
+ 11: y = r_2;
+ 12: r_3 = call gdc, 3
+ 13: r_4 = 48939520 + 4;
+ 14: a = r_4;
+return;
