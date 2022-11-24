@@ -63,7 +63,7 @@ void emitCompare(char *s1, int d);
  */
 int emitSkip( int howMany);
 
-
+void emitActivation(int type, char* name, int children_count);
 void emitConst( int counter, int val, char*c);
 void emitID ( int counter, int loc, char* name, char* c);
 void emitOp( char *op, int counter, int* op1, int* const_1, char* id_1, int* op2, int* const_2, char* id_2,char *c);

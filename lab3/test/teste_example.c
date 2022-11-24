@@ -1,4 +1,12 @@
-void main(int a)
+int teste(int y, int z, int a, int d){
+    int k;
+    int ka;
+    ka = z;
+    k = y + z;
+    return k;
+}
+
+void main(int a, int d)
 {
 /*adeadeadaee */
     int b;
@@ -21,6 +29,6 @@ void main(int a)
     while(i < 10){
         d[1] = b[i] + c[i];
     }
-    
+    x = teste(1, 2 ,3,4);
 /* dadaedea */
 } 
