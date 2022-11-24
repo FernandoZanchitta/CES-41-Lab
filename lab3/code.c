@@ -10,12 +10,7 @@
 #include "code.h"
 
 /* TM location number for current instruction emission */
-static int emitLoc = 0 ;
-
-/* Register Number */
-static int registerNum = 0 ;
-
-
+int emitLoc = 0 ;
 /* Highest TM location emitted so far
    For use in conjunction with emitSkip,
    emitBackup, and emitRestore */
@@ -27,24 +22,49 @@ static int highEmitLoc = 0;
 void emitComment( char * c )
 { if (TraceCode) fprintf(code,"* %s\n",c);}
 
-/* Procedure emitRO emits a register-only
- * TM instruction
- * op = the opcode
- * r = target register = ac
- * s = 1st source register
- * t = 2nd source register
- * c = a comment to be printed if TraceCode is TRUE
- */
-void emitRO( char *op, int r, int s, int t, char *c)
-{ fprintf(code,"%3d:  %5s  %d,%d,%d ",emitLoc++,op,r,s,t);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
-} /* emitRO */
+void emitActivation(int type, char* name, int children_count){
+  if (type == Void){
+      fprintf(code, "%3d: call %s, %d\n", emitLoc++, name, children_count);
+  }
+  else {
+      fprintf(code, "%3d: r_%d = call %s, %d\n", emitLoc++, registerNum++, name, children_count);
 
-void emitOp( char *op, int counter, char* name1, char* name2, char *c)
-{ fprintf(code,"%3d:  r_%d  = %s %s %s;", emitLoc++, registerNum++, name1, op, name2);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
+  }
+}
+void emitOp( char *op, int counter, int* op1, int* const_1, char* id_1, int* op2, int* const_2, char* id_2,char *c)
+{ 
+  while (registerNum < 0) {
+    registerNum = registerNum + 1;
+  }
+  if (op1 != NULL && op2 != NULL){
+    fprintf(code,"%3d: r_%d = r_%d %s r_%d;", emitLoc++, registerNum++, *op1, op, *op2);
+  }
+  else if (op1 != NULL && const_2 != NULL){
+    fprintf(code,"%3d: r_%d = r_%d %s %d;", emitLoc++, registerNum++, *op1, op, *const_2);
+  }
+  else if (op1 != NULL && id_2 != NULL){
+    fprintf(code,"%3d: r_%d = r_%d %s %s;", emitLoc++, registerNum++, *op1, op, id_2);
+  }
+  else if (const_1 != NULL && op2 != NULL){
+    fprintf(code,"%3d: r_%d = %d %s r_%d;", emitLoc++, registerNum++, *const_1, op, *op2);
+  }
+  else if (id_1 != NULL && op2 != NULL){
+    fprintf(code,"%3d: r_%d = %s %s r_%d;", emitLoc++, registerNum++, id_1, op, *op2);
+  }
+  else if (const_1 != NULL && id_2 != NULL){
+    fprintf(code,"%3d: r_%d = %d %s %s;", emitLoc++, registerNum++, *const_1, op, id_2);
+  }
+  else if (id_1 != NULL && id_2 != NULL){
+    fprintf(code,"%3d: r_%d = %s %s %s;", emitLoc++, registerNum++, id_1, op, id_2);
+  }
+  else if (id_1 != NULL && const_2 != NULL){
+    fprintf(code,"%3d: r_%d = %s %s %d;", emitLoc++, registerNum++, id_1, op, *const_2);
+  }
+  else if (const_1 != NULL && const_2 != NULL){
+    fprintf(code,"%3d: r_%d = %d %s %d;", emitLoc++, registerNum++, *const_1, op, *const_2);
+  }
+   
+  if (TraceCode) fprintf(code,"\top %s",c) ;
   fprintf(code,"\n") ;
   if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
 } /* emitRO */
@@ -52,7 +72,7 @@ void emitOp( char *op, int counter, char* name1, char* name2, char *c)
 
 void emitConst ( int counter, int val, char* c)
 { 
-  fprintf(code,"%3d:  r_%d = %d;",emitLoc++, registerNum++, val);
+  fprintf(code,"%3d: r_%d = %d;",emitLoc++, registerNum++, val);
   if (TraceCode) fprintf(code,"\t%s",c) ;
   fprintf(code,"\n") ;
   if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
@@ -60,52 +80,76 @@ void emitConst ( int counter, int val, char* c)
 
 void emitID ( int counter, int loc, char* name, char* c)
 { 
-  fprintf(code,"%3d:  r_%d = %s;",emitLoc++, registerNum++, name);
+  fprintf(code,"%3d: r_%d = %s;",emitLoc++, registerNum++, name);
   if (TraceCode) fprintf(code,"\t%s",c) ;
   fprintf(code,"\n") ;
   if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
 } /* emitID */
 
 
-/* Procedure emitRM emits a register-to-memory
- * TM instruction
- * op = the opcode
- * r = target register
- * d = the offset
- * s = the base register
- * c = a comment to be printed if TraceCode is TRUE
- */
-void emitRM( char * op, int r, int d, int s, char *c)
-{ fprintf(code,"%3d:  %5s  %d,%d(%d) ",emitLoc++,op,r,d,s);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc)  highEmitLoc = emitLoc ;
-} /* emitRM */
+
+void emitCodeBlock(int codeBlockVar){
+  fprintf(code, "L%d:\n", codeBlockVar);
+}
 
 void emitCheckCondition(int savedLoc){
-  fprintf(code, "%3d:  t%d = ",emitLoc++, savedLoc);
+  fprintf(code, "%3d: r_%d = ",emitLoc++, registerNum-1);
   fprintf(code,"\n") ;
 }
 
-void emitValidCondition(int registeredId, int line){
-  fprintf(code, "%3d:  if_true t%d goto L%d",emitLoc++, registeredId, line);
-  fprintf(code,"\n") ;
+void emitValidCondition(int currentLoc, int currentLocAux){
+  fprintf(code, "%3d: if_true r_%d goto L%d\n",emitLoc++, registerNum-1, currentLocAux);
 }
 
 void emitIFK3(int savedLoc){
-  fprintf(code, "%3d:  goto L%d",emitLoc++, savedLoc);
-  fprintf(code,"\n") ;
+  fprintf(code, "%3d: goto L%d\n",emitLoc++, savedLoc);
 }
 
 void emitIFK4(int savedLoc){
-  fprintf(code, "%3d:  L%d: ",emitLoc++, savedLoc);
-  fprintf(code,"\n") ;
+  fprintf(code, "%3d: L%d: \n",emitLoc++, savedLoc);
 }
 
 void emitAssignK(char * nameVar, int registerId){
-  fprintf(code, "%3d:  %s = t%d",emitLoc++, nameVar, registerId);
-  fprintf(code,"\n") ;
+  while (registerNum < 1) {
+    registerNum = registerNum + 1;
+  }
+  fprintf(code, "%3d: %s = r_%d;\n",emitLoc++, nameVar, registerNum-1);
 }
+
+void emitAssignKWithIdK(char * nameVar, char * secondVar,int registerId){
+  fprintf(code, "%3d: %s = %s;\n",emitLoc++, nameVar, secondVar);
+}
+
+void emitAssignArrayK(char * nameVar, char * indexArray, int registerId){
+  fprintf(code, "%3d: %s[%s] = r_%d;\n",emitLoc++, nameVar, indexArray, registerNum-1);
+}
+void emitAssignArrayConstK(char* nameTarget, char * nameVar, int indexArray, int registerId){
+  fprintf(code, "%3d: %s = %s[%d];\n",emitLoc++, nameTarget ,nameVar, indexArray);
+}
+
+void emitAssignArrayConstKWithConst(char* nameTarget, int p1_val, char * nameVar, int indexArray, int registerId){
+  fprintf(code, "%3d: %s[%d] = %s[%d];\n",emitLoc++, nameTarget, p1_val ,nameVar, indexArray);
+}
+void emitAssignArrayConstKWithIdK(char* nameTarget, char* p1_name,char * nameVar, int indexArray, int registerId){
+  fprintf(code, "%3d: %s[%s] = %s[%d];\n",emitLoc++, nameTarget , p1_name,nameVar, indexArray);
+}
+
+void emitAssignArrayIdKWithConst(char* nameTarget, int p1_val, char * nameVar, char* idK, int registerId){
+  fprintf(code, "%3d: %s[%d] = %s[%s];\n",emitLoc++, nameTarget, p1_val ,nameVar, idK);
+}
+void emitAssignArrayIdKWithIdK(char* nameTarget, char* p1_name,char * nameVar, char* idK, int registerId){
+  fprintf(code, "%3d: %s[%s] = %s[%s];\n",emitLoc++, nameTarget , p1_name,nameVar, idK);
+}
+
+void emitAssignArrayIdK(char* nameTarget, char * nameVar, char* idK, int registerId){
+  fprintf(code, "%3d: %s = %s[%s];\n",emitLoc++, nameTarget ,nameVar, idK);
+}
+void emitAssignConstK(char * nameVar, int val, int registerId){
+  fprintf(code, "%3d: %s = %d;\n",emitLoc++, nameVar, val);
+}
+
+
+
 void emitCompare(char *s1, int d){
   fprintf(code, "%s == %d", s1, d);
 }
@@ -136,19 +180,3 @@ void emitBackup( int loc)
 void emitRestore(void)
 { emitLoc = highEmitLoc;}
 
-/* Procedure emitRM_Abs converts an absolute reference 
- * to a pc-relative reference when emitting a
- * register-to-memory TM instruction
- * op = the opcode
- * r = target register
- * a = the absolute location in memory
- * c = a comment to be printed if TraceCode is TRUE
- */
-void emitRM_Abs( char *op, int r, int a, char * c)
-{ fprintf(code,"%3d:  %5s  %d,%d(%d) ",
-               emitLoc,op,r,a-(emitLoc+1),pc);
-  ++emitLoc ;
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
-} /* emitRM_Abs */

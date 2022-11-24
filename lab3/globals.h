@@ -80,7 +80,7 @@ typedef enum {OpK,ConstK,IdK,ActivationK, LT, EQ} ExpKind;
 
 /* ExpType is used for type checking */
 typedef enum {Void,Integer} ExpType;
-#define MAXCHILDREN 3
+#define MAXCHILDREN 5 
 
 typedef struct treeNode
    { struct treeNode * child[MAXCHILDREN];
@@ -134,4 +134,12 @@ extern int TraceCode;
 
 /* Error = TRUE prevents further passes if an error occurs */
 extern int Error; 
+
+/* Register Number */
+extern int registerNum;
+
+extern int emitLoc;
+
+/* IF-ELSE Block Number */
+extern int codeBlockNum;
 #endif

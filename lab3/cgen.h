@@ -15,5 +15,5 @@
  * file name as a comment in the code file
  */
 void codeGen(TreeNode * syntaxTree, char * codefile);
-
+static void processExp(char* op, TreeNode * p1, TreeNode * p2, ExpKind p1_type, ExpKind p2_type, int op1, int op2);
 #endif
