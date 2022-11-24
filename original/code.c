@@ -12,10 +12,6 @@
 /* TM location number for current instruction emission */
 static int emitLoc = 0 ;
 
-/* Register Number */
-static int registerNum = 0 ;
-
-
 /* Highest TM location emitted so far
    For use in conjunction with emitSkip,
    emitBackup, and emitRestore */
@@ -30,7 +26,7 @@ void emitComment( char * c )
 /* Procedure emitRO emits a register-only
  * TM instruction
  * op = the opcode
- * r = target register = ac
+ * r = target register
  * s = 1st source register
  * t = 2nd source register
  * c = a comment to be printed if TraceCode is TRUE
@@ -41,31 +37,6 @@ void emitRO( char *op, int r, int s, int t, char *c)
   fprintf(code,"\n") ;
   if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
 } /* emitRO */
-
-void emitOp( char *op, int counter, char* name1, char* name2, char *c)
-{ fprintf(code,"%3d:  r_%d  = %s %s %s;", emitLoc++, registerNum++, name1, op, name2);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
-} /* emitRO */
-
-
-void emitConst ( int counter, int val, char* c)
-{ 
-  fprintf(code,"%3d:  r_%d = %d;",emitLoc++, registerNum++, val);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
-} /* emitConst */
-
-void emitID ( int counter, int loc, char* name, char* c)
-{ 
-  fprintf(code,"%3d:  r_%d = %s;",emitLoc++, registerNum++, name);
-  if (TraceCode) fprintf(code,"\t%s",c) ;
-  fprintf(code,"\n") ;
-  if (highEmitLoc < emitLoc) highEmitLoc = emitLoc ;
-} /* emitID */
-
 
 /* Procedure emitRM emits a register-to-memory
  * TM instruction
@@ -81,34 +52,6 @@ void emitRM( char * op, int r, int d, int s, char *c)
   fprintf(code,"\n") ;
   if (highEmitLoc < emitLoc)  highEmitLoc = emitLoc ;
 } /* emitRM */
-
-void emitCheckCondition(int savedLoc){
-  fprintf(code, "%3d:  t%d = ",emitLoc++, savedLoc);
-  fprintf(code,"\n") ;
-}
-
-void emitValidCondition(int registeredId, int line){
-  fprintf(code, "%3d:  if_true t%d goto L%d",emitLoc++, registeredId, line);
-  fprintf(code,"\n") ;
-}
-
-void emitIFK3(int savedLoc){
-  fprintf(code, "%3d:  goto L%d",emitLoc++, savedLoc);
-  fprintf(code,"\n") ;
-}
-
-void emitIFK4(int savedLoc){
-  fprintf(code, "%3d:  L%d: ",emitLoc++, savedLoc);
-  fprintf(code,"\n") ;
-}
-
-void emitAssignK(char * nameVar, int registerId){
-  fprintf(code, "%3d:  %s = t%d",emitLoc++, nameVar, registerId);
-  fprintf(code,"\n") ;
-}
-void emitCompare(char *s1, int d){
-  fprintf(code, "%s == %d", s1, d);
-}
 
 /* Function emitSkip skips "howMany" code
  * locations for later backpatch. It also

@@ -56,15 +56,6 @@ void emitRO( char *op, int r, int s, int t, char *c);
  */
 void emitRM( char * op, int r, int d, int s, char *c);
 
-void emitCheckCondition(int savedLoc);
-void emitValidCondition(int registeredId, int line);
-void emitIFK3(int savedLoc);
-void emitIFK4(int savedLoc);
-
-void emitAssignK(char * nameVar, int registerId);
-
-void emitCompare(char *s1, int d);
-
 /* Function emitSkip skips "howMany" code
  * locations for later backpatch. It also
  * returns the current code position
@@ -91,9 +82,5 @@ void emitRestore(void);
  * c = a comment to be printed if TraceCode is TRUE
  */
 void emitRM_Abs( char *op, int r, int a, char * c);
-
-void emitConst( int counter, int val, char*c);
-void emitID ( int counter, int loc, char* name, char* c);
-void emitOp( char *op, int counter, char* name1, char* name2, char *c);
 
 #endif
