@@ -52,9 +52,14 @@ void emitIFK3(int savedLoc);
 void emitIFK4(int savedLoc);
 
 void emitAssignK(char * nameVar, int registerId);
+void emitAssignKWithIdK(char * nameVar, char * secondVar,int registerId);
 void emitAssignArrayK(char * nameVar, char * indexArray, int registerId);
-void emitAssignArrayConstK(char * nameVar, int indexArray, int registerId);
-
+void emitAssignArrayConstK(char * nameTarget, char * nameVar, int indexArray, int registerId);
+void emitAssignArrayConstKWithConst(char* nameTarget, int p1_val, char * nameVar, int indexArray, int registerId);
+void emitAssignArrayConstKWithIdK(char* nameTarget, char* p1_name, char * nameVar, int indexArray, int registerId);
+void emitAssignArrayIdK(char* nameTarget, char * nameVar, char* idK, int registerId);
+void emitAssignArrayIdKWithConst(char* nameTarget, int p1_val,char * nameVar, char* idK, int registerId);
+void emitAssignArrayIdKWithIdK(char* nameTarget, char* p1_name, char * nameVar, char* idK, int registerId);
 void emitCompare(char *s1, int d);
 
 /* Function emitSkip skips "howMany" code

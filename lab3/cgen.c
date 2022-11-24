@@ -35,7 +35,7 @@ static void genStmt( TreeNode * tree)
   switch (tree->kind.stmt) {
 
       case IfK :
-         printf("---- if k------\n");
+         // printf("---- if k------\n");
 
          // if (TraceCode) emitComment("-> if") ;
          p1 = tree->child[0] ;
@@ -57,7 +57,7 @@ static void genStmt( TreeNode * tree)
          break; /* if_k */
 
       case RepeatK:
-         printf("---- repeat k------\n");
+         // printf("---- repeat k------\n");
 
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
@@ -99,51 +99,65 @@ static void genStmt( TreeNode * tree)
          break; /* repeat */
 
       case AssignK:
-         printf("---- assign k------\n");
+         // printf("---- assign k------\n");
          // if (TraceCode) emitComment("-> assign") ;
          /* generate code for rhs */
          p1 = tree->child[0];
          p2 = tree->child[1];
          registerId = ac;
          cGen(p2);
-         printTree(p1);
-         printf("\n\naqui teremos: %d\n", p1->kind.decl);
-         if(p1->child[0] != NULL){
-            printf("\nentrei no if yooooooooooo\n");
-            if(p1->child[0]->kind.exp == ConstK){
-               printf("\nreeeeee eh constante \n");
-               emitAssignArrayConstK(p1->attr.name, p1->child[0]->attr.val, registerId);
-            }else{
-               emitAssignArrayK(p1->attr.name, p1->child[0]->attr.name, registerId);
+         // printTree(p1);
+         // printf("\n\naqui teremos: %d\n", p1->kind.decl);
+         if(p2->kind.exp == IdK){
+            if (p2->child[0] != NULL ){
+               if(p2->child[0]->kind.exp == ConstK){
+                  if (p1->child[0] == NULL){
+                     emitAssignArrayConstK(p1->attr.name, p2->attr.name, p2->child[0]->attr.val, registerId);
+                  }
+                  else {
+                     if (p1->child[0]->kind.exp == ConstK){
+                        emitAssignArrayConstKWithConst(p1->attr.name, p1->child[0]->attr.val,p2->attr.name, p2->child[0]->attr.val, registerId);
+                     }
+                     else {
+                        emitAssignArrayConstKWithIdK(p1->attr.name, p1->child[0]->attr.name, p2->attr.name, p2->child[0]->attr.val, registerId);
+                     }
+                  }
+               }
+               else if (p2->child[0]->kind.exp == IdK){
+                  if (p1->child[0] == NULL){
+                     emitAssignArrayIdK(p1->attr.name, p2->attr.name, p2->child[0]->attr.name, registerId);
+                  }
+                  else {
+                     if (p1->child[0]->kind.exp == ConstK){
+                        emitAssignArrayIdKWithConst(p1->attr.name, p1->child[0]->attr.val,p2->attr.name, p2->child[0]->attr.name, registerId);
+                     }
+                     else {
+                        emitAssignArrayIdKWithIdK(p1->attr.name, p1->child[0]->attr.name, p2->attr.name, p2->child[0]->attr.name, registerId);
+                     }
+
+                  }
+               }
+               else{
+                  emitAssignArrayK(p2->attr.name, p2->child[0]->attr.name, registerId);
+                  }
+            }
+            else{
+            emitAssignKWithIdK(p1->attr.name, p2->attr.name,registerId);
             }
          }else{
             emitAssignK(p1->attr.name, registerId);
-         }
+          }
 
          // if (TraceCode)  emitComment("<- assign") ;
          break; /* assign_k */
       default:
-         printf("\n---- default------\n");
+         // printf("\n---- default------\n");
          break;
     }
 } /* genStmt */
 
 void processExp(char* op, TreeNode * p1, TreeNode * p2, ExpKind p1_type, ExpKind p2_type, int op1, int op2){
-   if(p1_type == ArrayK && p2_type != ArrayK){
-      if(p1->child[0]->kind.exp == ConstK){
-         fprintf(code, "%3d: r_%d = %d * 4\n", emitLoc, registerNum++, p1->child[0]->attr.val);         
-      }else{
-         fprintf(code, "%3d: r_%d = %s * 4\n", emitLoc, registerNum++, p1->attr.name);
-      }
-      fprintf(code, "%3d: r_%d = %s[r_%d]\n", emitLoc, registerNum++, p1->attr.name, registerNum-1);
-      fprintf(code, "%3d: r_%d = r_%d %s --", emitLoc, registerNum++, registerNum-2, op);
-   }
-   else if(p1_type != ArrayK && p2_type == ArrayK){
-
-   }else if(p1_type == ArrayK && p2_type == ArrayK){
-
-   }
-   else if (p1_type == OpK && p2_type == OpK){
+   if (p1_type == OpK && p2_type == OpK){
       emitOp(op, ac, &op1, NULL, NULL, &op2, NULL, NULL, op);
    }
    else if (p1_type == OpK && p2_type == ConstK){
@@ -179,7 +193,7 @@ static void genExp( TreeNode * tree)
   switch (tree->kind.exp) {
 
     case ConstK :
-      printf("----ConstK---\n");
+      // printf("----ConstK---\n");
       // if (TraceCode) emitComment("-> Const") ;
       /* gen code to load integer constant using LDC */
       // emitRM("LDC",ac,tree->attr.val,0,"load const");
@@ -188,7 +202,7 @@ static void genExp( TreeNode * tree)
       break; /* ConstK */
     
     case IdK :
-      printf("----IdK---\n");
+      // printf("----IdK---\n");
       if (TraceCode) emitComment("-> Id") ;
       loc = st_lookup(tree->attr.name);
       // emitRM("LD",ac,loc,gp,"load id value");
@@ -196,40 +210,19 @@ static void genExp( TreeNode * tree)
       // if (TraceCode)  emitComment("<- Id") ;
       break; /* IdK */
     case ActivationK:
-      printf("----ActivationK---\n");
+      // printf("----ActivationK---\n");
       if (TraceCode) emitComment("-> Activation") ;
-      int n_children = 0;
-      if (strcmp(tree->attr.name, "minloc") == 1){
-         n_children = 3;
-      }
-      else if (strcmp(tree->attr.name, "sort") == 1){
-         n_children = 3;
-      }
-      else if (strcmp(tree->attr.name, "main") == 1){
-         n_children = 1;
-      }
-      else if (strcmp(tree->attr.name, "teste") == 1){
-         n_children = 4;
-      }
-      else {
-         n_children = 1;
-      } 
+      int n_children = 3;
       emitActivation(tree->type, tree->attr.name, n_children);
       if (TraceCode)  emitComment("<- Activation") ;
       break; /* ActivationK */
 
     case OpK :
-         printf("----OpK---\n");
-         // if (TraceCode) emitComment("-> Op") ;
-         if (tree->child[0] == NULL){
-            printf("c1 null");
-         }
-         if (tree->child[1] == NULL){
-            printf("c2 null");
-         }
+         // printf("----OpK---\n");
+         // if (TraceCode) emitComment("-> Op") ; 
          p1 = tree->child[0];
          p2 = tree->child[1];
-         printTree(tree);
+         // printTree(tree);
          /* gen code for ac = left arg */
          int p1_type = OpK;
          int p2_type = OpK;
@@ -394,23 +387,23 @@ static void cGen( TreeNode * tree)
    // }
    switch (tree->nodekind) {
       case StmtK:
-        printf("StmtK\n");
+      //   printf("StmtK\n");
         genStmt(tree);
         break;
       case ExpK:
-        printf("ExpK\n");
+      //   printf("ExpK\n");
         genExp(tree);
         break;
       case DeclK:
-        printf("DeclK\n");
+      //   printf("DeclK\n");
         genDecl(tree);
         break;
       case TypeK:
-         printf("TypeK\n");
+         // printf("TypeK\n");
          genType(tree);
          break;
       case ParamK:
-         printf("ParamK\n");
+         // printf("ParamK\n");
          fprintf(code, "param %s ",tree->attr.name); 
          // genParam(tree);
          break;

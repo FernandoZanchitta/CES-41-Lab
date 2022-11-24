@@ -15,3 +15,6 @@ i = i + 1;
 }
 return k;
 }
+void main (int a){
+    
+}

@@ -1,22 +1,21 @@
-int teste:	param y param z param a param d 
-  0: ka = r_0;
-  1: r_1 = y + z;
-  2: k = r_1;
-return k;
-void main:	param a param d 
+int minloc:	param a param low param high 
+  0: k = low;
+  1: x = a[low];
+  2: r_0 = low + 1;
+  3: i = r_0;
 L0:
-  3: r_2 = x == 10;
-  4: if_true r_2 goto L1
-  5: r_3 = 1 + 2;
-  6: r_4 = r_3 + 3;
-  7: r_5 = r_4 + 4;
-  8: r_6 = r_5 + 5;
-  9: b = r_6;
- 10: r_7 = b * 2;
- 11: r_8 = 138 + r_7;
- 12: r_9 = 5 * r_8;
- 13: x = r_9;
-L1:
- 14: r_10 = call teste, 3
- 15: x = r_10;
-return;
+  4: r_1 = i >= high;
+  5: if_true r_1 goto L1
+  6: r_2 = a - x;
+  7: if_true r_2 goto L0
+  8: goto L1
+  9: L0: 
+ 10: x = a[i];
+ 11: k = i;
+ 12: L1: 
+ 13: r_3 = i + 1;
+ 14: i = r_3;
+ 15: goto L0
+L2:
+return i;
+void main:	param a return;

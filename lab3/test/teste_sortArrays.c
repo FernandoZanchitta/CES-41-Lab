@@ -13,7 +13,7 @@ k = i;
 }
 i = i + 1;
 }
-return k;
+return i;
 }
 
 void sort(int a[], int low, int high){
@@ -28,8 +28,7 @@ a[i] = t;
 i = i + 1;
 }
 }
-
-void main(void){
+void main(int a){
 int i;
 i = 0;
 while(i<10){

@@ -10,7 +10,7 @@
 #include "code.h"
 
 /* TM location number for current instruction emission */
-emitLoc = 0 ;
+int emitLoc = 0 ;
 /* Highest TM location emitted so far
    For use in conjunction with emitSkip,
    emitBackup, and emitRestore */
@@ -115,12 +115,40 @@ void emitAssignK(char * nameVar, int registerId){
   }
   fprintf(code, "%3d: %s = r_%d;\n",emitLoc++, nameVar, registerNum-1);
 }
+
+void emitAssignKWithIdK(char * nameVar, char * secondVar,int registerId){
+  fprintf(code, "%3d: %s = %s;\n",emitLoc++, nameVar, secondVar);
+}
+
 void emitAssignArrayK(char * nameVar, char * indexArray, int registerId){
-  fprintf(code, "%3d:  %s[%s] = r_%d;\n",emitLoc++, nameVar, indexArray, registerNum-1);
+  fprintf(code, "%3d: %s[%s] = r_%d;\n",emitLoc++, nameVar, indexArray, registerNum-1);
 }
-void emitAssignArrayConstK(char * nameVar, int indexArray, int registerId){
-  fprintf(code, "%3d:  %s[%d] = r_%d;\n",emitLoc++, nameVar, indexArray, registerNum-1);
+void emitAssignArrayConstK(char* nameTarget, char * nameVar, int indexArray, int registerId){
+  fprintf(code, "%3d: %s = %s[%d];\n",emitLoc++, nameTarget ,nameVar, indexArray);
 }
+
+void emitAssignArrayConstKWithConst(char* nameTarget, int p1_val, char * nameVar, int indexArray, int registerId){
+  fprintf(code, "%3d: %s[%d] = %s[%d];\n",emitLoc++, nameTarget, p1_val ,nameVar, indexArray);
+}
+void emitAssignArrayConstKWithIdK(char* nameTarget, char* p1_name,char * nameVar, int indexArray, int registerId){
+  fprintf(code, "%3d: %s[%s] = %s[%d];\n",emitLoc++, nameTarget , p1_name,nameVar, indexArray);
+}
+
+void emitAssignArrayIdKWithConst(char* nameTarget, int p1_val, char * nameVar, char* idK, int registerId){
+  fprintf(code, "%3d: %s[%d] = %s[%s];\n",emitLoc++, nameTarget, p1_val ,nameVar, idK);
+}
+void emitAssignArrayIdKWithIdK(char* nameTarget, char* p1_name,char * nameVar, char* idK, int registerId){
+  fprintf(code, "%3d: %s[%s] = %s[%s];\n",emitLoc++, nameTarget , p1_name,nameVar, idK);
+}
+
+void emitAssignArrayIdK(char* nameTarget, char * nameVar, char* idK, int registerId){
+  fprintf(code, "%3d: %s = %s[%s];\n",emitLoc++, nameTarget ,nameVar, idK);
+}
+void emitAssignConstK(char * nameVar, int val, int registerId){
+  fprintf(code, "%3d: %s = %d;\n",emitLoc++, nameVar, val);
+}
+
+
 
 void emitCompare(char *s1, int d){
   fprintf(code, "%s == %d", s1, d);
