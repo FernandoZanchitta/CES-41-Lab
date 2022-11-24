@@ -2,7 +2,7 @@ all:
 	flex cminus.l
 	bison -d cminus.y
 	gcc -c *.c
-	gcc -o build/cminus *.o -ll
+	gcc -o build/cminus *.o -lfl
 	rm *.o *.tab.* *.yy.*
 run:
 	./build/cminus test/teste_example.c && cat test/teste_example.tm

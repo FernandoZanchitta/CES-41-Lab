@@ -44,8 +44,10 @@ void emitComment( char * c );
  * c = a comment to be printed if TraceCode is TRUE
  */
 
+void emitCodeBlock(int codeBlockVar);
+
 void emitCheckCondition(int savedLoc);
-void emitValidCondition(int currentLoc);
+void emitValidCondition(int currentLoc, int currentLocAux);
 void emitIFK3(int savedLoc);
 void emitIFK4(int savedLoc);
 
