@@ -6,7 +6,8 @@
 /* Compiler Construction: Principles and Practice   */
 /* Kenneth C. Louden                                */
 /****************************************************/
-
+#include <stdio.h>
+#include <string.h>
 #include "globals.h"
 #include "symtab.h"
 #include "code.h"
@@ -160,12 +161,34 @@ static void genExp( TreeNode * tree)
     
     case IdK :
       printf("----IdK---\n");
-      // if (TraceCode) emitComment("-> Id") ;
+      if (TraceCode) emitComment("-> Id") ;
       loc = st_lookup(tree->attr.name);
       // emitRM("LD",ac,loc,gp,"load id value");
       // emitID(ac, loc, tree->attr.name,"load id value");
       // if (TraceCode)  emitComment("<- Id") ;
       break; /* IdK */
+    case ActivationK:
+      printf("----ActivationK---\n");
+      if (TraceCode) emitComment("-> Activation") ;
+      int n_children = 0;
+      if (strcmp(tree->attr.name, "minloc") == 1){
+         n_children = 3;
+      }
+      else if (strcmp(tree->attr.name, "sort") == 1){
+         n_children = 3;
+      }
+      else if (strcmp(tree->attr.name, "main") == 1){
+         n_children = 1;
+      }
+      else if (strcmp(tree->attr.name, "teste") == 1){
+         n_children = 4;
+      }
+      else {
+         n_children = 1;
+      } 
+      emitActivation(tree->type, tree->attr.name, n_children);
+      if (TraceCode)  emitComment("<- Activation") ;
+      break; /* ActivationK */
 
     case OpK :
          printf("----OpK---\n");
@@ -215,25 +238,7 @@ static void genExp( TreeNode * tree)
          }
          cGen(p2);
          int op2 = registerNum-1;
-
-         int nested_ops = 0;
-         if (p2->nodekind == ExpK){
-            struct treeNode* current_op;
-            current_op = p2;
-            while (current_op->nodekind == ExpK && current_op->kind.exp == OpK){
-               current_op = current_op->child[0];
-               nested_ops++;
-            }
-         } 
-         else {
-            nested_ops = 0;
-         }
-         
-         // int op1 = registerNum - 1;
-         // int op2 = registerNum - 2 - (2*nested_ops);
-         // printf("registerNum: %d\n", registerNum);
-         /* now load left operand */
-         // emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
+   
          switch (tree->attr.op) {
             case PLUS :
                processExp("+", p1, p2, p1_type, p2_type, op1,op2); 
@@ -266,7 +271,6 @@ static void genExp( TreeNode * tree)
                emitComment("BUG: Unknown operator");
                break;
          } /* case op */
-         // if (TraceCode)  emitComment("<- Op") ;
          break; /* OpK */
 
     default:
@@ -308,13 +312,36 @@ static void genDecl( TreeNode * tree)
       break; /* Integer */
    case FuncK :
       // if (TraceCode) emitComment("FuncK");
-      for (int i = 0; i < 10000; i ++){
+      if (tree->type == Void) {
+         fprintf(code, "void %s:\t", tree->attr.name);
+      }
+      else {
+         fprintf(code, "int %s:\t", tree->attr.name);
+      }
+      int i = 0;
+      char* param = malloc(2000);
+
+      while (i < 10000){
          if (tree->child[i] != NULL) {
             cGen(tree->child[i]);
+            if (tree->child[i+1] != NULL){
+               if (tree->child[i]->child[0] != NULL){ 
+                  if (tree->child[i]->child[0]->nodekind == ParamK && tree->child[i+1]->child[0]->nodekind != ParamK){
+                     fprintf(code, "\n");
+                  } 
+               }
+            }
          }
          else {
             break;
          }
+         i++;
+      }
+      if (tree->type == Void) {
+         fprintf(code, "return;\n");
+      }
+      else {
+         fprintf(code, "return %s;\n", tree->child[i-1]->child[0]->attr.name);
       }
       break; /* Integer */
     default:
@@ -353,6 +380,7 @@ static void cGen( TreeNode * tree)
          break;
       case ParamK:
          printf("ParamK\n");
+         fprintf(code, "param %s ",tree->attr.name); 
          // genParam(tree);
          break;
       default:
