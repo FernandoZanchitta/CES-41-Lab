@@ -55,8 +55,10 @@ void emitRO( char *op, int r, int s, int t, char *c);
  */
 void emitRM( char * op, int r, int d, int s, char *c);
 
+void emitCodeBlock(int codeBlockVar);
+
 void emitCheckCondition(int savedLoc);
-void emitValidCondition(int currentLoc);
+void emitValidCondition(int currentLoc, int currentLocAux);
 void emitIFK3(int savedLoc);
 void emitIFK4(int savedLoc);
 

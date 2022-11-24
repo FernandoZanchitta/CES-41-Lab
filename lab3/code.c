@@ -77,13 +77,17 @@ void emitRM( char * op, int r, int d, int s, char *c)
   if (highEmitLoc < emitLoc)  highEmitLoc = emitLoc ;
 } /* emitRM */
 
+void emitCodeBlock(int codeBlockVar){
+  fprintf(code, "L%d:\n", codeBlockVar);
+}
+
 void emitCheckCondition(int savedLoc){
   fprintf(code, "%3d:  r_%d = ",emitLoc++, registerNum-1);
   fprintf(code,"\n") ;
 }
 
-void emitValidCondition(int currentLoc){
-  fprintf(code, "%3d:  if_true r_%d goto L%d\n",emitLoc++, registerNum-1, currentLoc);
+void emitValidCondition(int currentLoc, int currentLocAux){
+  fprintf(code, "%3d:  if_true r_%d goto L%d\n",emitLoc++, registerNum-1, currentLocAux);
 }
 
 void emitIFK3(int savedLoc){
@@ -97,6 +101,7 @@ void emitIFK4(int savedLoc){
 void emitAssignK(char * nameVar, int registerId){
   fprintf(code, "%3d:  %s = r_%d;\n",emitLoc++, nameVar, registerNum-1);
 }
+
 void emitCompare(char *s1, int d){
   fprintf(code, "%s == %d", s1, d);
 }

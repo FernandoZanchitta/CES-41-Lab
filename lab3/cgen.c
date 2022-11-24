@@ -44,25 +44,22 @@ static void genStmt( TreeNode * tree)
          int registerId = ac;
          cGen(p1);
          currentLoc = codeBlockNum;
-         emitValidCondition(currentLoc);
+         emitValidCondition(currentLoc, currentLoc);
          cGen(p3);
          nextLoc = codeBlockNum ;
          codeBlockNum++;
          emitIFK3(codeBlockNum);
          emitIFK4(nextLoc);
          cGen(p2);
+         emitIFK4(nextLoc+1);
          // if (TraceCode)  emitComment("<- if") ;
          break; /* if_k */
 
       case RepeatK:
          printf("---- repeat k------\n");
 
-         // if (TraceCode) emitComment("-> repeat") ;
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
-         // emitComment("repeat: jump after body comes back here");
-         /* generate code for body */
-         emitComment("L1: ");
          registerId = ac;
          switch(p1->attr.op){
             case LESS:
@@ -86,11 +83,14 @@ static void genStmt( TreeNode * tree)
             default:
                break;;
          }
-         emitCheckCondition(registerId);
+         currentLoc = codeBlockNum;
+         emitCodeBlock(currentLoc);
          cGen(p1);
-         emitValidCondition(registerId);
+         emitValidCondition(registerId, currentLoc + 1);
          cGen(p2);
-         emitComment("goto L1");
+         nextLoc = codeBlockNum ;
+         codeBlockNum++;
+         emitCodeBlock(nextLoc+1);
          /* generate code for test */
          // emitRM_Abs("JEQ",ac,savedLoc1,"repeat: jmp back to body");
          // if (TraceCode)  emitComment("<- repeat") ;
