@@ -27,6 +27,7 @@ static void genStmt( TreeNode * tree)
 { TreeNode * p1, * p2, * p3;
   int savedLoc1,savedLoc2,currentLoc;
   int loc;
+  int registerId;
   switch (tree->kind.stmt) {
 
       case IfK :
@@ -59,7 +60,7 @@ static void genStmt( TreeNode * tree)
          // emitComment("repeat: jump after body comes back here");
          /* generate code for body */
          emitComment("L1: ");
-         int registeredId = ac;
+         registerId = ac;
          switch(p1->attr.op){
             case LESS:
                p1->attr.op = GEQ;
@@ -80,11 +81,11 @@ static void genStmt( TreeNode * tree)
                p1->attr.op = COMPARE;
                break;
             default:
-               break;
+               break;;
          }
-         emitCheckCondition(registeredId);
+         emitCheckCondition(registerId);
          cGen(p1);
-         emitValidCondition(registeredId, 2);
+         emitValidCondition(registerId, 2);
          cGen(p2);
          emitComment("goto L1");
          /* generate code for test */
@@ -98,8 +99,9 @@ static void genStmt( TreeNode * tree)
          /* generate code for rhs */
          p1 = tree->child[0];
          p2 = tree->child[1];
+         registerId = ac;
          cGen(p2);
-         emitAssignK(p1->attr.name, registeredId);
+         emitAssignK(p1->attr.name, registerId);
 
          if (TraceCode)  emitComment("<- assign") ;
          break; /* assign_k */
