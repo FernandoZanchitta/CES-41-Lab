@@ -19,8 +19,8 @@
 */
 static int tmpOffset = 0;
 static int ident = 0;
-registerNum = 0;
-codeBlockNum = 0;
+int registerNum = 0;
+int codeBlockNum = 0;
 /* prototype for internal recursive code generator */
 static void cGen (TreeNode * tree);
 
@@ -197,6 +197,7 @@ static void genExp( TreeNode * tree)
             }
          }
          cGen(p1);
+         int op1 = registerNum-1;
 
 
          if (p2->nodekind == ExpK){
@@ -213,6 +214,7 @@ static void genExp( TreeNode * tree)
             }
          }
          cGen(p2);
+         int op2 = registerNum-1;
 
          int nested_ops = 0;
          if (p2->nodekind == ExpK){
@@ -227,9 +229,9 @@ static void genExp( TreeNode * tree)
             nested_ops = 0;
          }
          
-         int op1 = registerNum - 1;
-         int op2 = registerNum - 2 - (2*nested_ops);
-         printf("registerNum: %d\n", registerNum);
+         // int op1 = registerNum - 1;
+         // int op2 = registerNum - 2 - (2*nested_ops);
+         // printf("registerNum: %d\n", registerNum);
          /* now load left operand */
          // emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
          switch (tree->attr.op) {

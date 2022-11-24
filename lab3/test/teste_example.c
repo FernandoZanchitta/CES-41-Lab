@@ -10,9 +10,8 @@ void main(int a)
 
     while (x != 10)
     {
-        b = x * 2;
-        a = b + 4;
-        x = x + 1;
+        b = 1 + 2 + 3 +4+5;
+        x = 5*(138+(b*2));
     }
 /* dadaedea */
 } 
