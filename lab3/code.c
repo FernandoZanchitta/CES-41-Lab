@@ -83,23 +83,28 @@ void emitRM( char * op, int r, int d, int s, char *c)
 } /* emitRM */
 
 void emitCheckCondition(int savedLoc){
-  fprintf(code, "t%d = ", savedLoc);
+  fprintf(code, "%3d:  t%d = ",emitLoc++, savedLoc);
+  fprintf(code,"\n") ;
 }
 
 void emitValidCondition(int registeredId, int line){
-  fprintf(code, "if_true t%d goto L%d", registeredId, line);
+  fprintf(code, "%3d:  if_true t%d goto L%d",emitLoc++, registeredId, line);
+  fprintf(code,"\n") ;
 }
 
 void emitIFK3(int savedLoc){
-  fprintf(code, "goto L%d", savedLoc);
+  fprintf(code, "%3d:  goto L%d",emitLoc++, savedLoc);
+  fprintf(code,"\n") ;
 }
 
 void emitIFK4(int savedLoc){
-  fprintf(code, "L%d: ", savedLoc);
+  fprintf(code, "%3d:  L%d: ",emitLoc++, savedLoc);
+  fprintf(code,"\n") ;
 }
 
 void emitAssignK(char * nameVar, int registerId){
-  fprintf(code, "%s = t%d", nameVar, registerId);
+  fprintf(code, "%3d:  %s = t%d",emitLoc++, nameVar, registerId);
+  fprintf(code,"\n") ;
 }
 
 /* Function emitSkip skips "howMany" code

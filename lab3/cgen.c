@@ -160,51 +160,31 @@ static void genExp( TreeNode * tree)
                emitOp("+", ac, "c","d","op +");
                break;
             case MINUS :
-               emitRO("SUB",ac,ac1,ac,"op -");
+               emitOp("-", ac, "c","d","op -");
                break;
             case TIMES :
-               emitRO("MUL",ac,ac1,ac,"op *");
+               emitOp("*", ac, "c","d","op *");
                break;
             case OVER :
-               emitRO("DIV",ac,ac1,ac,"op /");
+               emitOp("/", ac, "c","d","op /");
                break;
             case LESS :
-               emitRO("SUB",ac,ac1,ac,"op <") ;
-               emitRM("JLT",ac,2,pc,"br if true") ;
-               emitRM("LDC",ac,0,ac,"false case") ;
-               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
-               emitRM("LDC",ac,1,ac,"true case") ;
+               emitOp("<", ac, "c","d","op <");
                break;
             // todo: check
             case LEQ :
-               emitRO("SUB",ac,ac1,ac,"op <=") ;
-               emitRM("JLT",ac,2,pc,"br if true") ;
-               emitRM("LDC",ac,0,ac,"false case") ;
-               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
-               emitRM("LDC",ac,1,ac,"true case") ;
+               emitOp("<=", ac, "c","d","op <=");
                break;
             // todo: check
             case GREATER :
-               emitRO("SUB",ac,ac1,ac,"op >") ;
-               emitRM("JLT",ac,2,pc,"br if true") ;
-               emitRM("LDC",ac,0,ac,"false case") ;
-               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
-               emitRM("LDC",ac,1,ac,"true case") ;
+               emitOp(">", ac, "c","d","op >");
                break;
             // todo: check
             case GEQ :
-               emitRO("SUB",ac,ac1,ac,"op >=") ;
-               emitRM("JLT",ac,2,pc,"br if true") ;
-               emitRM("LDC",ac,0,ac,"false case") ;
-               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
-               emitRM("LDC",ac,1,ac,"true case") ;
+               emitOp(">=", ac, "c","d","op >=");
                break;
             case COMPARE :
-               emitRO("SUB",ac,ac1,ac,"op ==") ;
-               emitRM("JEQ",ac,2,pc,"br if true");
-               emitRM("LDC",ac,0,ac,"false case") ;
-               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
-               emitRM("LDC",ac,1,ac,"true case") ;
+               emitOp("==", ac, "c","d","op ==");
                break;
             default:
                emitComment("BUG: Unknown operator");
@@ -267,37 +247,11 @@ static void genDecl( TreeNode * tree)
   }
 } /* genType */
 
-// /* Procedure genExp generates code at an expression node */
-// static void genType( TreeNode * tree)
-// { int loc;
-//   TreeNode * p1, * p2;
-//   switch (tree->type) {
-//     case Void :
-//       if (TraceCode) emitComment("-> Void") ;
-//       /* gen code to load integer constant using LDC */
-//       emitRM("LDC",ac,tree->attr.val,0,"load const");
-//       if (TraceCode)  emitComment("<- Void") ;
-//       break; /* Void */
-    
-//     case Integer :
-//       if (TraceCode) emitComment("-> Integer") ;
-//       loc = st_lookup(tree->attr.name);
-//       emitRM("LD",ac,loc,gp,"load id value");
-//       if (TraceCode)  emitComment("<- Integer") ;
-//       break; /* Integer */
-
-//     default:
-//       break;
-//       if (TraceCode)  emitComment("<- Integer") ;
-//   }
-// } /* genExp */
-
 /* Procedure cGen recursively generates code by
  * tree traversal
  */
 static void cGen( TreeNode * tree)
 { 
-   printf("aquiaqui temos cgen");
    if (tree != NULL)
   {  
    // ident ++;
@@ -352,12 +306,12 @@ void codeGen(TreeNode * syntaxTree, char * codefile)
    emitComment(s);
    /* generate standard prelude */
    // emitComment("Standard prelude:");
-   emitRM("LD",mp,0,ac,"load maxaddress from location 0");
-   emitRM("ST",ac,0,ac,"clear location 0");
+   // emitRM("LD",mp,0,ac,"load maxaddress from location 0");
+   // emitRM("ST",ac,0,ac,"clear location 0");
    emitComment("Begin of execution.");
    /* generate code for TINY program */ 
    cGen(syntaxTree);
    /* finish */
    emitComment("End of execution.");
-   emitRO("HALT",0,0,0,"");
+   // emitRO("HALT",0,0,0,"");
 }
