@@ -11,6 +11,7 @@
 #include "symtab.h"
 #include "code.h"
 #include "cgen.h"
+#include "util.h"
 
 /* tmpOffset is the memory offset for temps
    It is decremented each time a temp is
@@ -33,7 +34,7 @@ static void genStmt( TreeNode * tree)
       case IfK :
          printf("---- if k------\n");
 
-         if (TraceCode) emitComment("-> if") ;
+         // if (TraceCode) emitComment("-> if") ;
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
          p3 = tree->child[2] ;
@@ -47,13 +48,13 @@ static void genStmt( TreeNode * tree)
          emitIFK3(savedLoc2);
          emitIFK4(savedLoc1);
          cGen(p2);
-         if (TraceCode)  emitComment("<- if") ;
+         // if (TraceCode)  emitComment("<- if") ;
          break; /* if_k */
 
       case RepeatK:
          printf("---- repeat k------\n");
 
-         if (TraceCode) emitComment("-> repeat") ;
+         // if (TraceCode) emitComment("-> repeat") ;
          p1 = tree->child[0] ;
          p2 = tree->child[1] ;
          savedLoc1 = emitSkip(0);
@@ -90,12 +91,12 @@ static void genStmt( TreeNode * tree)
          emitComment("goto L1");
          /* generate code for test */
          // emitRM_Abs("JEQ",ac,savedLoc1,"repeat: jmp back to body");
-         if (TraceCode)  emitComment("<- repeat") ;
+         // if (TraceCode)  emitComment("<- repeat") ;
          break; /* repeat */
 
       case AssignK:
          printf("---- assign k------\n");
-         if (TraceCode) emitComment("-> assign") ;
+         // if (TraceCode) emitComment("-> assign") ;
          /* generate code for rhs */
          p1 = tree->child[0];
          p2 = tree->child[1];
@@ -103,7 +104,7 @@ static void genStmt( TreeNode * tree)
          cGen(p2);
          emitAssignK(p1->attr.name, registerId);
 
-         if (TraceCode)  emitComment("<- assign") ;
+         // if (TraceCode)  emitComment("<- assign") ;
          break; /* assign_k */
       default:
          printf("\n---- default------\n");
@@ -119,25 +120,25 @@ static void genExp( TreeNode * tree)
 
     case ConstK :
       printf("----ConstK---\n");
-      if (TraceCode) emitComment("-> Const") ;
+      // if (TraceCode) emitComment("-> Const") ;
       /* gen code to load integer constant using LDC */
       // emitRM("LDC",ac,tree->attr.val,0,"load const");
       emitConst(ac, tree->attr.val, "load const"); 
-      if (TraceCode)  emitComment("<- Const") ;
+      // if (TraceCode)  emitComment("<- Const") ;
       break; /* ConstK */
     
     case IdK :
       printf("----IdK---\n");
-      if (TraceCode) emitComment("-> Id") ;
+      // if (TraceCode) emitComment("-> Id") ;
       loc = st_lookup(tree->attr.name);
       // emitRM("LD",ac,loc,gp,"load id value");
       emitID(ac, loc, tree->attr.name,"load id value");
-      if (TraceCode)  emitComment("<- Id") ;
+      // if (TraceCode)  emitComment("<- Id") ;
       break; /* IdK */
 
     case OpK :
          printf("----OpK---\n");
-         if (TraceCode) emitComment("-> Op") ;
+         // if (TraceCode) emitComment("-> Op") ;
          if (tree->child[0] == NULL){
             printf("c1 null");
          }
@@ -146,12 +147,17 @@ static void genExp( TreeNode * tree)
          }
          p1 = tree->child[0];
          p2 = tree->child[1];
+         printTree(tree);
          /* gen code for ac = left arg */
-         cGen(p1);
+         if(p1->child[0] != NULL){
+            cGen(p1);
+         }
          /* gen code to push left operand */
          // emitRM("ST",ac,tmpOffset--,mp,"op: push left");
          /* gen code for ac = right operand */
-         cGen(p2);
+         if(p1->child[1] != NULL){
+            cGen(p2);
+         }
          /* now load left operand */
          // emitRM("LD",ac1,++tmpOffset,mp,"op: load left");
          switch (tree->attr.op) {
@@ -200,17 +206,13 @@ static void genExp( TreeNode * tree)
                emitRM("LDC",ac,1,ac,"true case") ;
                break;
             case COMPARE :
-               emitRO("SUB",ac,ac1,ac,"op ==") ;
-               emitRM("JEQ",ac,2,pc,"br if true");
-               emitRM("LDC",ac,0,ac,"false case") ;
-               emitRM("LDA",pc,1,pc,"unconditional jmp") ;
-               emitRM("LDC",ac,1,ac,"true case") ;
+               emitCompare(p1->attr.name, p2->attr.val);
                break;
             default:
                emitComment("BUG: Unknown operator");
                break;
          } /* case op */
-         if (TraceCode)  emitComment("<- Op") ;
+         // if (TraceCode)  emitComment("<- Op") ;
          break; /* OpK */
 
     default:
@@ -243,15 +245,15 @@ static void genDecl( TreeNode * tree)
 { 
   switch (tree->kind.decl) {
     case VarK :
-      if (TraceCode) emitComment("Vark");
+      // if (TraceCode) emitComment("Vark");
       cGen(tree->child[0]);
       break; /* Void */    
     case ArrayK :
-      if (TraceCode) emitComment("ArrayK");
+      // if (TraceCode) emitComment("ArrayK");
       cGen(tree->child[0]);
       break; /* Integer */
    case FuncK :
-      if (TraceCode) emitComment("FuncK");
+      // if (TraceCode) emitComment("FuncK");
       for (int i = 0; i < 10000; i ++){
          if (tree->child[i] != NULL) {
             cGen(tree->child[i]);

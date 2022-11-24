@@ -4,7 +4,7 @@ void main(int a)
     int b;
     a = 1*2;
     b = 8 + a;*/
-    if (3 == a){
+    if (a == 3){
         a = 2;
     }
     else {
