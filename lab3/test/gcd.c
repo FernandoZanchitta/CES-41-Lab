@@ -2,20 +2,15 @@
 
 int gdc (int u, int v)
 {
-    int r;
-if (v == 0) {r = u; return r;}
-else {r = gdc(v,u-u/v*v); return r;}
-
+if (v == 0) return u;
+else return gdc(v,u-u/v*v);
 /* u-u / v*v == u mod v */
 }
-
-void main(int c)
+void main(void)
 {
 int x;
 int y;
-int a;
-c= 5;
-x = 3;
-y = 5+x;
-a = gdc(x,y) + 4;
+x = input();
+y = input();
+output(gdc(x,y));
 }
